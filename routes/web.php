@@ -19,8 +19,8 @@ Route::get('/', function () {
 })->name('home');
 
 
-Route::controller(LoginController::class)->group(function() {
+Route::controller(LoginController::class)->group(function () {
     Route::get('login', 'login')->name('login.form');
-    
-    Route::post('loginA', 'submit')->name('login.submit');
+
+    Route::post('login', 'submit')->name('login.submit');
 });
