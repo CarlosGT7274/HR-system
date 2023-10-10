@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Pages\HomeController;
 use App\Http\Controllers\Pages\LoginController;
 use Illuminate\Support\Facades\Route;
 
@@ -14,10 +15,9 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('/', function () {
-    return view('welcome');
-})->name('home');
+Route::middleware('needToken')->get('/', [HomeController::class, 'home'])->name('home');
 
+Route::view('/unauth', 'general.unauthorized')->name('unauthorized');
 
 Route::controller(LoginController::class)->group(function () {
     Route::get('login', 'login')->name('login.form');

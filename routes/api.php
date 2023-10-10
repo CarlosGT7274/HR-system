@@ -49,7 +49,7 @@ use App\Models\SYS\sys_permisos;
 
 Route::prefix('v1')->group(function () {
     //? ----------------------------------------------------------------------------
-    //? ---------------------------------   AUTH   ---------------------------------
+    //? ---------------------------------   api   ---------------------------------
     //? ----------------------------------------------------------------------------
 
     Route::controller(AuthController::class)->group(function () {
@@ -189,7 +189,7 @@ Route::prefix('v1')->group(function () {
         });
 
 
-        Route::prefix('{id_company}')->middleware('auth')->group(function () {
+        Route::prefix('{id_company}')->middleware('auth:api')->group(function () {
 
             Route::prefix('holidays')->group(function () {
 
@@ -601,7 +601,7 @@ Route::prefix('v1')->group(function () {
             Route::delete('{id}', 'delete');
         });
 
-        Route::prefix('{id_employee}')->middleware('auth')->group(function () {
+        Route::prefix('{id_employee}')->middleware('auth:api')->group(function () {
 
 
             Route::controller(EmpleadosController::class)->group(function () {
@@ -769,7 +769,7 @@ Route::prefix('v1')->group(function () {
     //* ---------------------------------   ATT   ----------------------------------
     //* ----------------------------------------------------------------------------
 
-    Route::prefix('biometrics')->middleware('auth')->group(function () {
+    Route::prefix('biometrics')->middleware('auth:api')->group(function () {
 
         Route::prefix('terminals')->group(function () {
 

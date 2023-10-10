@@ -77,7 +77,7 @@ class EmpresaController extends Controller
      */
     public function create(Request $request)
     {
-       $request->validate([
+        $request->validate([
             'razonSocial' => 'required | string | min:1',
             'rfc' => 'required | string | min:1 | max:13',
             'giroComercial' => 'required | string | min:1',
@@ -126,7 +126,7 @@ class EmpresaController extends Controller
             ], 404);
         }
 
-       $request->validate([
+        $request->validate([
             'razonSocial' => 'string | min:1',
             'rfc' => 'string | min:1 | max:13',
             'giroComercial' => 'string | min:1',
@@ -233,7 +233,7 @@ class EmpresaController extends Controller
             ], 404);
         }
 
-       $request->validate([
+        $request->validate([
             'nombre' => 'required | string',
             'descripcion' => 'sometimes | required | string',
             'empleados' => 'array',
@@ -282,7 +282,7 @@ class EmpresaController extends Controller
             ], 404);
         }
 
-       $request->validate([
+        $request->validate([
             'nombre' => 'sometimes | required | string',
             'descripcion' => 'sometimes | required | string',
             'empleados' => 'array',
@@ -332,7 +332,7 @@ class EmpresaController extends Controller
 
         $data = [];
 
-       $request->validate([
+        $request->validate([
             'id_unidad' => 'integer | min:1 | exists:hr_unidades,id_unidad',
             'id_departamento' => 'integer | min:1 | exists:hr_departamentos,id_departamento',
             'id_puesto' => 'integer | min:1 | exists:hr_puestos,id_puesto',
@@ -366,7 +366,7 @@ class EmpresaController extends Controller
 
     private function reportParams(Request $request, $id_company)
     {
-       $request->validate([
+        $request->validate([
             'inicio' => 'required | date | date_format:Y-m-d',
             'fin' => 'required | date | date_format:Y-m-d',
             'id' => 'integer | min:1 | exists:hr_empleados,id_empleado',
@@ -667,7 +667,7 @@ class EmpresaController extends Controller
 
         $data = [];
 
-       $request->validate([
+        $request->validate([
             'inicio' => 'required | date | date_format:Y-m-d',
             'fin' => 'required | date | date_format:Y-m-d'
         ]);

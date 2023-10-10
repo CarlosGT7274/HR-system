@@ -1,4 +1,4 @@
-@extends('layouts.forms')
+@extends('layouts.simple')
 
 @section('content')
     <form class="mx-auto d-flex flex-column gap-3 my-5" style="width: 20rem;" method="post" action="{{ route('login.submit') }}">

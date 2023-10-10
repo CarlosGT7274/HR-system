@@ -18,8 +18,10 @@ class LoginController extends Controller
 
     public function login()
     {
+        session(['token' => '']);
+
         $data = [
-            'message' =>  ''
+            'message' =>  session('token')
         ];
 
         return view('forms.login', $data);
@@ -32,7 +34,7 @@ class LoginController extends Controller
             'password' => 'required | string',
         ]);
 
-        $data = $this->apiRequest('/api/v1/login', 'POST', [
+        $data = $this->apiRequest('login', 'POST', [
             'email' => $request->email,
             'password' => $request->password,
         ]);
@@ -41,6 +43,8 @@ class LoginController extends Controller
             return view('forms.login', ['message' => $data['mensaje']]);
         } else {
             session(['token' => $data['data']['token']]);
+            session(['user' => $data['data']['usuario']]);
+            session(['permissions' => $data['data']['permisos']]);
             return redirect()->route('home');
         }
     }
