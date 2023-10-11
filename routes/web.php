@@ -15,7 +15,7 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::middleware(['auth:api', 'needToken'])->get('/', [HomeController::class, 'home'])->name('home');
+Route::middleware('needToken')->get('/', [HomeController::class, 'home'])->name('home');
 
 Route::view('/unauth', 'general.unauthorized')->name('unauthorized');
 

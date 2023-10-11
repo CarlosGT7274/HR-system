@@ -7,7 +7,6 @@ use Illuminate\Http\Request;
 
 class SessionController extends Controller
 {
-    private $error = '';
 
     /**
      * Create a new controller instance.
@@ -24,7 +23,7 @@ class SessionController extends Controller
 
         $data = [
             'pageTitle' => 'Login',
-            'message' =>  $this->error
+            'message' =>  ''
         ];
 
         return view('forms.login', $data);
