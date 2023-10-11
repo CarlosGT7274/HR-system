@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\Pages\HomeController;
 use App\Http\Controllers\Pages\SessionController;
+use App\Http\Controllers\Pages\EmployeesController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -27,4 +28,17 @@ Route::controller(SessionController::class)->group(function () {
     Route::get('resetPassword', 'getEmail')->name('resetPassword.form');
 
     Route::post('resetPassword', 'sedToken')->name('resetPassword.submit');
+});
+
+Route::middleware(['auth:api', 'needToken'])-> group(function () {
+    
+    Route::controller(EmployeesController::class)->group(function () {
+        Route::get('login', 'login')->name('login.form');
+    
+        Route::post('login', 'submit')->name('login.submit');
+    
+        Route::get('resetPassword', 'getEmail')->name('resetPassword.form');
+    
+        Route::post('resetPassword', 'sedToken')->name('resetPassword.submit');
+    });
 });
