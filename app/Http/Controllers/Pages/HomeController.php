@@ -18,13 +18,6 @@ class HomeController extends Controller
 
     public function home(Request $request)
     {
-
-        // if (session('token')) {
-        //     echo 'Bearer ' . session('token');
-        // } else {
-        //     echo 'No tengo Token';
-        // }
-
         return view('home.home', ['user' => session('user')]);
     }
 }

@@ -24,7 +24,7 @@ class Controller extends BaseController
     {
         $internalRequest = Request::create('/api/' . env('API_VERSION') . '/' . $uri, $method, $params);
 
-        $response = Route::dispatch($internalRequest);
+        $response = app()->handle($internalRequest);
 
         if ($response->getStatusCode() == 500) {
             return ['error' => true, 'mensaje' => 'Error en el Servidor'];

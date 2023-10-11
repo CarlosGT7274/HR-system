@@ -1,7 +1,7 @@
 <?php
 
 use App\Http\Controllers\Pages\HomeController;
-use App\Http\Controllers\Pages\LoginController;
+use App\Http\Controllers\Pages\SessionController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -15,12 +15,16 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::middleware('needToken')->get('/', [HomeController::class, 'home'])->name('home');
+Route::middleware(['auth:api', 'needToken'])->get('/', [HomeController::class, 'home'])->name('home');
 
 Route::view('/unauth', 'general.unauthorized')->name('unauthorized');
 
-Route::controller(LoginController::class)->group(function () {
+Route::controller(SessionController::class)->group(function () {
     Route::get('login', 'login')->name('login.form');
 
     Route::post('login', 'submit')->name('login.submit');
+
+    Route::get('resetPassword', 'getEmail')->name('resetPassword.form');
+
+    Route::post('resetPassword', 'sedToken')->name('resetPassword.submit');
 });
