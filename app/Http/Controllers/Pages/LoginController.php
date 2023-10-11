@@ -30,13 +30,13 @@ class LoginController extends Controller
     public function submit(Request $request)
     {
         $request->validate([
-            'email' => 'required | email',
-            'password' => 'required | string',
+            'correo' => 'required | email',
+            'contraseña' => 'required | string',
         ]);
 
         $data = $this->apiRequest('login', 'POST', [
-            'email' => $request->email,
-            'password' => $request->password,
+            'email' => $request->correo,
+            'password' => $request->contraseña,
         ]);
 
         if ($data['error']) {

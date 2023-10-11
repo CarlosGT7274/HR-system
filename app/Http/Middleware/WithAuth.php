@@ -27,11 +27,7 @@ class WithAuth
     {
         $this->deleteUnwishedHeaders($this->unwishedHeaders);
 
-        if (!$request->headers->get('Authorization')) {
-            $request->headers->set('Authorization', 'Bearer ' . session('token'));
-        }
-
-        return $next($request);
+        return session('token') ? $next($request) : redirect()->route('login.form');
     }
     private function deleteUnwishedHeaders($headers)
     {

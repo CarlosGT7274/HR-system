@@ -62,12 +62,13 @@ class Handler extends ExceptionHandler
                 'mensaje' => 'Faltan o no son correctos algunos datos de tu JSON',
                 'errors' => $exception->errors()
             ], $exception->status);
-        } else if ($request->is('api/*') && $exception instanceof AuthenticationException) {
-            return response()->json([
-                'error' => true,
-                'mensaje' => 'No Autorizado',
-            ], 401);
         }
+        // else if ($request->is('api/*') && $exception instanceof AuthenticationException) {
+        //     return response()->json([
+        //         'error' => true,
+        //         'mensaje' => 'No Autorizado',
+        //     ], 401);
+        // }
 
         return parent::render($request, $exception);
     }

@@ -19,12 +19,18 @@ class HomeController extends Controller
     public function home(Request $request)
     {
 
-        // if (session('token')) {
-        //     echo 'Bearer ' . session('token');
-        // } else {
-        //     echo 'No tengo Token';
-        // }
+        if (session('token')) {
+            echo 'Bearer ' . session('token');
+        } else {
+            echo 'No tengo Token';
+        }
 
-        return view('home.home', ['user' => session('user')]);
+        // return view('home.home', ['user' => session('user')]);
+
+        print_r($request->headers->get('authorization'));
+
+        $response = $this->apiRequest('me', 'GET', []);
+
+        print_r($response);
     }
 }
