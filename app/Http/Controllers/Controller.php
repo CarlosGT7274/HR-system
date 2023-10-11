@@ -5,7 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 use Illuminate\Foundation\Validation\ValidatesRequests;
 use Illuminate\Routing\Controller as BaseController;
-use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Request;
 use Illuminate\Support\Facades\Route;
 
 class Controller extends BaseController
@@ -22,7 +22,8 @@ class Controller extends BaseController
      */
     public function apiRequest($uri, $method, $params)
     {
-        $internalRequest = Request::create('/api/' . env('API_VERSION') . '/' . $uri, $method, $params);
+        $internalRequest = Request::create('/api/' . env('API_VERSION') . '/' . $uri, $method, $params, [], [], $_SERVER);
+        $internalRequest->headers->set('Authorization', 'Bearer ' . session('token'));
 
         $response = app()->handle($internalRequest);
 

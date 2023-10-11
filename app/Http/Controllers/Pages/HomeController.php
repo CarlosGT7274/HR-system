@@ -18,6 +18,10 @@ class HomeController extends Controller
 
     public function home(Request $request)
     {
-        return view('home.home', ['user' => session('user')]);
+        print_r($request->headers->get('authorization'));
+
+        $response = $this->apiRequest('me', 'GET', []);
+
+        return view('home.home', ['pageTitle' => 'Home', 'user' => $response['data']]);
     }
 }
