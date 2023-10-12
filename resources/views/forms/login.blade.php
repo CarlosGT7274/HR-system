@@ -1,12 +1,12 @@
 @extends('layouts.simple')
 
 @section('content')
-    <div class="mx-auto flex flex-col gap-4 my-5 p-3 border-2 border-sky-800 rounded w-96">
+    <div class="mx-auto flex flex-col gap-4 my-5 p-3 rounded w-96">
         <form class="flex flex-col gap-4" method="post" action="{{ route('login.submit') }}">
             @csrf
             <h2 class="text-3xl">Inicio de Sesión</h2>
             <div>
-                <label for="email" class="text-lg">Correo Electrónico</label>
+                <label for="email" class="text-lg mb-2">Correo Electrónico</label>
                 <input autocomplete="email" class="form-control" name="correo" type="email" placeholder="Ingrese un correo">
                 @if ($errors->has('correo'))
                     <span class="text-danger">{{ $errors->first('correo') }}</span>
@@ -14,7 +14,7 @@
             </div>
 
             <div>
-                <label for="password" class="text-lg">Contraseña</label>
+                <label for="password" class="text-lg mb-2">Contraseña</label>
                 <input class="form-control" name="contraseña" type="password" placeholder="Ingrese su contraseña">
                 @if ($errors->has('contraseña'))
                     <span class="text-danger">{{ $errors->first('contraseña') }}</span>
