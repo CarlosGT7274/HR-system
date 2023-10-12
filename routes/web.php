@@ -28,3 +28,7 @@ Route::controller(SessionController::class)->group(function () {
 
     Route::post('resetPassword', 'sedToken')->name('resetPassword.submit');
 });
+
+Route::controller(HomeController::class)->group(function (){
+    Route::get('graph', 'graph')->name('attendance.graph');
+});

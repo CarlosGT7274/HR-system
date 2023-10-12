@@ -1,6 +1,9 @@
 <?php
 
 namespace App\Http\Controllers;
+use Illuminate\Support\Facades\Http;
+
+use Illuminate\Routing\ControllerDispatcher;
 
 use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 use Illuminate\Foundation\Validation\ValidatesRequests;
@@ -35,4 +38,24 @@ class Controller extends BaseController
             return $data;
         }
     }
+
+    function internalRequest($uri, $method , $data )
+{
+
+
+    $int = Request::create('/api/' . env('API_VERSION') . '/' . $uri , $method, $data,[], [], $_SERVER);
+   
+    $int->headers->set('Authorization', 'Bearer ' . session('token'));
+
+    $response = Route::dispatch($int);
+
+    if ($response->getStatusCode() == 500) {
+        return ['error' => true, 'mensaje' => 'Error en el Servidor'];
+    } else {
+        $data = json_decode($response->getContent(), true);
+        $data['code'] = $response->getStatusCode();
+        return $data;
+    }
+
+}
 }

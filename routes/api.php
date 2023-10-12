@@ -1183,7 +1183,7 @@ Route::prefix('v1')->group(function () {
 
         Route::get('general', 'general');
 
-        Route::get('attendance', 'attendance');
+        Route::post('attendance', 'attendance');
 
         Route::get('birthdays', 'monthBirthdays');
 
