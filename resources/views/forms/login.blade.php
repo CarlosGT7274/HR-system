@@ -1,38 +1,33 @@
 @extends('layouts.simple')
 
 @section('content')
-    <div class="mx-auto flex flex-col gap-4 my-5 p-3 border-2 border-sky-800 rounded w-96">
-        <form class="flex flex-col gap-4" method="post" action="{{ route('login.submit') }}">
-            @csrf
-            <h2 class="text-3xl">Inicio de Sesión</h2>
-            <div>
-                <label for="email" class="text-lg">Correo Electrónico</label>
-                <input autocomplete="email" class="form-control" name="correo" type="email" placeholder="Ingrese un correo">
-                @if ($errors->has('correo'))
-                    <span class="text-danger">{{ $errors->first('correo') }}</span>
-                @endif
-            </div>
+    <div class="w-full bg-gray-200 pt-28" style="height: 100vh">
+        <div class="mx-auto flex flex-col p-5 rounded-xl
+    bg-white md:w-96 w-72">
+            <form class="flex flex-col gap-3" method="post" action="{{ route('login.submit') }}">
+                @csrf
+                <h2 class="md:text-3xl text-2xl text-center font-semibold">Inicio de Sesión</h2>
+                <div class="flex flex-col gap-4 my-4">
+                    <x-input icon="fa-envelope" name="correo" autocomplete="email" type="email"
+                        placeholder="Correo electrónico" needsUnhidden=""></x-input>
 
-            <div>
-                <label for="password" class="text-lg">Contraseña</label>
-                <input class="form-control" name="contraseña" type="password" placeholder="Ingrese su contraseña">
-                @if ($errors->has('contraseña'))
-                    <span class="text-danger">{{ $errors->first('contraseña') }}</span>
-                @endif
-            </div>
+                    <x-input icon="fa-key" name="contraseña" autocomplete="" type="password" placeholder="Contraseña"
+                        needsUnhidden="yes"></x-input>
 
-            @if ($message)
-                <span class="text-danger">{{ $message }}</span>
-            @endif
-            <button class="border-2  border-sky-800 rounded-lg p-2" type="submit">Ingresar</button>
-
-        </form>
-        <a class="text-decoration-none text-sky-700" href={{ route('resetPassword.form') }}>
-            ¿Se te olvido tu contraseña?
-        </a>
-
-        <script>
-            console.log(@json($message))
-        </script>
+                    @if ($message)
+                        <span class="text-red-700">{{ $message }}</span>
+                    @endif
+                    <button class="border-2 border-sky-800 rounded-lg p-2 hover:bg-sky-800 hover:text-white font-semibold"
+                        type="submit">Ingresar</button>
+                </div>
+            </form>
+            <a class="text-decoration-none text-sky-700 text-lg" href={{ route('resetPassword.form') }}>
+                ¿Se te olvido tu contraseña?
+            </a>
+        </div>
     </div>
+@endsection
+
+@section('js-scripts')
+    @vite('resources/js/preview_password.js')
 @endsection

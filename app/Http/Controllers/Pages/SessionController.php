@@ -7,7 +7,6 @@ use Illuminate\Http\Request;
 
 class SessionController extends Controller
 {
-    private $error = '';
 
     /**
      * Create a new controller instance.
@@ -24,7 +23,7 @@ class SessionController extends Controller
 
         $data = [
             'pageTitle' => 'Login',
-            'message' =>  $this->error
+            'message' =>  ''
         ];
 
         return view('forms.login', $data);
@@ -58,8 +57,8 @@ class SessionController extends Controller
     public function getEmail()
     {
         $data = [
-            'pageTitle' => 'Olvido Su Contraseña',
-            'message' =>  session('token')
+            'pageTitle' => 'Restablecer Contraseña',
+            'message' =>  ''
         ];
 
         return view('forms.resetPassword', $data);
@@ -69,7 +68,7 @@ class SessionController extends Controller
     {
         $data = [
             'pageTitle' => 'Olvido Su Contraseña',
-            'message' =>  session('token')
+            'message' =>  ''
         ];
 
         return view('forms.resetPassword', $data);

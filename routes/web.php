@@ -16,7 +16,7 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::middleware(['auth:api', 'needToken'])->get('/', [HomeController::class, 'home'])->name('home');
+Route::middleware('needToken')->get('/', [HomeController::class, 'home'])->name('home');
 
 Route::view('/unauth', 'general.unauthorized')->name('unauthorized');
 
@@ -29,7 +29,6 @@ Route::controller(SessionController::class)->group(function () {
 
     Route::post('resetPassword', 'sedToken')->name('resetPassword.submit');
 });
-
 Route::middleware(['auth:api', 'needToken'])-> group(function () {
     
     Route::controller(EmployeesController::class)->group(function () {
