@@ -12,10 +12,7 @@
 </head>
 
 <body>
-    <div id="main-container">
-        @yield('content')
-    </div>
-
+    @yield('content')
 
     @vite('resources/js/app.js')
     @yield('js-scripts')
