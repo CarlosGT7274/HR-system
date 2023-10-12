@@ -11,8 +11,8 @@
     @yield('css-styles')
 </head>
 
-<body style="height: 100vh">
-    <div id="main-container" class="h-full">
+<body>
+    <div id="main-container">
         @yield('content')
     </div>
 

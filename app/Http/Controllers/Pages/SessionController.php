@@ -57,8 +57,8 @@ class SessionController extends Controller
     public function getEmail()
     {
         $data = [
-            'pageTitle' => 'Olvido Su Contraseña',
-            'message' =>  session('token')
+            'pageTitle' => 'Restablecer Contraseña',
+            'message' =>  ''
         ];
 
         return view('forms.resetPassword', $data);
@@ -68,7 +68,7 @@ class SessionController extends Controller
     {
         $data = [
             'pageTitle' => 'Olvido Su Contraseña',
-            'message' =>  session('token')
+            'message' =>  ''
         ];
 
         return view('forms.resetPassword', $data);
