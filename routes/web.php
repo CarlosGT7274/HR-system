@@ -26,5 +26,5 @@ Route::controller(SessionController::class)->group(function () {
 
     Route::get('resetPassword', 'getEmail')->name('resetPassword.form');
 
-    Route::post('resetPassword', 'sedToken')->name('resetPassword.submit');
+    Route::post('resetPassword', 'sendToken')->name('resetPassword.submit');
 });

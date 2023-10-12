@@ -1,7 +1,7 @@
-var icon = document.getElementById("preview");
+var buton = document.getElementById("preview");
 var input = document.getElementById("password");
 
-icon.addEventListener("click", function () {
+buton.addEventListener("click", function () {
     if (input.type === "password") {
         input.type = "text";
     } else {

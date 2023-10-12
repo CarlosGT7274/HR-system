@@ -130,7 +130,7 @@ class AuthController extends Controller
         if (empty($user)) {
             return response()->json([
                 'error' => true,
-                'mensaje' => 'Usuario No encontrado'
+                'mensaje' => 'Usuario inexistente'
             ], 404);
         }
 

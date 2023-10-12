@@ -64,13 +64,25 @@ class SessionController extends Controller
         return view('forms.resetPassword', $data);
     }
 
-    public function sendToken()
+    public function sendToken(Request $request)
     {
-        $data = [
-            'pageTitle' => 'Olvido Su Contraseña',
-            'message' =>  ''
-        ];
+        $request->validate([
+            'correo' => 'required | email',
+        ]);
 
-        return view('forms.resetPassword', $data);
+        $response = $this->apiRequest('resetToken', 'GET', [
+            'email' => $request->correo,
+        ]);
+
+        if ($response['code'] == 200) {
+            return view('forms.emailSend');
+        } else {
+            $data = [
+                'pageTitle' => 'Restablecer Contraseña',
+                'message' =>  $response['mensaje']
+            ];
+
+            return view('forms.resetPassword', $data);
+        }
     }
 }
