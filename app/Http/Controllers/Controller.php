@@ -1,6 +1,7 @@
 <?php
 
 namespace App\Http\Controllers;
+
 use Illuminate\Support\Facades\Http;
 
 use Illuminate\Routing\ControllerDispatcher;
@@ -39,23 +40,22 @@ class Controller extends BaseController
         }
     }
 
-    function internalRequest($uri, $method , $data )
-{
+    function internalRequest($uri, $method, $data)
+    {
 
 
-    $int = Request::create('/api/' . env('API_VERSION') . '/' . $uri , $method, $data,[], [], $_SERVER);
-   
-    $int->headers->set('Authorization', 'Bearer ' . session('token'));
+        $int = Request::create('/api/' . env('API_VERSION') . '/' . $uri, $method, $data, [], [], $_SERVER);
 
-    $response = Route::dispatch($int);
+        $int->headers->set('Authorization', 'Bearer ' . session('token'));
 
-    if ($response->getStatusCode() == 500) {
-        return ['error' => true, 'mensaje' => 'Error en el Servidor'];
-    } else {
-        $data = json_decode($response->getContent(), true);
-        $data['code'] = $response->getStatusCode();
-        return $data;
+        $response = Route::dispatch($int);
+
+        if ($response->getStatusCode() == 500) {
+            return ['error' => true, 'mensaje' => 'Error en el Servidor'];
+        } else {
+            $data = json_decode($response->getContent(), true);
+            $data['code'] = $response->getStatusCode();
+            return $data;
+        }
     }
-
-}
 }
