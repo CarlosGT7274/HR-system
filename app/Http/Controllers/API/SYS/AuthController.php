@@ -130,13 +130,13 @@ class AuthController extends Controller
         if (empty($user)) {
             return response()->json([
                 'error' => true,
-                'mensaje' => 'Usuario No encontrado'
+                'mensaje' => 'Usuario inexistente'
             ], 404);
         }
 
         $token = md5($user->id_usuario . $user->email . time());
 
-        Mail::to($user->email)->send(new ResetPasswordMail($token));
+        Mail::to($user->email)->send(new ResetPasswordMail($token, 'Mail'));
 
         $user->tiempoTokenContraseña = date('H:i:s');
         $user->tokenCambiarContraseña = $token;
@@ -166,13 +166,13 @@ class AuthController extends Controller
         if (empty($user)) {
             return response()->json([
                 'error' => true,
-                'mensaje' => 'Token Inválido'
+                'mensaje' => 'El tiempo ha expirado'
             ], 401);
         } else if (!empty($user->tiempoTokenContraseña) && !empty($user->tiempoTokenContraseña)) {
             if (Carbon::now()->diffInMinutes(Carbon::parse($user->tiempoTokenContraseña)) > 60) {
                 return response()->json([
                     'error' => true,
-                    'mensaje' => 'Token Expirado'
+                    'mensaje' => 'El tiempo ha expirado'
                 ], 401);
             }
         }

@@ -2,6 +2,19 @@
 @tailwind components;
 @tailwind utilities;
 
+:root {
+    --color-dark: #0d0d0d;
+    --color-dlight: #353535;
+    --color-ldark: #8c8c8b;
+    --color-light: #f0f0f2;
+    --color-primary: #0F4B80;
+    --color-secondary: #1A80C8;
+    --color-tertiary: #248096;
+}
+
 input:focus{
     outline: 0;
+}
+input{
+    background-color: transparent;
 }

@@ -27,17 +27,9 @@ Route::controller(SessionController::class)->group(function () {
 
     Route::get('resetPassword', 'getEmail')->name('resetPassword.form');
 
-    Route::post('resetPassword', 'sedToken')->name('resetPassword.submit');
-});
-Route::middleware(['auth:api', 'needToken'])-> group(function () {
-    
-    Route::controller(EmployeesController::class)->group(function () {
-        Route::get('login', 'login')->name('login.form');
-    
-        Route::post('login', 'submit')->name('login.submit');
-    
-        Route::get('resetPassword', 'getEmail')->name('resetPassword.form');
-    
-        Route::post('resetPassword', 'sedToken')->name('resetPassword.submit');
-    });
+    Route::post('resetPassword', 'sendToken')->name('resetPassword.submit');
+
+    Route::get('changePassword', 'changePassword')->name('changePassword.form');
+
+    Route::post('changePassword', 'updatePassword')->name('changePassword.submit');
 });

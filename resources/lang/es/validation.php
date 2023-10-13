@@ -35,4 +35,5 @@ return [
     'required_without' => 'El campo :attribute es obligatorio cuando :values no está presente.',
     'required_with' => 'El campo :attribute es obligatorio cuando :values está presente.',
     'required_with_all' => 'El campo :attribute es obligatorio cuando :values están presentes.',
+    'same' => 'El campo debe ser igual a :other'
 ];

@@ -30,9 +30,7 @@ class NotificationMail extends Mailable
      */
     public function envelope()
     {
-        return new Envelope(
-            subject: $this->group['nombre'],
-        );
+        return new Envelope(subject: $this->group['nombre']);
     }
 
     /**
@@ -42,9 +40,6 @@ class NotificationMail extends Mailable
      */
     public function content()
     {
-        return new Content(
-            view: 'mail.notification',
-            with: ['message' => '', 'url' => ''],
-        );
+        return new Content(view: 'mail.notification', with: ['message' => '', 'url' => '']);
     }
 }

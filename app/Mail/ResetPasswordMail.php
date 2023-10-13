@@ -13,15 +13,15 @@ class ResetPasswordMail extends Mailable
 {
     use Queueable, SerializesModels;
 
-    private $url = "http://rhapi.rh-control.com/resetear";
+    private $url;
     /**
      * Create a new message instance.
      *
      * @return void
      */
-    public function __construct(private $token)
+    public function __construct(private $token, private $pageTitle)
     {
-        //
+        $this->url = env('APP_URL') . '/changePass';
     }
 
     /**
@@ -45,7 +45,7 @@ class ResetPasswordMail extends Mailable
     {
         return new Content(
             view: 'mail.reset-password',
-            with: ['token' => $this->token, 'url' => $this->url],
+            with: ['pageTitle' => 'Email', 'token' => $this->token, 'url' => $this->url],
         );
     }
 }
