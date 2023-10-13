@@ -75,7 +75,13 @@ class SessionController extends Controller
         ]);
 
         if ($response['code'] == 200) {
-            return view('forms.emailSend');
+            $data = [
+                'pageTitle' => 'Emial Enviado',
+                'message' => '¡Email enviado correctamente!',
+                'submessage' => 'Se ha enviado un emial a su correo con indicaciones para realizar el cambio de contraseña'
+            ];
+
+            return view('forms.successMessage', $data);
         } else {
             $data = [
                 'pageTitle' => 'Restablecer Contraseña',
@@ -83,6 +89,49 @@ class SessionController extends Controller
             ];
 
             return view('forms.resetPassword', $data);
+        }
+    }
+
+    public function changePassword(Request $request)
+    {
+        $data = [
+            'pageTitle' => 'Restablecer Contraseña',
+            'message' =>  '',
+            'token' => $request->token
+        ];
+
+        return view('forms.changePassword', $data);
+    }
+
+    public function updatePassword(Request $request)
+    {
+        $request->validate([
+            'accessToken' => 'required | string',
+            'contraseña' => 'required | string',
+            'de_confirmacion' => 'required | string | same:contraseña'
+        ]);
+
+        $response = $this->apiRequest('updatePassword', 'PUT', [
+            'password' => $request->contraseña,
+            'token' => $request->accessToken
+        ]);
+
+        if ($response['code'] == 200) {
+            $data = [
+                'pageTitle' => 'Cambio Exitoso',
+                'message' => '¡Contraseña cambiada Correctamente!',
+                'submessage' => 'Tu contraseña ha sido cambiada de manera correcta'
+            ];
+
+            return view('forms.successMessage', $data);
+        } else {
+            $data = [
+                'pageTitle' => 'Restablecer Contraseña',
+                'message' =>  $response['mensaje'],
+                'token' => ''
+            ];
+
+            return view('forms.changePassword', $data);
         }
     }
 }

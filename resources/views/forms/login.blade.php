@@ -31,5 +31,4 @@
 @endsection
 
 @section('js-scripts')
-    @vite('resources/js/preview_password.js')
 @endsection

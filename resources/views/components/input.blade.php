@@ -9,7 +9,7 @@
             type="{{ $type }}" placeholder="{{ $placeholder }}">
 
         @if ($needsUnhidden == 'yes')
-            <button type="button" id="preview">
+            <button type="button" id="{{ $id . 'preview' }}">
                 <i class="fa-solid fa-lg fa-eye" style="color: var(--color-dlight)"></i>
             </button>
         @endif
@@ -19,3 +19,15 @@
         <span class="text-danger">{{ $errors->first($name) }}</span>
     @endif
 </div>
+
+<script>
+    if (@json($needsUnhidden)) {
+        document.getElementById(`${@json($id)}preview`).addEventListener("click", function() {
+            if (document.getElementById(@json($id)).type === "password") {
+                document.getElementById(@json($id)).type = "text";
+            } else {
+                document.getElementById(@json($id)).type = "password";
+            }
+        });
+    }
+</script>

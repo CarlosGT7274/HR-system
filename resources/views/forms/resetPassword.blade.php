@@ -21,7 +21,7 @@
             <a class="text-decoration-none text-sky-700 flex flex-row items-center gap-1 text-lg"
                 href={{ route('login.form') }}>
                 <i class="fa-solid fa-md fa-arrow-left pt-1" style="color: var(--color-primary)"></i>
-                <p class="font-semibold text-primary text-base">Regresar</p>
+                <p class="font-semibold text-primary text-base">Iniciar Sesión</p>
             </a>
         </div>
     </div>
