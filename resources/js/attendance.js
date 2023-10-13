@@ -1,33 +1,38 @@
-
 import ApexCharts from "apexcharts";
 
-// Define la configuración del gráfico
-const chartOptions =     {
+export function attendance(jsonData, element) {
+    // Extraer las fechas y datos de asistencias y faltas
+    const dates = Object.keys(jsonData.data.dates);
+    const asistenciasData = dates.map(date => jsonData.data.dates[date].asistencias);
+    const faltasData = dates.map(date => jsonData.data.dates[date].faltas);
+  
+    // Crear un nuevo conjunto de datos para ApexCharts
+    const chartData = [
+      {
+        name: "Asistencias",
+        data: asistenciasData,
+      },
+      {
+        name: "Faltas",
+        data: faltasData,
+      },
+    ];
+  
+    // Configuración del gráfico
+    const chartOptions = {
         "annotations": {},
         "chart": {
             "animations": {
                 "enabled": false
             },
-            "background": "#fff",
-            "foreColor": "#373D3F",
+            "background": "",
+            "foreColor": "#333",
             "fontFamily": "Roboto",
-            "height": 250,
-            "id": "NdbDw",
-            "stacked": true,
-            "stackType": "100%",
-            "toolbar": {
-                "show": false,
-                "tools": {
-                    "selection": true,
-                    "zoom": true,
-                    "zoomin": true,
-                    "zoomout": true,
-                    "pan": true,
-                    "reset": true
-                }
-            },
+            "height": 370,
+            "id": "Br0NO",
+            
             "type": "area",
-            "width": 480
+            "width": 580
         },
         "plotOptions": {
             "bar": {
@@ -88,7 +93,7 @@ const chartOptions =     {
         "fill": {},
         "grid": {
             "padding": {
-                "right": 36,
+                "right": 25,
                 "left": 15
             }
         },
@@ -104,80 +109,10 @@ const chartOptions =     {
                 "sizeOffset": 6
             }
         },
-        "series": [
-            {
-                "name": "Area 1",
-                "data": [
-                    {
-                        "x": "Category 1",
-                        "y": 31
-                    },
-                    {
-                        "x": "Category 2",
-                        "y": 40
-                    },
-                    {
-                        "x": "Category 3",
-                        "y": 28
-                    },
-                    {
-                        "x": "Category 4",
-                        "y": 51
-                    },
-                    {
-                        "x": "Category 5",
-                        "y": 42
-                    }
-                ]
-            },
-            {
-                "name": "Area 2",
-                "data": [
-                    {
-                        "x": "Category 1",
-                        "y": 20
-                    },
-                    {
-                        "x": "Category 2",
-                        "y": 32
-                    },
-                    {
-                        "x": "Category 3",
-                        "y": 38
-                    },
-                    {
-                        "x": "Category 4",
-                        "y": 22
-                    },
-                    {
-                        "x": "Category 5",
-                        "y": 56
-                    }
-                ]
-            }
-        ],
-        "stroke": {
-            "width": 4,
-            "fill": {
-                "type": "solid",
-                "opacity": 0.85,
-                "gradient": {
-                    "shade": "light",
-                    "type": "vertical",
-                    "shadeIntensity": 0.5,
-                    "inverseColors": false,
-                    "opacityFrom": 0.65,
-                    "opacityTo": 0.5,
-                    "stops": [
-                        0,
-                        100,
-                        100
-                    ],
-                    "colorStops": []
-                }
-            }
-        },
+        "series": chartData,
+        
         "xaxis": {
+            categories: dates,
             "labels": {
                 "trim": true,
                 "style": {}
@@ -191,7 +126,7 @@ const chartOptions =     {
                     "cssClass": ""
                 }
             },
-            "tickAmount": 2,
+            "tickAmount": "dataPoints",
             "title": {
                 "style": {
                     "fontWeight": 700
@@ -199,23 +134,13 @@ const chartOptions =     {
             }
         },
         "yaxis": {
-            "max": 100,
-            "min": 0,
+            "tickAmount": 5,
             "labels": {
+                "style": {}
+            },
+            "title": {
                 "style": {
-                    "colors": [
-                        null,
-                        null,
-                        null,
-                        null,
-                        null,
-                        null,
-                        null,
-                        null,
-                        null,
-                        null,
-                        null
-                    ]
+                    "fontWeight": 700
                 }
             }
         },
@@ -224,8 +149,36 @@ const chartOptions =     {
         }
     };
 
-const chart = new ApexCharts(document.querySelector("#attendance"), chartOptions);
+  
+    // Crear el gráfico
+    const chart = new ApexCharts(element, chartOptions);
+  
+    // Renderizar el gráfico
+    chart.render();
+  }
+  
+  // Llamada a la función con tus datos y el ID del elemento HTML
+  
 
-chart.render();
 
 
+
+// var att = @json($attendance);
+
+const att = document.getElementById("jsonatt")
+
+const jsond = JSON.parse(att.value)
+
+
+    
+const chartElementId = "attendance";
+
+const element = document.getElementById("attendance")
+
+
+attendance(jsond, element);
+
+
+
+ 
+  

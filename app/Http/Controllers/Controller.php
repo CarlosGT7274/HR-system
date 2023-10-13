@@ -22,7 +22,7 @@ class Controller extends BaseController
      * @param string $uri Api uri where the request should be made
      * @param string $method Method for the api request
      * @param array $params for the body of the reuest to the api
-     * @return array
+    //  * @return array
      */
     public function apiRequest($uri, $method, $params)
     {
@@ -32,7 +32,8 @@ class Controller extends BaseController
         $response = app()->handle($internalRequest);
 
         if ($response->getStatusCode() == 500) {
-            return ['error' => true, 'mensaje' => 'Error en el Servidor'];
+            // return ['error' => true, 'mensaje' => 'Error en el Servidor'];
+            return $response;
         } else {
             $data = json_decode($response->getContent(), true);
             $data['code'] = $response->getStatusCode();

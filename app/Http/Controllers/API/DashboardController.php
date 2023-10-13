@@ -36,7 +36,6 @@ class DashboardController extends Controller
      */
     public function getEmployees(Request $request, $active = 1, $birthdays = false)
     {
-
         $request->validate([
             'date' => 'required | date | date_format:Y-m-d',
             'position' => 'integer | min:1 | exists:hr_puestos,id_puesto',
@@ -69,7 +68,7 @@ class DashboardController extends Controller
             $month = date('m', strtotime($request->date));
             $employeeDate = date('m', strtotime($employee['alta']));
 
-            if ($employeeDate >= $month && $active == 1 && !$birthdays) {
+            if ($employeeDate > $month && $active == 1 && !$birthdays) {
                 unset($employees[$key]);
                 continue;
             }

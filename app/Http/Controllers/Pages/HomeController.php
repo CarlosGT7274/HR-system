@@ -38,10 +38,13 @@ class HomeController extends Controller
             'date' => $request->fecha
         ]);
 
+        $general = $this->apiRequest('dashboard/general', 'get', [
+            'date' => $request->fecha
+        ]);
         // $attendance = $this->internalRequest('dashboard/attendance', 'GET',  ['date' => '2023-10-11']);
 
-        // return $attendance;
+        // return $attendance; 
 
-        return view('home.home', ['pageTitle' => 'Home', 'menuItems' => $this->menuItems, 'attendance' => $attendance]);
+        return view('home.home', ['pageTitle' => 'Home', 'menuItems' => $this->menuItems, 'attendance' => $attendance, 'general' => $general]);
     }
 }

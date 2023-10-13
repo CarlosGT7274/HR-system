@@ -36,8 +36,7 @@
     </div>
 
     <div class="flex flex-row">
-        <div id="Main"
-            class="xl:rounded-r transform xl:translate-x-0 ease-in-out transition duration-500 flex justify-start items-start  w-full sm:w-64 bg-gray-900 flex-col h-[100vh]">
+        <div id="Main" class="bg-fixed xl:rounded-r transform xl:translate-x-0 ease-in-out transition duration-500 flex justify-start items-start  w-full sm:w-64 bg-gray-900 flex-col h-[100vh]">
             <div class="hidden xl:flex justify-start p-6 items-center space-x-3">
                 <svg width="34" height="34" viewBox="0 0 34 34" fill="none" xmlns="http://www.w3.org/2000/svg">
                     <path
@@ -95,11 +94,11 @@
                         </div>
                     @endforeach
                     </path>
+                </div>
 
-                    <div class="flex flex-col p-6  w-full  pt-32 ">
-                        <p class="cursor-pointer text-sm leading-5 text-white">{{ session('user')['nombre'] }}</p>
-                        <p class="cursor-pointer text-xs leading-3 text-gray-300">{{ session('user')['email'] }}</p>
-                    </div>
+                <div class="flex flex-col p-6  w-full  pt-32 ">
+                    <p class="cursor-pointer text-sm leading-5 text-white">{{ session('user')['nombre'] }}</p>
+                    <p class="cursor-pointer text-xs leading-3 text-gray-300">{{ session('user')['email'] }}</p>
                 </div>
             </div>
         </div>
@@ -116,7 +115,13 @@
             </form>
 
             <div id="graphics">
-                <div id="attendance"></div>
+                <div id="attendance">
+                    <input type="hidden" name="" id="jsonatt" value="{{json_encode($attendance)}}">
+                </div>
+                <div id="general">
+                    <input type="hidden" name="" id="jsonG" value="{{json_encode($general)}}">
+                </div>
+
             </div>
         </div>
     </div>
@@ -126,46 +131,48 @@
 @endsection
 
 @section('js-scripts')
-    <script>
-        console.log(@json($attendance));
+<script>
+    let icon1 = document.getElementById("icon1");
+let menu1 = document.getElementById("menu1");
+const showMenu1 = (flag) => {
+    if (flag) {
+        icon1.classList.toggle("rotate-180");
+        menu1.classList.toggle("hidden");
+    }
+};
 
-        let icon1 = document.getElementById("icon1");
-        let menu1 = document.getElementById("menu1");
-        const showMenu1 = (flag) => {
-            if (flag) {
-                icon1.classList.toggle("rotate-180");
-                menu1.classList.toggle("hidden");
-            }
-        };
-        let icon2 = document.getElementById("icon2");
-        let menu2 = document.getElementById("menu2");
-        const showMenu2 = (flag) => {
-            if (flag) {
-                icon2.classList.toggle("rotate-180");
-                menu2.classList.toggle("hidden");
-            }
-        };
-        let icon3 = document.getElementById("icon3");
-        let menu3 = document.getElementById("menu3");
-        const showMenu3 = (flag) => {
-            if (flag) {
-                icon3.classList.toggle("rotate-180");
-                menu3.classList.toggle("hidden");
-            }
-        };
+let icon2 = document.getElementById("icon2");
+let menu2 = document.getElementById("menu2");
+const showMenu2 = (flag) => {
+    if (flag) {
+        icon2.classList.toggle("rotate-180");
+        menu2.classList.toggle("hidden");
+    }
+};
 
-        let Main = document.getElementById("Main");
-        let open = document.getElementById("open");
-        let close = document.getElementById("close");
+let icon3 = document.getElementById("icon3");
+let menu3 = document.getElementById("menu3");
+const showMenu3 = (flag) => {
+    if (flag) {
+        icon3.classList.toggle("rotate-180");
+        menu3.classList.toggle("hidden");
+    }
+};
 
-        const showNav = (flag) => {
-            if (flag) {
-                Main.classList.toggle("-translate-x-full");
-                Main.classList.toggle("translate-x-0");
-                Main.classList.toggle("hidden");
-                open.classList.toggle("hidden");
-                close.classList.toggle("hidden");
-            }
-        };
-    </script>
+let Main = document.getElementById("Main");
+let open = document.getElementById("open");
+let close = document.getElementById("close");
+
+const showNav = (flag) => {
+    if (flag) {
+        Main.classList.toggle("-translate-x-full");
+        Main.classList.toggle("translate-x-0");
+        Main.classList.toggle("hidden");
+        open.classList.toggle("hidden");
+        close.classList.toggle("hidden");
+    }
+};
+</script>
+  @vite("resources/js/attendance.js")
+  @vite("resources/js/general.js")
 @endsection
