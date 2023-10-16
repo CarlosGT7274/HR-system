@@ -49,7 +49,9 @@ class SessionController extends Controller
         } else {
             session(['token' => $response['data']['token']]);
             session(['user' => $response['data']['usuario']]);
+            session(['company' => $response['data']['empresa']]);
             session(['permissions' => $response['data']['permisos']]);
+
             return redirect()->route('home');
         }
     }
@@ -133,5 +135,14 @@ class SessionController extends Controller
 
             return view('forms.changePassword', $data);
         }
+    }
+
+    public function logout()
+    {
+        $this->apiRequest('logout', 'POST', []);
+
+        session()->flush();
+
+        return redirect()->route('login.form');
     }
 }

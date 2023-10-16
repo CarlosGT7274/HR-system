@@ -1,8 +1,8 @@
 @extends('layouts.simple')
 
 @section('content')
-    <div class="w-full bg-ldark pt-28 h-[100vh]">
-        <div class="mx-auto flex flex-col p-5 rounded-xl bg-light/80 md:w-96 w-72 shadow-2xl shadow-dark gap-4">
+    <main class="w-full bg-ldark pt-28 h-[100vh]">
+        <section class="mx-auto flex flex-col p-5 rounded-xl bg-light/80 md:w-96 w-72 shadow-2xl shadow-dark gap-4">
             <h1 class="text-2xl text-dark text-center font-semibold"> {{ $message }} </h1>
             <p class="text-lg text-justify">{{ $submessage }}</p>
 
@@ -11,6 +11,6 @@
                 <i class="fa-solid fa-md fa-arrow-left pt-1" style="color: var(--color-primary)"></i>
                 <p class="font-semibold text-primary text-base">Iniciar Sesión</p>
             </a>
-        </div>
-    </div>
+        </section>
+    </main>
 @endsection

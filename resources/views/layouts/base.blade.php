@@ -12,17 +12,11 @@
 </head>
 
 <body>
-    <div id="nav-bar">
-        @yield('navbar')
-    </div>
+    @yield('navbar')
 
-    <div id="main-container">
-        @yield('content')
-    </div>
+    @yield('content')
 
-    <footer>
-        @yield('footer')
-    </footer>
+    @yield('footer')
 
     @vite('resources/js/app.js')
     @yield('js-scripts')

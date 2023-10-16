@@ -1,5 +1,5 @@
 <div>
-    <div class="mb-1 border-b-2 border-b-ldark flex flex-row gap-2 items-center justify-around">
+    <div class="mb-1 border-b-2 border-b-ldark flex flex-row gap-2 items-center justify-around hover:border-b-primary">
 
         @if ($icon != '')
             <i class="fa-solid fa-lg {{ $icon }}" style="color: var(--color-dlight)"></i>

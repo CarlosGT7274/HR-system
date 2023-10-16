@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Mail\ResetPasswordMail;
 use App\Models\SYS\sys_roles_permisos;
 use App\Models\SYS\sys_usuarios;
+use App\Models\SYS\sys_usuarios_empresas;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
@@ -60,6 +61,7 @@ class AuthController extends Controller
                 'token' => $token,
                 'tipoToken' => 'Bearer',
                 'usuario' => auth()->user(),
+                'empresa' => sys_usuarios_empresas::where('id_usuario', auth()->user()->id_usuario)->value('id_empresa'),
                 'permisos' => $permissions
             ]
         ], 200);

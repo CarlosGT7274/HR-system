@@ -69,7 +69,7 @@ class DashboardController extends Controller
             $month = date('m', strtotime($request->date));
             $employeeDate = date('m', strtotime($employee['alta']));
 
-            if ($employeeDate >= $month && $active == 1 && !$birthdays) {
+            if ($employeeDate > $month && $active == 1 && !$birthdays) {
                 unset($employees[$key]);
                 continue;
             }

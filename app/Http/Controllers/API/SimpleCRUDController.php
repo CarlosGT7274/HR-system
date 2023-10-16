@@ -30,7 +30,7 @@ class SimpleCRUDController extends Controller
     /**
      * Read All Data from a table with a possible extra param
      * 
-     * @param array $extraParam Searching exra param ['column' => one column, 'value' => value of the param]
+     * @param array $extraParam Searching extra param ['column' => one column, 'value' => value of the param]
      * @param boolean $needEncode Bool flag for encode if is needed. 
      * @return array|string Information of All Matching Element
      */
@@ -60,9 +60,9 @@ class SimpleCRUDController extends Controller
     /**
      * Read a Specific row on the data base table
      *
-     * @param integer $id Elemet id 
+     * @param integer $id Element id 
      * @param boolean $needEncode Bool flag for encode if is needed. 
-     * @param array $extraParam Searching exra param ['column' => one column, 'value' => value of the param]
+     * @param array $extraParam Searching extra param ['column' => one column, 'value' => value of the param]
      * @return array|string Element Information
      */
     public function readOne($id, $extraParam, $needEncode = false)
@@ -98,7 +98,7 @@ class SimpleCRUDController extends Controller
      * 
      * @param Request $request JSON of the Request Boy
      * @param array $extraInfo Extra Info for the Element
-     * @param array $varlidationRules Validation Rules for the Request
+     * @param array $validationRules Validation Rules for the Request
      * @return boolean
      */
     public function create($request, $extraInfo, $validationRules, $needDecode = false)
@@ -131,11 +131,11 @@ class SimpleCRUDController extends Controller
     /**
      * Update an object on the data base table
      * 
-     * @param int $id Elemet id 
+     * @param int $id Element id 
      * @param Request $request JSON of the Request Boy
-     * @param array $varlidationRules Validation Rules for the Request
+     * @param array $validationRules Validation Rules for the Request
      * @param boolean $needEncode Bool flag for encode if is needed. 
-     * @return boolean If the Update was succesfull
+     * @return boolean If the Update was successful
      */
     public function update($id, $request, $validationRules, $needDecode = false)
     {
@@ -165,8 +165,8 @@ class SimpleCRUDController extends Controller
     /**
      * Delete a specific object on the data base table.
      * 
-     * @param int $id Elemet id 
-     * @return boolean If the Delete was succesfull
+     * @param int $id Element id 
+     * @return boolean If the Delete was successful
      */
     public function delete($id)
     {
@@ -175,7 +175,7 @@ class SimpleCRUDController extends Controller
         if (empty($object)) {
             return response()->json([
                 'error' => true,
-                'mensaje' => 'Regitro Inexistente'
+                'mensaje' => 'Registro Inexistente'
             ], 404);
         }
 
@@ -183,6 +183,12 @@ class SimpleCRUDController extends Controller
             $attempt =  $this->tableModel::destroy($id);
         } catch (\Throwable $th) {
             $attempt = false;
+
+            return response()->json([
+                'error' => $attempt ? false : true,
+                'id' => $id,
+                'mensaje' => $this->tableModel::find($id)
+            ], 200);
         }
 
         return response()->json([
