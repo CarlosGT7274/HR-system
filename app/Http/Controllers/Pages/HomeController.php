@@ -24,7 +24,15 @@ class HomeController extends Controller
 
     public function home(Request $request)
     {
-        return view('home.home', ['pageTitle' => 'Home', 'menuItems' => $this->menuItems, 'attendance' => []]);
+        return view('home.home', [
+            'pageTitle' => 'Home', 
+            'menuItems' => $this->menuItems, 
+            'attendance' => [], 
+            "general" => [], 
+            "salaries" => [], 
+            "birthdays" => [],
+            "rotations" =>[]
+        ]);
     }
 
 
@@ -41,10 +49,30 @@ class HomeController extends Controller
         $general = $this->apiRequest('dashboard/general', 'get', [
             'date' => $request->fecha
         ]);
+
+        $salaries = $this->apiRequest("dashboard/salaries", "get", [
+            "date" => $request->fecha
+        ]);
+
+        $birthdays = $this->apiRequest("dashboard/birthdays", "get", [
+            'date' => $request->fecha
+        ]);
+
+        $rotations = $this->apiRequest("dashboard/rotations", "get", [
+            'date' => $request->fecha
+        ]);
         // $attendance = $this->internalRequest('dashboard/attendance', 'GET',  ['date' => '2023-10-11']);
 
         // return $attendance; 
 
-        return view('home.home', ['pageTitle' => 'Home', 'menuItems' => $this->menuItems, 'attendance' => $attendance, 'general' => $general]);
+        return view('home.home', [
+            'pageTitle' => 'Home', 
+            'menuItems' => $this->menuItems, 
+            'attendance' => $attendance, 
+            'general' => $general, 
+            "salaries" => $salaries, 
+            "birthdays" => $birthdays,
+            "rotations" => $rotations
+        ]);
     }
 }

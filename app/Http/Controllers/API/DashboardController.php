@@ -351,6 +351,7 @@ class DashboardController extends Controller
             foreach ($employees as $key => $employee) {
 
                 $hist = hr_historial::where('id_empleado', $employee['id_empleado'])->firstWhere('movimiento', 'B');
+                $nomP = hr_puestos::firstWhere('id_puesto', $hist['id_puesto']);
 
                 $histMonth = date('m', strtotime($hist['fecha']));
 
@@ -362,7 +363,7 @@ class DashboardController extends Controller
                     if (empty($temp_object)) {
                         $temp_object = ['unidad' => $hist['id_unidad'], 'puestos' => [], 'motivos' => []];
 
-                        array_push($temp_object['puestos'], ['total' => 1, 'puesto' => $hist['id_puesto']]);
+                        array_push($temp_object['puestos'], ['total' => 1, 'puesto' => $nomP['nombre']]);
 
                         array_push($temp_object['motivos'], ['total' => 1, 'motivo' => $hist['observaciones']]);
 

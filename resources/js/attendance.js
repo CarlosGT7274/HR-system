@@ -28,11 +28,10 @@ export function attendance(jsonData, element) {
             "background": "",
             "foreColor": "#333",
             "fontFamily": "Roboto",
-            "height": 370,
             "id": "Br0NO",
             
             "type": "area",
-            "width": 580
+        
         },
         "plotOptions": {
             "bar": {

@@ -1,11 +1,11 @@
 
 import ApexCharts from "apexcharts";
 
-const Gdata= document.getElementById("jsonG").value
+const Gdata = document.getElementById("jsonG").value
 const dataG = JSON.parse(Gdata)
 
-console.log(Object.values(dataG['data']['4']))
-
+// console.log(Object.values(dataG['data']))
+// console.log(dataG)
 var options = {
     series: [{
     name: 'Males',
@@ -18,8 +18,7 @@ var options = {
   ],
     chart: {
     type: 'bar',
-    height: 440,
-    stacked: true
+    stacked: true,
   },
   colors: ['#008FFB', '#FF4560'],
   plotOptions: {
@@ -83,7 +82,7 @@ var options = {
     }
   },
   subtitle: {
-    text: 'total: ' + ' Capacitaciones: ' ,
+    text: 'total: ' + Object.values(dataG['data'])[0] + ' Capacitaciones: ' + Object.values(dataG['data'])[3],
     align: 'center',
     margin: 30,
     offsetY: 40,
