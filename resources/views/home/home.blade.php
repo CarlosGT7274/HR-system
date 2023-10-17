@@ -25,7 +25,7 @@
                     <path d="M4 18H20" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
                 </svg>
             </button>
-            <button aria-label="close" id="close" onclick="showNav(true)" class=" focus:outline-none focus:ring-2">
+            <button aria-label="close" id="close" onclick="showNav(false)" class="focus:outline-none focus:ring-2">
                 <svg class="" width="24" height="24" viewBox="0 0 24 24" fill="none"
                     xmlns="http://www.w3.org/2000/svg">
                     <path d="M18 6L6 18" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
@@ -115,23 +115,47 @@
                 <button type="submit"> Enviar </button>
             </form>
 
-            <div id="graphics" class="flex flex-wrap justify-between">
-                <div id="attendance" class=" h-96"  >
-                    <input type="hidden" name="" id="jsonatt" value="{{json_encode($attendance)}}">
+            <div id="graphics" class="relative flex flex-col flex-1 overflow-y-auto overflow-x-hidden">
+
+                
+                <div id="attendance" >
+                        <input type="hidden" name="" id="jsonatt" value="{{json_encode($attendance)}}">
                 </div>
-                <div id="general" class="w-1/2">
+
+
+                <div className="flex flex-col col-span-full sm:col-span-6 bg-white dark:bg-slate-800 shadow-lg rounded-sm border border-slate-200 dark:border-slate-700">
+                    <header className="px-5 py-4 border-b border-slate-100 dark:border-slate-700">
+                      <h2 className="font-semibold text-slate-800 dark:text-slate-100">Salarios</h2>
+                    </header>
+                     {{-- Chart built with Chart.js 3  --}}
+                     {{-- Change the height attribute to adjust the chart height  --}}
+                    {{-- <BarChart data={chartData} width={595} height={248} /> --}}
+                    <div class="px-5 py-3" id="salaries2">
+
+                    </div>
+                </div>
+              
+
+                <div id="general" class="">
                     <input type="hidden" name="" id="jsonG" value="{{json_encode($general)}}">
                 </div>
-                <div id="salaries" class="w-1/2">
+
+                <div id="salaries" class="">
                     <input type="hidden" name="" id="jsonS" value="{{json_encode($salaries)}}">
                 </div>
-                <div id="birthdays" class="w-1/2">
+
+                <div id="birthdays" class="">
                     <input type="hidden" name="" id="jsonB" value="{{json_encode($birthdays)}}">
                 </div>
-                <div id="rotations" class="w-1/2">
+
+                <div id="rotations" class="">
                     <input type="hidden" name="" id="jsonR" value="{{json_encode($rotations)}}">
                 </div>
+
             </div>
+            
+            
+            
             
         </div>
     </div>
@@ -175,13 +199,28 @@ let close = document.getElementById("close");
 
 const showNav = (flag) => {
     if (flag) {
-        Main.classList.toggle("-translate-x-full");
-        Main.classList.toggle("translate-x-0");
-        Main.classList.toggle("hidden");
-        open.classList.toggle("hidden");
-        close.classList.toggle("hidden");
+        Main.classList.remove("hidden");
+        open.classList.add("hidden");
+        close.classList.remove("hidden");
+    } else {
+        Main.classList.add("hidden");
+        open.classList.remove("hidden");
+        close.classList.add("hidden");
     }
 };
+
+// Establece el ancho de la ventana a partir del cual deseas ocultar el div
+const anchoUmbral = 1024; // Cambia este valor según tus necesidades
+
+// Función que maneja la ocultación en función del ancho de la ventana
+const handleResize = () => {
+    if (window.innerWidth >= anchoUmbral) {
+        showNav(true); // Mostrar el div
+    }
+};
+
+// Llama a la función handleResize al cargar la página y en respuesta a cambios de tamaño
+window.addEventListener("resize", handleResize);
 </script>
   @vite("resources/js/attendance.js")
   @vite("resources/js/general.js")
