@@ -14,7 +14,7 @@
 <body>
 
     <main class="flex flex-col lg:flex-row">
-        @yield('navbar')
+        @include('components.sidebar')
 
         <section>
             @yield('content')

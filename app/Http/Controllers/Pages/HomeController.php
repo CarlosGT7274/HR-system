@@ -7,6 +7,11 @@ use Illuminate\Http\Request;
 
 class HomeController extends Controller
 {
+    private $menuItems = [
+        ['title' => 'Personal', 'subMenu' => ['Unidad', 'Departamentos', 'Puestos', 'Conceptos', 'Empleados', 'Aprobaciones', 'Vacaciones', 'Renuncias']],
+        ['title' => 'Dispositivos', 'subMenu' => ['Dispositivos', 'Sincronizar Datos', 'Cargar eventos USB', 'Descargar eventos', 'Enrolamiento remoto']],
+        ['title' => 'Asistencias', 'subMenu' => ['Asistencia', 'Incidencias', 'Excepciones', 'Tiempos Extras', 'Calendario', 'Horarios y Turnos', 'Consultas y Reportes']],
+    ];
     /**
      * Create a new controller instance.
      *
@@ -18,10 +23,9 @@ class HomeController extends Controller
 
     public function home(Request $request)
     {
-        print_r($request->headers->get('authorization'));
-
-        $response = $this->apiRequest('me', 'GET', []);
-
-        return view('home.home', ['pageTitle' => 'Home', 'user' => $response['data']]);
+        return view('home.home', [
+            'pageTitle' => 'Home',
+            'menuItems' => $this->menuItems,
+        ]);
     }
 }
