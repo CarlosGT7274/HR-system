@@ -12,9 +12,14 @@
 </head>
 
 <body>
-    @yield('navbar')
 
-    @yield('content')
+    <main class="flex flex-col lg:flex-row">
+        @yield('navbar')
+
+        <section>
+            @yield('content')
+        </section>
+    </main>
 
     @yield('footer')
 
