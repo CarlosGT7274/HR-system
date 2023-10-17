@@ -4,54 +4,7 @@ const jsonRr = JSON.parse(document.getElementById("jsonR").value)
 
 console.log(jsonRr)
 
-
-// Datos proporcionados
-const data = {
-    "error": false,
-    "mensaje": "",
-    "data": {
-      "hombres": 2,
-      "mujeres": 1,
-      "total": 3,
-      "detalles": [
-        {
-          "unidad": 2,
-          "puestos": [
-            {
-              "total": 1,
-              "puesto": "Administrador general"
-            }
-          ],
-          "motivos": [
-            {
-              "total": 1,
-              "motivo": null
-            }
-          ]
-        },
-        {
-          "unidad": 1,
-          "puestos": [
-            {
-              "total": 1,
-              "puesto": "Cocinero"
-            },
-            {
-              "total": 1,
-              "puesto": 3
-            }
-          ],
-          "motivos": [
-            {
-              "total": 2,
-              "motivo": null
-            }
-          ]
-        }
-      ]
-    }
-  };
-  
+const data = jsonRr;
   // Procesa los datos para obtener el nombre del puesto y el total de despidos
   const detalles = data.data.detalles;
   const despidosPorPuesto = [];

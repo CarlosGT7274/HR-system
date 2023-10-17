@@ -64,7 +64,7 @@ var options = {
   },
   title: {
         floating: false,
-        text: 'Grafica General',
+        text: 'total: ' + Object.values(dataG['data'])[0] + ' Capacitaciones: ' + Object.values(dataG['data'])[3],
         align: 'left',
         style: {
           fontSize: '18px'
@@ -79,16 +79,6 @@ var options = {
       formatter: function (val) {
         return Math.abs(Math.round(val)) + "%"
       }
-    }
-  },
-  subtitle: {
-    text: 'total: ' + Object.values(dataG['data'])[0] + ' Capacitaciones: ' + Object.values(dataG['data'])[3],
-    align: 'center',
-    margin: 30,
-    offsetY: 40,
-    style: {
-      color: '#222',
-      fontSize: '24px',
     }
   }
   };
