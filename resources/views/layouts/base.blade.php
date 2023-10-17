@@ -12,17 +12,16 @@
 </head>
 
 <body>
-    <div id="nav-bar">
-        @yield('navbar')
-    </div>
 
-    <div id="main-container">
-        @yield('content')
-    </div>
+    <main class="flex flex-col lg:flex-row">
+        @include('components.sidebar')
 
-    <footer>
-        @yield('footer')
-    </footer>
+        <section>
+            @yield('content')
+        </section>
+    </main>
+
+    @yield('footer')
 
     @vite('resources/js/app.js')
     @yield('js-scripts')

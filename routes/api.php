@@ -30,6 +30,7 @@ use App\Models\HR\Company\Employment\hr_unidades_terminales;
 use App\Models\HR\Company\General\hr_capacitaciones;
 use App\Models\HR\Company\General\hr_codigos_pagos;
 use App\Models\HR\Company\General\hr_dias_feriados;
+use App\Models\HR\Company\General\hr_politicas_pagos;
 use App\Models\HR\Employee\Info\hr_documentos;
 use App\Models\HR\Employee\Info\hr_familiares;
 use App\Models\HR\Employee\Info\hr_imagenes;
@@ -188,23 +189,20 @@ Route::prefix('v1')->group(function () {
             Route::delete('{id}', 'delete');
         });
 
-
         Route::prefix('{id_company}')->middleware('auth:api')->group(function () {
 
             Route::prefix('holidays')->group(function () {
+                $controller = new SimpleCRUDController(new hr_dias_feriados);
 
-                Route::get('', function ($id_company) {
-                    $controller = new SimpleCRUDController(new hr_dias_feriados);
+                Route::get('', function ($id_company) use ($controller) {
                     return $controller->readAll(['column' => 'id_empresa', 'value' => $id_company]);
                 });
 
-                Route::get('{id}', function ($id_company, $id) {
-                    $controller = new SimpleCRUDController(new hr_dias_feriados);
+                Route::get('{id}', function ($id_company, $id) use ($controller) {
                     return $controller->readOne($id, ['column' => 'id_empresa', 'value' => $id_company]);
                 });
 
-                Route::post('', function ($id_company, Request $request) {
-                    $controller = new SimpleCRUDController(new hr_dias_feriados);
+                Route::post('', function ($id_company, Request $request) use ($controller) {
                     return $controller->create(
                         $request,
                         ['id_empresa' => $id_company],
@@ -217,8 +215,7 @@ Route::prefix('v1')->group(function () {
                     );
                 });
 
-                Route::put('{id}', function ($id, Request $request) {
-                    $controller = new SimpleCRUDController(new hr_dias_feriados);
+                Route::put('{id}', function ($id_company, $id, Request $request) use ($controller) {
                     return $controller->update(
                         $id,
                         $request,
@@ -231,16 +228,15 @@ Route::prefix('v1')->group(function () {
                     );
                 });
 
-                Route::delete('{id}', function ($id) {
-                    $controller = new SimpleCRUDController(new hr_dias_feriados);
+                Route::delete('{id}', function ($id_company, $id) use ($controller) {
                     return $controller->delete($id);
                 });
             });
 
             Route::prefix('trainings')->group(function () {
+                $controller = new SimpleCRUDController(new hr_capacitaciones);
 
-                Route::get('', function ($id_company) {
-                    $controller = new SimpleCRUDController(new hr_capacitaciones);
+                Route::get('', function ($id_company) use ($controller) {
                     return $controller->readAll(['column' => 'id_empresa', 'value' => $id_company]);
                 });
 
@@ -252,82 +248,71 @@ Route::prefix('v1')->group(function () {
                     Route::put('{id}', 'updateTraining');
                 });
 
-                Route::delete('{id}', function ($id) {
-                    $controller = new SimpleCRUDController(new hr_capacitaciones);
+                Route::delete('{id}', function ($id_company, $id) use ($controller) {
                     return $controller->delete($id);
                 });
             });
 
             Route::prefix('employeeTypes')->group(function () {
+                $controller = new SimpleCRUDController(new hr_tipos_empleados);
 
-                Route::get('', function ($id_company) {
-                    $controller = new SimpleCRUDController(new hr_tipos_empleados);
+                Route::get('', function ($id_company) use ($controller) {
                     return $controller->readAll(['column' => 'id_empresa', 'value' => $id_company]);
                 });
 
-                Route::get('{id}', function ($id_company, $id) {
-                    $controller = new SimpleCRUDController(new hr_tipos_empleados);
+                Route::get('{id}', function ($id_company, $id) use ($controller) {
                     return $controller->readOne($id, ['column' => 'id_empresa', 'value' => $id_company]);
                 });
 
-                Route::post('', function ($id_company, Request $request) {
-                    $controller = new SimpleCRUDController(new hr_tipos_empleados);
+                Route::post('', function ($id_company, Request $request) use ($controller) {
                     return $controller->create($request, ['id_empresa' => $id_company], ['nombre' => 'required | string']);
                 });
 
-                Route::put('{id}', function ($id, Request $request) {
-                    $controller = new SimpleCRUDController(new hr_tipos_empleados);
+                Route::put('{id}', function ($id_company, $id, Request $request) use ($controller) {
                     return $controller->update($id, $request, ['nombre' => 'sometimes | required | string']);
                 });
 
-                Route::delete('{id}', function ($id) {
-                    $controller = new SimpleCRUDController(new hr_tipos_empleados);
+                Route::delete('{id}', function ($id_company, $id) use ($controller) {
                     return $controller->delete($id);
                 });
             });
 
             Route::prefix('departments')->group(function () {
+                $controller = new SimpleCRUDController(new hr_departamentos);
 
-                Route::get('', function ($id_company) {
-                    $controller = new SimpleCRUDController(new hr_departamentos);
+                Route::get('', function ($id_company) use ($controller) {
                     return $controller->readAll(['column' => 'id_empresa', 'value' => $id_company]);
                 });
 
-                Route::get('{id}', function ($id_company, $id) {
-                    $controller = new SimpleCRUDController(new hr_departamentos);
+                Route::get('{id}', function ($id_company, $id) use ($controller) {
                     return $controller->readOne($id, ['column' => 'id_empresa', 'value' => $id_company]);
                 });
 
-                Route::post('', function ($id_company, Request $request) {
-                    $controller = new SimpleCRUDController(new hr_departamentos);
+                Route::post('', function ($id_company, Request $request) use ($controller) {
                     return $controller->create($request, ['id_empresa' => $id_company], ['nombre' => 'required | string']);
                 });
 
-                Route::put('{id}', function ($id, Request $request) {
-                    $controller = new SimpleCRUDController(new hr_departamentos);
+                Route::put('{id}', function ($id_company, $id, Request $request) use ($controller) {
                     return $controller->update($id, $request, ['nombre' => 'sometimes | required | string']);
                 });
 
-                Route::delete('{id}', function ($id) {
-                    $controller = new SimpleCRUDController(new hr_departamentos);
+                Route::delete('{id}', function ($id_company, $id) use ($controller) {
                     return $controller->delete($id);
                 });
             });
 
             Route::prefix('positions')->group(function () {
+                $controller = new SimpleCRUDController(new hr_puestos);
 
-                Route::get('', function ($id_company) {
-                    $controller = new SimpleCRUDController(new hr_puestos);
+                Route::get('', function ($id_company) use ($controller) {
                     return $controller->readAll(['column' => 'id_empresa', 'value' => $id_company]);
                 });
 
-                Route::get('{id}', function ($id_company, $id) {
-                    $controller = new SimpleCRUDController(new hr_puestos);
+                Route::get('{id}', function ($id_company, $id) use ($controller) {
                     return $controller->readOne($id, ['column' => 'id_empresa', 'value' => $id_company]);
                 });
 
-                Route::post('', function ($id_company, Request $request) {
-                    $controller = new SimpleCRUDController(new hr_puestos);
+                Route::post('', function ($id_company, Request $request) use ($controller) {
                     return $controller->create(
                         $request,
                         ['id_empresa' => $id_company],
@@ -340,8 +325,7 @@ Route::prefix('v1')->group(function () {
                     );
                 });
 
-                Route::put('{id}', function ($id, Request $request) {
-                    $controller = new SimpleCRUDController(new hr_puestos);
+                Route::put('{id}', function ($id_company, $id, Request $request) use ($controller) {
                     return $controller->update(
                         $id,
                         $request,
@@ -354,26 +338,23 @@ Route::prefix('v1')->group(function () {
                     );
                 });
 
-                Route::delete('{id}', function ($id) {
-                    $controller = new SimpleCRUDController(new hr_puestos);
+                Route::delete('{id}', function ($id_company, $id) use ($controller) {
                     return $controller->delete($id);
                 });
             });
 
             Route::prefix('units')->group(function () {
+                $controller = new SimpleCRUDController(new hr_unidades);
 
-                Route::get('', function ($id_company) {
-                    $controller = new SimpleCRUDController(new hr_unidades);
+                Route::get('', function ($id_company)  use ($controller) {
                     return $controller->readAll(['column' => 'id_empresa', 'value' => $id_company]);
                 });
 
-                Route::get('{id}', function ($id_company, $id) {
-                    $controller = new SimpleCRUDController(new hr_unidades);
+                Route::get('{id}', function ($id_company, $id)  use ($controller) {
                     return $controller->readOne($id, ['column' => 'id_empresa', 'value' => $id_company]);
                 });
 
-                Route::post('', function ($id_company, Request $request) {
-                    $controller = new SimpleCRUDController(new hr_unidades);
+                Route::post('', function ($id_company, Request $request)  use ($controller) {
                     return $controller->create(
                         $request,
                         ['id_empresa' => $id_company],
@@ -387,8 +368,7 @@ Route::prefix('v1')->group(function () {
                     );
                 });
 
-                Route::put('{id}', function ($id, Request $request) {
-                    $controller = new SimpleCRUDController(new hr_unidades);
+                Route::put('{id}', function ($id_company, $id, Request $request)  use ($controller) {
                     return $controller->update(
                         $id,
                         $request,
@@ -402,12 +382,11 @@ Route::prefix('v1')->group(function () {
                     );
                 });
 
-                Route::delete('{id}', function ($id) {
-                    $controller = new SimpleCRUDController(new hr_unidades);
+                Route::delete('{id}', function ($id_company, $id)  use ($controller) {
                     return $controller->delete($id);
                 });
 
-                Route::post('{id}', function ($id, Request $request) {
+                Route::post('{id}', function ($id_company, $id, Request $request) {
                     $controller = new SimpleCRUDController(new hr_unidades_terminales);
                     return $controller->create(
                         $request,
@@ -418,19 +397,17 @@ Route::prefix('v1')->group(function () {
             });
 
             Route::prefix('tree')->group(function () {
+                $controller = new SimpleCRUDController(new hr_organizacion);
 
-                Route::get('', function ($id_company) {
-                    $controller = new SimpleCRUDController(new hr_organizacion);
+                Route::get('', function ($id_company) use ($controller) {
                     return $controller->readAll(['column' => 'id_empresa', 'value' => $id_company]);
                 });
 
-                Route::get('{id}', function ($id_company, $id) {
-                    $controller = new SimpleCRUDController(new hr_organizacion);
+                Route::get('{id}', function ($id_company, $id) use ($controller) {
                     return $controller->readOne($id, ['column' => 'id_empresa', 'value' => $id_company]);
                 });
 
-                Route::post('', function ($id_company, Request $request) {
-                    $controller = new SimpleCRUDController(new hr_organizacion);
+                Route::post('', function ($id_company, Request $request) use ($controller) {
                     return $controller->create(
                         $request,
                         ['id_empresa' => $id_company],
@@ -443,8 +420,7 @@ Route::prefix('v1')->group(function () {
                     );
                 });
 
-                Route::put('{id}', function ($id_company, $id, Request $request) {
-                    $controller = new SimpleCRUDController(new hr_organizacion);
+                Route::put('{id}', function ($id_company, $id, Request $request) use ($controller) {
                     return $controller->update(
                         $id,
                         $request,
@@ -457,8 +433,7 @@ Route::prefix('v1')->group(function () {
                     );
                 });
 
-                Route::delete('{id}', function ($id) {
-                    $controller = new SimpleCRUDController(new hr_organizacion);
+                Route::delete('{id}', function ($id_company, $id) use ($controller) {
                     return $controller->delete($id);
                 });
             });
@@ -477,19 +452,17 @@ Route::prefix('v1')->group(function () {
             });
 
             Route::prefix('payCodes')->group(function () {
+                $controller = new SimpleCRUDController(new hr_codigos_pagos);
 
-                Route::get('', function ($id_company) {
-                    $controller = new SimpleCRUDController(new hr_codigos_pagos);
+                Route::get('', function ($id_company) use ($controller) {
                     return $controller->readAll(['column' => 'id_empresa', 'value' => $id_company]);
                 });
 
-                Route::get('{id}', function ($id_company, $id) {
-                    $controller = new SimpleCRUDController(new hr_codigos_pagos);
+                Route::get('{id}', function ($id_company, $id) use ($controller) {
                     return $controller->readOne($id, ['column' => 'id_empresa', 'value' => $id_company]);
                 });
 
-                Route::post('', function ($id_company, Request $request) {
-                    $controller = new SimpleCRUDController(new hr_codigos_pagos);
+                Route::post('', function ($id_company, Request $request) use ($controller) {
                     return $controller->create(
                         $request,
                         ['id_empresa' => $id_company],
@@ -502,8 +475,7 @@ Route::prefix('v1')->group(function () {
                     );
                 });
 
-                Route::put('{id}', function ($id, Request $request) {
-                    $controller = new SimpleCRUDController(new hr_codigos_pagos);
+                Route::put('{id}', function ($id_company, $id, Request $request) use ($controller) {
                     return $controller->update(
                         $id,
                         $request,
@@ -516,25 +488,22 @@ Route::prefix('v1')->group(function () {
                     );
                 });
 
-                Route::delete('{id}', function ($id) {
-                    $controller = new SimpleCRUDController(new hr_codigos_pagos);
+                Route::delete('{id}', function ($id_company, $id) use ($controller) {
                     return $controller->delete($id);
                 });
 
                 Route::prefix('{id_payCod}/payPolitics')->group(function () {
+                    $controller = new SimpleCRUDController(new hr_politicas_pagos);
 
-                    Route::get('', function ($id_payCod) {
-                        $controller = new SimpleCRUDController(new hr_codigos_pagos);
+                    Route::get('', function ($id_company, $id_payCod) use ($controller) {
                         return $controller->readAll(['column' => 'id_codigo_pago', 'value' => $id_payCod]);
                     });
 
-                    Route::get('{id}', function ($id_payCod, $id) {
-                        $controller = new SimpleCRUDController(new hr_codigos_pagos);
+                    Route::get('{id}', function ($id_company, $id_payCod, $id) use ($controller) {
                         return $controller->readOne($id, ['column' => 'id_codigo_pago', 'value' => $id_payCod]);
                     });
 
-                    Route::post('', function ($id_payCod, Request $request) {
-                        $controller = new SimpleCRUDController(new hr_codigos_pagos);
+                    Route::post('', function ($id_company, $id_payCod, Request $request) use ($controller) {
                         return $controller->create(
                             $request,
                             ['id_codigo_pago' => $id_payCod],
@@ -547,9 +516,7 @@ Route::prefix('v1')->group(function () {
                         );
                     });
 
-                    Route::put('{id}', function ($id, Request $request) {
-
-                        $controller = new SimpleCRUDController(new hr_codigos_pagos);
+                    Route::put('{id}', function ($id_company, $id_payCod, $id, Request $request) use ($controller) {
                         return $controller->update(
                             $id,
                             $request,
@@ -562,8 +529,7 @@ Route::prefix('v1')->group(function () {
                         );
                     });
 
-                    Route::delete('{id}', function ($id) {
-                        $controller = new SimpleCRUDController(new hr_codigos_pagos);
+                    Route::delete('{id}', function ($id_company, $id_payCod, $id) use ($controller) {
                         return $controller->delete($id);
                     });
                 });
@@ -603,7 +569,6 @@ Route::prefix('v1')->group(function () {
 
         Route::prefix('{id_employee}')->middleware('auth:api')->group(function () {
 
-
             Route::controller(EmpleadosController::class)->group(function () {
                 Route::post('training', 'training');
 
@@ -628,19 +593,17 @@ Route::prefix('v1')->group(function () {
             });
 
             Route::prefix('documents')->group(function () {
+                $controller = new SimpleCRUDController(new hr_documentos);
 
-                Route::get('', function ($id_employee) {
-                    $controller = new SimpleCRUDController(new hr_documentos);
+                Route::get('', function ($id_employee) use ($controller) {
                     return $controller->readAll(['column' => 'id_empleado', 'value' => $id_employee], true);
                 });
 
-                Route::get('{id}', function ($id, $id_employee) {
-                    $controller = new SimpleCRUDController(new hr_documentos);
+                Route::get('{id}', function ($id_employee, $id) use ($controller) {
                     return $controller->readOne($id, ['column' => 'id_empleado', 'value' => $id_employee], true);
                 });
 
-                Route::post('', function (Request $request, $id_employee) {
-                    $controller = new SimpleCRUDController(new hr_documentos);
+                Route::post('', function (Request $request, $id_employee) use ($controller) {
                     return $controller->create(
                         $request,
                         ['id_empleado' => $id_employee],
@@ -653,8 +616,7 @@ Route::prefix('v1')->group(function () {
                     );
                 });
 
-                Route::put('{id}', function ($id, Request $request) {
-                    $controller = new SimpleCRUDController(new hr_documentos);
+                Route::put('{id}', function ($id_employee, $id, Request $request) use ($controller) {
                     return $controller->update(
                         $id,
                         $request,
@@ -667,26 +629,23 @@ Route::prefix('v1')->group(function () {
                     );
                 });
 
-                Route::delete('{id}', function ($id) {
-                    $controller = new SimpleCRUDController(new hr_documentos);
+                Route::delete('{id}', function ($id_employee, $id) use ($controller) {
                     return $controller->delete($id);
                 });
             });
 
             Route::prefix('image')->group(function () {
+                $controller = new SimpleCRUDController(new hr_imagenes);
 
-                Route::get('', function ($id_employee) {
-                    $controller = new SimpleCRUDController(new hr_imagenes);
+                Route::get('', function ($id_employee) use ($controller) {
                     return $controller->readAll(['column' => 'id_empleado', 'value' => $id_employee], true);
                 });
 
-                Route::get('{id}', function ($id, $id_employee) {
-                    $controller = new SimpleCRUDController(new hr_imagenes);
+                Route::get('{id}', function ($id_employee, $id) use ($controller) {
                     return $controller->readOne($id, ['column' => 'id_empleado', 'value' => $id_employee], true);
                 });
 
-                Route::post('', function (Request $request, $id_employee) {
-                    $controller = new SimpleCRUDController(new hr_imagenes);
+                Route::post('', function (Request $request, $id_employee) use ($controller) {
                     return $controller->create(
                         $request,
                         ['id_empleado' => $id_employee],
@@ -695,8 +654,7 @@ Route::prefix('v1')->group(function () {
                     );
                 });
 
-                Route::put('{id}', function ($id, Request $request) {
-                    $controller = new SimpleCRUDController(new hr_imagenes);
+                Route::put('{id}', function ($id_employee, $id, Request $request) use ($controller) {
                     return $controller->update(
                         $id,
                         $request,
@@ -705,26 +663,23 @@ Route::prefix('v1')->group(function () {
                     );
                 });
 
-                Route::delete('{id}', function ($id) {
-                    $controller = new SimpleCRUDController(new hr_imagenes);
+                Route::delete('{id}', function ($id_employee, $id) use ($controller) {
                     return $controller->delete($id);
                 });
             });
 
             Route::prefix('relatives')->group(function () {
+                $controller = new SimpleCRUDController(new hr_familiares);
 
-                Route::get('', function ($id_employee) {
-                    $controller = new SimpleCRUDController(new hr_familiares);
+                Route::get('', function ($id_employee) use ($controller) {
                     return $controller->readAll(['column' => 'id_empleado', 'value' => $id_employee], true);
                 });
 
-                Route::get('{id}', function ($id, $id_employee) {
-                    $controller = new SimpleCRUDController(new hr_familiares);
+                Route::get('{id}', function ($id_employee, $id) use ($controller) {
                     return $controller->readOne($id, ['column' => 'id_empleado', 'value' => $id_employee], true);
                 });
 
-                Route::post('', function (Request $request, $id_employee) {
-                    $controller = new SimpleCRUDController(new hr_familiares);
+                Route::post('', function (Request $request, $id_employee) use ($controller) {
                     return $controller->create(
                         $request,
                         ['id_empleado' => $id_employee],
@@ -740,8 +695,7 @@ Route::prefix('v1')->group(function () {
                     );
                 });
 
-                Route::put('{id}', function ($id, Request $request) {
-                    $controller = new SimpleCRUDController(new hr_familiares);
+                Route::put('{id}', function ($id_employee, $id, Request $request) use ($controller) {
                     return $controller->update(
                         $id,
                         $request,
@@ -757,8 +711,7 @@ Route::prefix('v1')->group(function () {
                     );
                 });
 
-                Route::delete('{id}', function ($id) {
-                    $controller = new SimpleCRUDController(new hr_familiares);
+                Route::delete('{id}', function ($id_employee, $id) use ($controller) {
                     return $controller->delete($id);
                 });
             });
@@ -772,19 +725,17 @@ Route::prefix('v1')->group(function () {
     Route::prefix('biometrics')->middleware('auth:api')->group(function () {
 
         Route::prefix('terminals')->group(function () {
+            $controller = new SimpleCRUDController(new att_terminal);
 
-            Route::get('', function () {
-                $controller = new SimpleCRUDController(new att_terminal);
+            Route::get('', function () use ($controller) {
                 return $controller->readAll([]);
             });
 
-            Route::get('{id}', function ($id) {
-                $controller = new SimpleCRUDController(new att_terminal);
+            Route::get('{id}', function ($id) use ($controller) {
                 return $controller->readOne($id, []);
             });
 
-            Route::post('', function (Request $request) {
-                $controller = new SimpleCRUDController(new att_terminal);
+            Route::post('', function (Request $request) use ($controller) {
                 return $controller->create(
                     $request,
                     [],
@@ -815,8 +766,7 @@ Route::prefix('v1')->group(function () {
                 );
             });
 
-            Route::put('{id}', function ($id, Request $request) {
-                $controller = new SimpleCRUDController(new att_terminal);
+            Route::put('{id}', function ($id, Request $request) use ($controller) {
                 return $controller->update(
                     $id,
                     $request,
@@ -847,27 +797,24 @@ Route::prefix('v1')->group(function () {
                 );
             });
 
-            Route::delete('{id}', function ($id) {
-                $controller = new SimpleCRUDController(new att_terminal);
+            Route::delete('{id}', function ($id) use ($controller) {
                 return $controller->delete($id);
             });
 
             Route::prefix('{id_terminal}')->group(function () {
 
                 Route::prefix('parameters')->group(function () {
+                    $controller = new SimpleCRUDController(new att_terminal_para);
 
-                    Route::get('', function ($id_terminal) {
-                        $controller = new SimpleCRUDController(new att_terminal_para);
+                    Route::get('', function ($id_terminal) use ($controller) {
                         return $controller->readAll(['column' => 'terminal_id', 'value' => $id_terminal]);
                     });
 
-                    Route::get('{id}', function ($id, $id_terminal) {
-                        $controller = new SimpleCRUDController(new att_terminal_para);
+                    Route::get('{id}', function ($id_terminal, $id) use ($controller) {
                         return $controller->readOne($id, ['column' => 'terminal_id', 'value' => $id_terminal]);
                     });
 
-                    Route::post('', function ($id_terminal, Request $request) {
-                        $controller = new SimpleCRUDController(new att_terminal_para);
+                    Route::post('', function ($id_terminal, Request $request) use ($controller) {
                         return $controller->create(
                             $request,
                             ['terminal_id' => $id_terminal],
@@ -880,9 +827,7 @@ Route::prefix('v1')->group(function () {
                         );
                     });
 
-                    Route::put('{id}', function ($id, Request $request) {
-
-                        $controller = new SimpleCRUDController(new att_terminal_para);
+                    Route::put('{id}', function ($id_terminal, $id, Request $request) use ($controller) {
                         return $controller->update(
                             $id,
                             $request,
@@ -895,26 +840,23 @@ Route::prefix('v1')->group(function () {
                         );
                     });
 
-                    Route::delete('{id}', function ($id) {
-                        $controller = new SimpleCRUDController(new att_terminal_para);
+                    Route::delete('{id}', function ($id_terminal, $id) use ($controller) {
                         return $controller->delete($id);
                     });
                 });
 
                 Route::prefix('employees')->group(function () {
+                    $controller = new SimpleCRUDController(new att_terminal_emp);
 
-                    Route::get('', function ($id_terminal) {
-                        $controller = new SimpleCRUDController(new att_terminal_emp);
+                    Route::get('', function ($id_terminal) use ($controller) {
                         return $controller->readAll(['column' => 'terminal_serial', 'value' => $id_terminal]);
                     });
 
-                    Route::get('{id}', function ($id, $id_terminal) {
-                        $controller = new SimpleCRUDController(new att_terminal_emp);
+                    Route::get('{id}', function ($id_terminal, $id) use ($controller) {
                         return $controller->readOne($id, ['column' => 'terminal_serial', 'value' => $id_terminal]);
                     });
 
-                    Route::post('', function ($id_terminal, Request $request) {
-                        $controller = new SimpleCRUDController(new att_terminal_emp);
+                    Route::post('', function ($id_terminal, Request $request) use ($controller) {
                         return $controller->create(
                             $request,
                             ['terminal_serial' => $id_terminal],
@@ -928,9 +870,7 @@ Route::prefix('v1')->group(function () {
                         );
                     });
 
-                    Route::put('{id}', function ($id, Request $request) {
-
-                        $controller = new SimpleCRUDController(new att_terminal_emp);
+                    Route::put('{id}', function ($id_terminal, $id, Request $request) use ($controller) {
                         return $controller->update(
                             $id,
                             $request,
@@ -944,8 +884,7 @@ Route::prefix('v1')->group(function () {
                         );
                     });
 
-                    Route::delete('{id}', function ($id) {
-                        $controller = new SimpleCRUDController(new att_terminal_emp);
+                    Route::delete('{id}', function ($id_terminal, $id) use ($controller) {
                         return $controller->delete($id);
                     });
                 });
@@ -953,19 +892,17 @@ Route::prefix('v1')->group(function () {
         });
 
         Route::prefix('employees')->group(function () {
+            $controller = new SimpleCRUDController(new att_empleado);
 
-            Route::get('', function () {
-                $controller = new SimpleCRUDController(new att_empleado);
+            Route::get('', function () use ($controller) {
                 return $controller->readAll([]);
             });
 
-            Route::get('{id}', function ($id) {
-                $controller = new SimpleCRUDController(new att_empleado);
+            Route::get('{id}', function ($id) use ($controller) {
                 return $controller->readOne($id, []);
             });
 
-            Route::post('', function (Request $request) {
-                $controller = new SimpleCRUDController(new att_empleado);
+            Route::post('', function (Request $request) use ($controller) {
                 return $controller->create(
                     $request,
                     [],
@@ -986,8 +923,7 @@ Route::prefix('v1')->group(function () {
                 );
             });
 
-            Route::put('{id}', function ($id, Request $request) {
-                $controller = new SimpleCRUDController(new att_empleado);
+            Route::put('{id}', function ($id, Request $request) use ($controller) {
                 return $controller->update(
                     $id,
                     $request,
@@ -1008,25 +944,22 @@ Route::prefix('v1')->group(function () {
                 );
             });
 
-            Route::delete('{id}', function ($id) {
-                $controller = new SimpleCRUDController(new att_empleado);
+            Route::delete('{id}', function ($id) use ($controller) {
                 return $controller->delete($id);
             });
 
             Route::prefix('{id_emp}/templates')->group(function () {
+                $controller = new SimpleCRUDController(new att_template);
 
-                Route::get('', function ($id_emp) {
-                    $controller = new SimpleCRUDController(new att_template);
+                Route::get('', function ($id_emp) use ($controller) {
                     return $controller->readAll(['column' => 'emp_id', 'value' => $id_emp]);
                 });
 
-                Route::get('{id}', function ($id, $id_emp) {
-                    $controller = new SimpleCRUDController(new att_template);
+                Route::get('{id}', function ($id_emp, $id) use ($controller) {
                     return $controller->readOne($id, ['column' => 'emp_id', 'value' => $id_emp]);
                 });
 
-                Route::post('', function ($id_emp, Request $request) {
-                    $controller = new SimpleCRUDController(new att_template);
+                Route::post('', function ($id_emp, Request $request) use ($controller) {
                     return $controller->create(
                         $request,
                         ['emp_id' => $id_emp],
@@ -1042,8 +975,7 @@ Route::prefix('v1')->group(function () {
                     );
                 });
 
-                Route::put('{id}', function ($id, Request $request) {
-                    $controller = new SimpleCRUDController(new att_template);
+                Route::put('{id}', function ($id_emp, $id, Request $request) use ($controller) {
                     return $controller->update(
                         $id,
                         $request,
@@ -1059,27 +991,24 @@ Route::prefix('v1')->group(function () {
                     );
                 });
 
-                Route::delete('{id}', function ($id) {
-                    $controller = new SimpleCRUDController(new att_template);
+                Route::delete('{id}', function ($id_emp, $id) use ($controller) {
                     return $controller->delete($id);
                 });
             });
         });
 
         Route::prefix('registers')->group(function () {
+            $controller = new SimpleCRUDController(new att_registros);
 
-            Route::get('', function () {
-                $controller = new SimpleCRUDController(new att_registros);
+            Route::get('', function () use ($controller) {
                 return $controller->readAll([]);
             });
 
-            Route::get('{id}', function ($id) {
-                $controller = new SimpleCRUDController(new att_registros);
+            Route::get('{id}', function ($id) use ($controller) {
                 return $controller->readOne($id, []);
             });
 
-            Route::post('', function (Request $request) {
-                $controller = new SimpleCRUDController(new att_registros);
+            Route::post('', function (Request $request) use ($controller) {
                 return $controller->create(
                     $request,
                     [],
@@ -1098,8 +1027,7 @@ Route::prefix('v1')->group(function () {
                 );
             });
 
-            Route::put('{id}', function ($id, Request $request) {
-                $controller = new SimpleCRUDController(new att_registros);
+            Route::put('{id}', function ($id, Request $request) use ($controller) {
                 return $controller->update(
                     $id,
                     $request,
@@ -1118,26 +1046,23 @@ Route::prefix('v1')->group(function () {
                 );
             });
 
-            Route::delete('{id}', function ($id) {
-                $controller = new SimpleCRUDController(new att_registros);
+            Route::delete('{id}', function ($id) use ($controller) {
                 return $controller->delete($id);
             });
         });
 
         Route::prefix('exceptions')->group(function () {
+            $controller = new SimpleCRUDController(new att_excepciones);
 
-            Route::get('', function () {
-                $controller = new SimpleCRUDController(new att_excepciones);
+            Route::get('', function () use ($controller) {
                 return $controller->readAll([]);
             });
 
-            Route::get('{id}', function ($id) {
-                $controller = new SimpleCRUDController(new att_excepciones);
+            Route::get('{id}', function ($id) use ($controller) {
                 return $controller->readOne($id, []);
             });
 
-            Route::post('', function (Request $request) {
-                $controller = new SimpleCRUDController(new att_excepciones);
+            Route::post('', function (Request $request) use ($controller) {
                 return $controller->create(
                     $request,
                     [],
@@ -1152,8 +1077,7 @@ Route::prefix('v1')->group(function () {
                 );
             });
 
-            Route::put('{id}', function ($id, Request $request) {
-                $controller = new SimpleCRUDController(new att_excepciones);
+            Route::put('{id}', function ($id, Request $request) use ($controller) {
                 return $controller->update(
                     $id,
                     $request,
@@ -1168,8 +1092,7 @@ Route::prefix('v1')->group(function () {
                 );
             });
 
-            Route::delete('{id}', function ($id) {
-                $controller = new SimpleCRUDController(new att_excepciones);
+            Route::delete('{id}', function ($id) use ($controller) {
                 return $controller->delete($id);
             });
         });

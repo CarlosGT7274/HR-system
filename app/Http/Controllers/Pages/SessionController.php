@@ -49,7 +49,9 @@ class SessionController extends Controller
         } else {
             session(['token' => $response['data']['token']]);
             session(['user' => $response['data']['usuario']]);
+            session(['company' => $response['data']['empresa']]);
             session(['permissions' => $response['data']['permisos']]);
+
             return redirect()->route('home');
         }
     }
@@ -57,20 +59,90 @@ class SessionController extends Controller
     public function getEmail()
     {
         $data = [
-            'pageTitle' => 'Olvido Su Contraseña',
-            'message' =>  session('token')
+            'pageTitle' => 'Restablecer Contraseña',
+            'message' =>  ''
         ];
 
         return view('forms.resetPassword', $data);
     }
 
-    public function sendToken()
+    public function sendToken(Request $request)
+    {
+        $request->validate([
+            'correo' => 'required | email',
+        ]);
+
+        $response = $this->apiRequest('resetToken', 'GET', [
+            'email' => $request->correo,
+        ]);
+
+        if ($response['code'] == 200) {
+            $data = [
+                'pageTitle' => 'Emial Enviado',
+                'message' => '¡Email enviado correctamente!',
+                'submessage' => 'Se ha enviado un emial a su correo con indicaciones para realizar el cambio de contraseña'
+            ];
+
+            return view('forms.successMessage', $data);
+        } else {
+            $data = [
+                'pageTitle' => 'Restablecer Contraseña',
+                'message' =>  $response['mensaje']
+            ];
+
+            return view('forms.resetPassword', $data);
+        }
+    }
+
+    public function changePassword(Request $request)
     {
         $data = [
-            'pageTitle' => 'Olvido Su Contraseña',
-            'message' =>  session('token')
+            'pageTitle' => 'Restablecer Contraseña',
+            'message' =>  '',
+            'token' => $request->token
         ];
 
-        return view('forms.resetPassword', $data);
+        return view('forms.changePassword', $data);
+    }
+
+    public function updatePassword(Request $request)
+    {
+        $request->validate([
+            'accessToken' => 'required | string',
+            'contraseña' => 'required | string',
+            'de_confirmacion' => 'required | string | same:contraseña'
+        ]);
+
+        $response = $this->apiRequest('updatePassword', 'PUT', [
+            'password' => $request->contraseña,
+            'token' => $request->accessToken
+        ]);
+
+        if ($response['code'] == 200) {
+            $data = [
+                'pageTitle' => 'Cambio Exitoso',
+                'message' => '¡Contraseña cambiada Correctamente!',
+                'submessage' => 'Tu contraseña ha sido cambiada de manera correcta'
+            ];
+
+            return view('forms.successMessage', $data);
+        } else {
+            $data = [
+                'pageTitle' => 'Restablecer Contraseña',
+                'message' =>  $response['mensaje'],
+                'token' => ''
+            ];
+
+            return view('forms.changePassword', $data);
+        }
+    }
+
+    public function logout()
+    {
+        $this->apiRequest('logout', 'POST', []);
+
+        session()->flush();
+
+        return redirect()->route('login.form');
     }
 }

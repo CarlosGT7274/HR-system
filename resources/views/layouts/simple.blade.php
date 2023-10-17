@@ -11,11 +11,8 @@
     @yield('css-styles')
 </head>
 
-<body style="height: 100vh">
-    <div id="main-container" class="h-full">
-        @yield('content')
-    </div>
-
+<body>
+    @yield('content')
 
     @vite('resources/js/app.js')
     @yield('js-scripts')
