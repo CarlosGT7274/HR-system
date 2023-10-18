@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Pages;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
+use Illuminate\Support\Carbon;
 
 class HomeController extends Controller
 {
@@ -23,14 +24,37 @@ class HomeController extends Controller
 
     public function home(Request $request)
     {
+
+        $fechaActual = Carbon::now()->format('Y-m-d');
+
+        $attendance = $this->apiRequest('dashboard/attendance', 'GET', [
+            'date' => $fechaActual
+        ]);
+
+        $general1 = $this->apiRequest('dashboard/general', 'get', [
+            'date' => $fechaActual
+        ]);
+
+        $salaries1 = $this->apiRequest("dashboard/salaries", "get", [
+            "date" => $fechaActual
+        ]);
+
+        $birthdays1 = $this->apiRequest("dashboard/birthdays", "get", [
+            'date' => $fechaActual
+        ]);
+
+        $rotations1 = $this->apiRequest("dashboard/rotations", "get", [
+            'date' => $fechaActual
+        ]);
+
         return view('home.home', [
             'pageTitle' => 'Home', 
             'menuItems' => $this->menuItems, 
-            'attendance' => [], 
-            "general" => [], 
-            "salaries" => [], 
-            "birthdays" => [],
-            "rotations" =>[]
+            'attendance' => $attendance, 
+            "general" => $general1, 
+            "salaries" => $salaries1, 
+            "birthdays" => $birthdays1,
+            "rotations" => $rotations1
         ]);
     }
 
@@ -41,9 +65,11 @@ class HomeController extends Controller
             'fecha' => 'required | date | date_format:Y-m-d'
         ]);
 
-        $attendance = $this->apiRequest('dashboard/attendance', 'GET', [
+        $attendance = $this->apiRequest('dashboard/attendance', 'get', [
             'date' => $request->fecha
         ]);
+
+        // var_dump(json_encode($attendance));
 
         $general = $this->apiRequest('dashboard/general', 'get', [
             'date' => $request->fecha
@@ -60,9 +86,6 @@ class HomeController extends Controller
         $rotations = $this->apiRequest("dashboard/rotations", "get", [
             'date' => $request->fecha
         ]);
-        // $attendance = $this->internalRequest('dashboard/attendance', 'GET',  ['date' => '2023-10-11']);
-
-        // return $attendance; 
 
         return view('home.home', [
             'pageTitle' => 'Home', 
