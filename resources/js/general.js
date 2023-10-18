@@ -64,7 +64,7 @@ var options = {
   },
   title: {
         floating: false,
-        text: 'total: ' + Object.values(dataG['data'])[0] + ' Capacitaciones: ' + Object.values(dataG['data'])[3],
+        text: 'total: ' + Object.values(dataG['data'])[0] ,
         align: 'left',
         style: {
           fontSize: '18px'

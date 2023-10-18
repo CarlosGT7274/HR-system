@@ -31,6 +31,9 @@ class HomeController extends Controller
             'date' => $fechaActual
         ]);
 
+        $unidades = $this->apiRequest('companies/' . session('company') . '/units', 'get', []);
+        $departamentos = $this->apiRequest('companies/' . session('company') . '/departments', 'get', []);
+
         $general1 = $this->apiRequest('dashboard/general', 'get', [
             'date' => $fechaActual
         ]);
@@ -54,7 +57,9 @@ class HomeController extends Controller
             "general" => $general1, 
             "salaries" => $salaries1, 
             "birthdays" => $birthdays1,
-            "rotations" => $rotations1
+            "rotations" => $rotations1,
+            "unidades" => $unidades['data'],
+            "departamentos" => $departamentos['data']
         ]);
     }
 
@@ -62,31 +67,61 @@ class HomeController extends Controller
     public function graph(Request $request)
     {
         $request->validate([
-            'fecha' => 'required | date | date_format:Y-m-d'
+            'fecha' => 'required | date | date_format:Y-m-d',
+            'unidad' => 'integer',
+            "posiciones" => 'integer',
+            'departamento' => 'integer'
         ]);
 
-        $attendance = $this->apiRequest('dashboard/attendance', 'get', [
-            'date' => $request->fecha
-        ]);
+        $apiParams = [];
 
-        // var_dump(json_encode($attendance));
+        foreach($request->all() as $key => $param){
+            if($param != null){
+                $newKey = '';
 
-        $general = $this->apiRequest('dashboard/general', 'get', [
-            'date' => $request->fecha
-        ]);
+                switch ($key) {
+                    case 'fecha':
+                        $newKey = 'date';
+                        break;
+                    case 'unidad':
+                        $newKey = 'unit';
+                        break;
+                    case 'departamento':
+                        $newKey = 'department';
+                        break;
+                    case 'posiciones':
+                        $newKey = 'position';
+                        break;
+                }
 
-        $salaries = $this->apiRequest("dashboard/salaries", "get", [
-            "date" => $request->fecha
-        ]);
+                
+                $apiParams[$newKey] = $param;
+            }
+        }
 
-        $birthdays = $this->apiRequest("dashboard/birthdays", "get", [
-            'date' => $request->fecha
-        ]);
+        // dd($request['unidad']);
+        dd($apiParams);
 
-        $rotations = $this->apiRequest("dashboard/rotations", "get", [
-            'date' => $request->fecha
-        ]);
+        $unidades = $this->apiRequest('companies/' . session('company') . '/units', 'get', []);
+        $departamentos = $this->apiRequest('companies/' . session('company') . '/departments', 'get', []);
+        $posciones = $this->apiRequest('companies/' . session('company') . '/positions', 'get', []);
+        // dd($posciones);
+        $general = $this->apiRequest('dashboard/general', 'get', $apiParams);
+        
+        $salaries = $this->apiRequest("dashboard/salaries", "get", $apiParams);
+        
+        $birthdays = $this->apiRequest("dashboard/birthdays", "get", $apiParams);
+        
+        // dd($birthdays);
+        
+        $rotations = $this->apiRequest("dashboard/rotations", "get", $apiParams);
+        
+        $apiParams['paramDate'] = $request->fecha;
 
+        $attendance = $this->apiRequest('dashboard/attendance', 'get', $apiParams);
+
+        // dd($attendance);
+        
         return view('home.home', [
             'pageTitle' => 'Home', 
             'menuItems' => $this->menuItems, 
@@ -94,7 +129,10 @@ class HomeController extends Controller
             'general' => $general, 
             "salaries" => $salaries, 
             "birthdays" => $birthdays,
-            "rotations" => $rotations
+            "rotations" => $rotations,
+            "unidades" => $unidades['data'],
+            "departamentos" => $departamentos['data'],
+            "posiciones" => $posciones['data']
         ]);
     }
 }

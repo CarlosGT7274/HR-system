@@ -15,6 +15,7 @@ export default defineConfig({
                 getResource("js", "general"),
                 getResource("js", "birthdays"),
                 getResource("js", "rotations"),
+                getResource("js", "capacitaciones"),
 
                 getResource("css", "app"),
 
