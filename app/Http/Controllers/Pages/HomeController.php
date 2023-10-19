@@ -22,9 +22,8 @@ class HomeController extends Controller
     {
     }
 
-    public function home(Request $request)
+    public function home()
     {
-
         $fechaActual = Carbon::now()->format('Y-m-d');
 
         $attendance = $this->apiRequest('dashboard/attendance', 'GET', [
@@ -33,6 +32,7 @@ class HomeController extends Controller
 
         $unidades = $this->apiRequest('companies/' . session('company') . '/units', 'get', []);
         $departamentos = $this->apiRequest('companies/' . session('company') . '/departments', 'get', []);
+        $posciones = $this->apiRequest('companies/' . session('company') . '/positions', 'get', []);
 
         $general1 = $this->apiRequest('dashboard/general', 'get', [
             'date' => $fechaActual
@@ -59,7 +59,8 @@ class HomeController extends Controller
             "birthdays" => $birthdays1,
             "rotations" => $rotations1,
             "unidades" => $unidades['data'],
-            "departamentos" => $departamentos['data']
+            "departamentos" => $departamentos['data'],
+            "posiciones" => $posciones['data']
         ]);
     }
 
@@ -68,15 +69,16 @@ class HomeController extends Controller
     {
         $request->validate([
             'fecha' => 'required | date | date_format:Y-m-d',
-            'unidad' => 'integer',
-            "posiciones" => 'integer',
-            'departamento' => 'integer'
+            'unidad' => 'string | regex:/^\d+$/ | nullable',
+            "posiciones" => 'string | regex:/^\d+$/ | nullable',
+            'departamento' => 'string | regex:/^\d+$/ | nullable',
         ]);
-
+        
         $apiParams = [];
+        
 
         foreach($request->all() as $key => $param){
-            if($param != null){
+            if($param != null && $key != '_token'){
                 $newKey = '';
 
                 switch ($key) {
@@ -92,6 +94,9 @@ class HomeController extends Controller
                     case 'posiciones':
                         $newKey = 'position';
                         break;
+                    case 'region':
+                        $newKey = 'region';
+                        break;
                 }
 
                 
@@ -99,8 +104,8 @@ class HomeController extends Controller
             }
         }
 
-        // dd($request['unidad']);
-        dd($apiParams);
+        // dd($request['region']);
+    // dd($apiParams);
 
         $unidades = $this->apiRequest('companies/' . session('company') . '/units', 'get', []);
         $departamentos = $this->apiRequest('companies/' . session('company') . '/departments', 'get', []);

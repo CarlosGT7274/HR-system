@@ -16,28 +16,25 @@ use Illuminate\Support\Facades\Route;
 | be assigned to the "web" middleware group. Make something great!
 |
 */
-
-Route::middleware('needToken')->get('/', [HomeController::class, 'home'])->name('home');
+Route::middleware('needToken')->controller(HomeController::class)->group(function (){
+    Route::get('/', 'home')->name('home');
+    Route::post('/', 'graph')->name('attendance.graph');
+});
 
 Route::controller(SessionController::class)->group(function () {
     Route::get('login', 'login')->name('login.form');
-
+    
     Route::post('login', 'submit')->name('login.submit');
-
+    
     Route::get('resetPassword', 'getEmail')->name('resetPassword.form');
-
+    
     Route::post('resetPassword', 'sedToken')->name('resetPassword.submit');
-Route::get('changePassword', 'changePassword')->name('changePassword.form');
-
-Route::post('changePassword', 'updatePassword')->name('changePassword.submit');
-
-Route::post('logout', 'logout')->name('logout');
+    Route::get('changePassword', 'changePassword')->name('changePassword.form');
+    
+    Route::post('changePassword', 'updatePassword')->name('changePassword.submit');
+    
+    Route::post('logout', 'logout')->name('logout');
 });
-
-Route::controller(HomeController::class)->group(function (){
-    Route::get('graph', 'graph')->name('attendance.graph');
-});
-
 
 Route::middleware('needToken')->group(function () {
 

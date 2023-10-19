@@ -16,7 +16,7 @@
     <main class="flex flex-col lg:flex-row">
         @include('components.sidebar')
 
-        <section>
+        <section class="w-full">
             @yield('content')
         </section>
     </main>

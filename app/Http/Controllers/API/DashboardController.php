@@ -351,7 +351,8 @@ class DashboardController extends Controller
             foreach ($employees as $key => $employee) {
 
                 $hist = hr_historial::where('id_empleado', $employee['id_empleado'])->firstWhere('movimiento', 'B');
-                $nomP = hr_puestos::firstWhere('id_puesto', $hist['id_puesto']);
+                $nomP = hr_puestos::where('id_puesto', $hist['id_puesto'])->value('nombre');
+                $nomU = hr_unidades::where('id_unidad', $hist['id_unidad'])->value('nombre');
 
                 $histMonth = date('m', strtotime($hist['fecha']));
 
@@ -361,16 +362,16 @@ class DashboardController extends Controller
                     }
 
                     if (empty($temp_object)) {
-                        $temp_object = ['unidad' => $hist['id_unidad'], 'puestos' => [], 'motivos' => []];
+                        $temp_object = ['unidad' => $nomU, 'puestos' => [], 'motivos' => []];
 
-                        array_push($temp_object['puestos'], ['total' => 1, 'puesto' => $nomP['nombre']]);
+                        array_push($temp_object['puestos'], ['total' => 1, 'puesto' => $nomP]);
 
                         array_push($temp_object['motivos'], ['total' => 1, 'motivo' => $hist['observaciones']]);
 
                         unset($employees[$key]);
-                    } else if ($hist['id_unidad'] == $temp_object['unidad']) {
+                    } else if ($nomU == $temp_object['unidad']) {
 
-                        array_push($temp_object['puestos'], ['total' => 1, 'puesto' => $hist['id_puesto']]);
+                        array_push($temp_object['puestos'], ['total' => 1, 'puesto' => $nomP]);
 
                         array_push($temp_object['motivos'], ['total' => 1, 'motivo' => $hist['observaciones']]);
 
