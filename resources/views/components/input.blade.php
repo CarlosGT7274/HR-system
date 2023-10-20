@@ -6,7 +6,7 @@
         @endif
 
         <input class="w-full h-10" id="{{ $id }}" autocomplete="{{ $autocomplete }}" name="{{ $name }}"
-            type="{{ $type }}" placeholder="{{ $placeholder }}">
+            type="{{ $type }}" placeholder="{{ $placeholder }}" value="{{ $defaultValue }}">
 
         @if ($needsUnhidden == 'yes')
             <button type="button" id="{{ $id . 'preview' }}">

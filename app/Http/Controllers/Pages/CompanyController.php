@@ -12,7 +12,7 @@ class CompanyController extends Controller
      *
      * @return void
      */
-    public function __construct(private $uri, private $pageTitle)
+    public function __construct(private $uri, private $pageTitle, private $baseUrl, private $id_name)
     {
     }
 
@@ -20,26 +20,51 @@ class CompanyController extends Controller
     {
         $data = [
             'pageTitle' => $this->pageTitle,
-            'data' => $this->apiRequest('companies/' . session('company') . '/' . $this->uri, 'GET', [])['data']
+            'data' => $this->apiRequest('companies/' . session('company') . '/' . $this->uri, 'GET', [])['data'],
+            'nombre' => '',
+            'base_route' => $this->baseUrl,
+            'id_name' => $this->id_name
         ];
 
         return view($view, $data);
     }
 
-    public function getOne($id, $view)
+    public function getOne($id, $view, $failed = false)
     {
         $data = [
             'pageTitle' => $this->pageTitle,
-            'data' => $this->apiRequest('companies/' . session('company') . '/' . $this->uri . '/' . $id, 'GET', [])
+            'data' => $this->apiRequest('companies/' . session('company') . '/' . $this->uri . '/' . $id, 'GET', [])['data'],
+            'failed' => $failed,
+            'base_route' => $this->baseUrl,
+            'id_name' => $this->id_name
         ];
 
         return view($view, $data);
     }
 
-    public function form($view)
+    public function search(Request $request,  $view)
+    {
+        $request->validate([
+            'nombre' => 'required | string',
+        ]);
+
+        $data = [
+            'pageTitle' => $this->pageTitle,
+            'data' => $this->apiRequest('companies/' . session('company') . '/' . $this->uri . '/' . $request->nombre, 'GET', [])['data'],
+            'nombre' => $request->nombre,
+            'base_route' => $this->baseUrl,
+            'id_name' => $this->id_name
+        ];
+
+        return view($view, $data);
+    }
+
+    public function form($view, $title)
     {
         $data = [
-            'pageTitle' => $this->pageTitle
+            'pageTitle' => $this->pageTitle,
+            'title' => $title,
+            'base_route' => $this->baseUrl,
         ];
 
         return view($view, $data);
@@ -59,21 +84,23 @@ class CompanyController extends Controller
             }
         }
 
-        print_r($data);
-
         $this->apiRequest('companies/' . session('company') . '/' . $this->uri, 'POST', $data);
 
         return redirect()->route($route);
     }
 
-    public function delete($id, $route)
+    public function delete($id, $route, $failed_view)
     {
-        $this->apiRequest('companies/' . session('company') . '/' . $this->uri . '/' . $id, 'DELETE', []);
+        $response = $this->apiRequest('companies/' . session('company') . '/' . $this->uri . '/' . $id, 'DELETE', []);
 
-        return redirect()->route($route);
+        if ($response['error']) {
+            return $this->getOne($id, $failed_view, true);
+        } else {
+            return redirect()->route($route);
+        }
     }
 
-    public function update($route, Request $request, $validationRules, $changes = [])
+    public function update($id, $route, Request $request, $validationRules, $changes = [])
     {
         $request->validate($validationRules);
 
@@ -87,10 +114,8 @@ class CompanyController extends Controller
             }
         }
 
-        print_r($data);
+        $this->apiRequest('companies/' . session('company') . '/' . $this->uri . '/' . $id, 'PUT', $data);
 
-        $this->apiRequest('companies/' . session('company') . '/' . $this->uri, 'PUT', $data);
-
-        return redirect()->route($route);
+        return redirect()->route($route, ['id' => $id]);
     }
 }

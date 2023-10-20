@@ -31,6 +31,7 @@ use App\Models\HR\Company\General\hr_capacitaciones;
 use App\Models\HR\Company\General\hr_codigos_pagos;
 use App\Models\HR\Company\General\hr_dias_feriados;
 use App\Models\HR\Company\General\hr_politicas_pagos;
+use App\Models\HR\Employee\General\hr_empleados;
 use App\Models\HR\Employee\Info\hr_documentos;
 use App\Models\HR\Employee\Info\hr_familiares;
 use App\Models\HR\Employee\Info\hr_imagenes;
@@ -261,7 +262,12 @@ Route::prefix('v1')->group(function () {
                 });
 
                 Route::get('{id}', function ($id_company, $id) use ($controller) {
-                    return $controller->readOne($id, ['column' => 'id_empresa', 'value' => $id_company]);
+                    $employees['empleados'] = hr_empleados::select('nombre', 'apellidoP', 'apellidoM')->where('id_tipo_empleado', $id)->join('sys_usuarios', 'sys_usuarios.id_usuario', 'hr_empleados.id_usuario')->get();
+                    return $controller->readOne($id, ['column' => 'id_empresa', 'value' => $id_company], false, $employees);
+                })->where('id', '[0-9]+');
+
+                Route::get('{name}', function ($id_company, $name) use ($controller) {
+                    return $controller->searchByName($name, ['column' => 'id_empresa', 'value' => $id_company]);
                 });
 
                 Route::post('', function ($id_company, Request $request) use ($controller) {
@@ -285,7 +291,12 @@ Route::prefix('v1')->group(function () {
                 });
 
                 Route::get('{id}', function ($id_company, $id) use ($controller) {
-                    return $controller->readOne($id, ['column' => 'id_empresa', 'value' => $id_company]);
+                    $employees['empleados'] = hr_empleados::select('nombre', 'apellidoP', 'apellidoM')->where('id_departamento', $id)->join('sys_usuarios', 'sys_usuarios.id_usuario', 'hr_empleados.id_usuario')->get();
+                    return $controller->readOne($id, ['column' => 'id_empresa', 'value' => $id_company], false, $employees);
+                })->where('id', '[0-9]+');
+
+                Route::get('{name}', function ($id_company, $name) use ($controller) {
+                    return $controller->searchByName($name, ['column' => 'id_empresa', 'value' => $id_company]);
                 });
 
                 Route::post('', function ($id_company, Request $request) use ($controller) {
