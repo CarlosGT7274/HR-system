@@ -1,7 +1,7 @@
 import ApexCharts from "apexcharts"; 
 const Gdata = document.getElementById("jsonCa").value
 const dataG = JSON.parse(Gdata)
-console.log(dataG["data"]["capacitaciones"])
+// console.log(dataG["data"]["capacitaciones"])
 
 const porcentajeTomadas = dataG.data.capacitaciones;
 const porcentajeNoTomadas = 100 - porcentajeTomadas;

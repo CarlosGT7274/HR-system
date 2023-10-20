@@ -2,7 +2,7 @@ import ApexCharts from "apexcharts";
 
 
 const jsonData = JSON.parse(document.getElementById("jsonatt").value);
-console.log(jsonData)
+// console.log(jsonData)
 const chartElementId = "attendance";
 const element = document.getElementById(chartElementId);
 
@@ -90,6 +90,11 @@ plotOptions: {
   },
   yaxis: {
     tickAmount: 5,
+    labels: {
+      formatter: function (val) {
+          return Math.round(val);
+      },
+  },
   },
   theme: {
     palette: "palette4",

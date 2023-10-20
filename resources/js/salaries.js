@@ -3,9 +3,9 @@ import ApexCharts from "apexcharts";
 const jsonS = JSON.parse(document.getElementById("jsonS").value)
 
 
-console.log(jsonS)
-console.log(jsonS["data"]["puestos"].map(puesto => puesto.puesto))
-console.log(jsonS["data"]["puestos"].map(puesto => puesto.salario))
+// console.log(jsonS)
+// console.log(jsonS["data"]["puestos"].map(puesto => puesto.puesto))
+// console.log(jsonS["data"]["puestos"].map(puesto => puesto.salario))
 
       
 const options = {
