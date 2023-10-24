@@ -3,6 +3,7 @@
 use App\Http\Controllers\Pages\CompanyController;
 use App\Http\Controllers\Pages\HomeController;
 use App\Http\Controllers\Pages\SessionController;
+use App\Http\Controllers\Pages\systemController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -67,5 +68,15 @@ Route::middleware('needToken')->group(function () {
         Route::put('{id}', function ($id) use ($controller) {
             // return $controller->update($id, 'departments.all');
         })->where('id', '[0-9]+')->name('departments.delete');
+    });
+});
+
+Route::middleware('needToken')->group(function () {
+    Route::prefix('Perfiles')->group(function () {
+        $controll = new systemController('Perfiles', 'Perfiles');
+
+        Route::get('', function () use ($controll) {
+            return $controll->getviewAll('system.roles.admincrud');
+        } );   
     });
 });

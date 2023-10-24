@@ -39,9 +39,6 @@ xaxis: {
   labels: {
     rotate: -90
   }
-},
-title: {
-  text: "Edades"
 }
 };
 
@@ -85,9 +82,6 @@ title: {
   stroke: {
     width: 1,
     colors: ['#fff']
-  },
-  title: {
-    text: 'Trabajadores con hijos'
   },
   xaxis: {
     categories: ['si', 'no'],

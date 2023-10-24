@@ -93,4 +93,6 @@
     };
 
     window.addEventListener("resize", handleResize);
+
+    
 </script>

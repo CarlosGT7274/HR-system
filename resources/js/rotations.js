@@ -2,14 +2,41 @@ import ApexCharts from "apexcharts";
 
 const jsonRr = JSON.parse(document.getElementById("jsonR").value);
 
-// console.log(jsonRr);
 
 const data = jsonRr;
 
 const categories = [];
-const seriesData = [];
+const seriesData = {};
 
-data.data.detalles.forEach((unidad) => {
+const motivosCats = [];
+const motivosSeries = [];
+
+const temp_array = []
+
+data.data.detalles.forEach((unidad, i) => {
+    
+    motivosSeries.push({
+        name: unidad.unidad, 
+        data: structuredClone(temp_array)
+    })
+
+    unidad.motivos.forEach((motivo)=> {
+        if(motivo.motivo == null){
+            motivo.motivo = "Sin motivo"
+        }
+
+        const pos = motivosCats.indexOf(motivo.motivo)
+
+        if (pos === -1) {
+            motivosCats.push(motivo.motivo);
+            temp_array.push(0)
+            motivosSeries[i].data.push(motivo.total);
+        }
+        else {
+            motivosSeries[i].data[pos] = motivo.total;
+        }
+
+    })
     unidad.puestos.forEach((puesto) => {
         if (!categories.includes(puesto.puesto)) {
             categories.push(puesto.puesto);
@@ -20,8 +47,6 @@ data.data.detalles.forEach((unidad) => {
         seriesData[unidad.unidad].push(puesto.total);
     });
 });
-
-// console.log(series);
 
 const options = {
     chart: {
@@ -53,24 +78,20 @@ const options = {
     })),
     theme: {
         palette: "palette4",
-    },
-    title: {
-        text: "Despidos por puesto",
-    },
+    }
 };
 
 const chart = new ApexCharts(document.querySelector("#rotations"), options);
 chart.render();
+
+
 
 const despidosPorUnidad = data.data.detalles.map((detalle) => {
   const unidad = detalle.unidad;
   const puestos = detalle.puestos.length;
 
   return { unidad, puestos };
-});
-
-// console.log(despidosPorUnidad);
-// console.log(despidosPorUnidad.map((item) => item.unidad));
+})
 
 const option2 = {
     chart: {
@@ -84,7 +105,7 @@ const option2 = {
       categories: despidosPorUnidad.map((item) => item.unidad),
     },
     yaxis: {
-      labels: {
+        labels: {
         formatter: function (val) {
             return Math.round(val);
         },
@@ -92,11 +113,7 @@ const option2 = {
     },
     series: [{
       data: despidosPorUnidad.map((item) => item.puestos),
-    }],
-    title: {
-        text: "Despidos por Unidad",
-        align: "left",
-    },
+    }]
 };
 
 
@@ -106,3 +123,65 @@ const chart2 = new ApexCharts(
     option2
 );
 chart2.render();
+
+function crearGraficoDonut(id, labels, series) {
+    var optionsf = {
+      series: series,
+      chart: {
+        type: 'donut',
+      },
+      labels: labels,
+      responsive: [{
+        breakpoint: 480,
+        options: {
+            chart: {
+            width: 200
+        },
+          legend: {
+              position: 'bottom'
+          }
+        }
+      }]
+    };
+  
+    var chartf = new ApexCharts(document.querySelector(`#${id}`), optionsf);
+    chartf.render();
+  }
+
+  crearGraficoDonut('firmas', ['Si', 'No'], [data.data.firmas, 100 - data.data.firmas])
+  crearGraficoDonut('finiquitos', ['Si', 'No'], [data.data.finiquitos, 100 - data.data.finiquitos])
+  crearGraficoDonut('entrevistas', ['Si', 'No'], [data.data.entrevistas, 100 - data.data.entrevistas])
+  crearGraficoDonut('recontratables', ['Si', 'No'], [data.data.recontratables, 100 - data.data.recontratables])
+  
+  const optionsM = {
+      chart: {
+        type: "bar",
+        stacked: true,
+    },
+    xaxis: {
+        categories: motivosCats,
+    },
+    yaxis: {
+        labels: {
+            formatter: function (val) {
+                return Math.round(val);
+            },
+        },
+    },
+    plotOptions: {
+        bar: {
+            horizontal: false,
+            stacked: true,
+        },
+    },
+    legend: {
+        position: "top",
+    },
+    series: motivosSeries,
+    theme: {
+        palette: "palette4",
+    }
+};
+
+const chartM = new ApexCharts(document.querySelector("#rotationsM"), optionsM);
+chartM.render();

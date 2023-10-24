@@ -14,7 +14,8 @@ const options = {
         data: jsonS["data"]["puestos"].map(puesto => puesto.salario),
     }],
     chart: {
-        type: 'bar'
+        type: 'bar',
+        height: '100%'
     },
     xaxis: {
         categories: jsonS["data"]["puestos"].map(puesto => puesto.puesto),

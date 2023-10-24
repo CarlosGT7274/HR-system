@@ -12,6 +12,7 @@ class HomeController extends Controller
         ['title' => 'Personal', 'subMenu' => ['Unidad', 'Departamentos', 'Puestos', 'Conceptos', 'Empleados', 'Aprobaciones', 'Vacaciones', 'Renuncias']],
         ['title' => 'Dispositivos', 'subMenu' => ['Dispositivos', 'Sincronizar Datos', 'Cargar eventos USB', 'Descargar eventos', 'Enrolamiento remoto']],
         ['title' => 'Asistencias', 'subMenu' => ['Asistencia', 'Incidencias', 'Excepciones', 'Tiempos Extras', 'Calendario', 'Horarios y Turnos', 'Consultas y Reportes']],
+        ['title' => 'Sistema', 'subMenu' => ['Perfiles', 'Usuarios', 'Bitacora', 'Configurar correo']]
     ];
     /**
      * Create a new controller instance.
@@ -60,7 +61,14 @@ class HomeController extends Controller
             "rotations" => $rotations1,
             "unidades" => $unidades['data'],
             "departamentos" => $departamentos['data'],
-            "posiciones" => $posciones['data']
+            "posiciones" => $posciones['data'],
+            "filtros" => [
+                "value" => '',
+                "unidad" => '',
+                "departamentoss" => '',
+                "puesto" => '',
+                "region" => ''
+            ]
         ]);
     }
 
@@ -75,6 +83,12 @@ class HomeController extends Controller
         ]);
         
         $apiParams = [];
+
+        $value = $request->fecha;
+        $unidad = $request->unidad;
+        $departamentoss = $request->departamento;
+        $puesto = $request->posiciones;
+        $region = $request->region;
         
 
         foreach($request->all() as $key => $param){
@@ -120,7 +134,7 @@ class HomeController extends Controller
         // dd($birthdays);
         
         $rotations = $this->apiRequest("dashboard/rotations", "get", $apiParams);
-        
+
         $apiParams['paramDate'] = $request->fecha;
 
         $attendance = $this->apiRequest('dashboard/attendance', 'get', $apiParams);
@@ -137,7 +151,14 @@ class HomeController extends Controller
             "rotations" => $rotations,
             "unidades" => $unidades['data'],
             "departamentos" => $departamentos['data'],
-            "posiciones" => $posciones['data']
+            "posiciones" => $posciones['data'],
+            "filtros" => [
+                "value" => $value,
+                "unidad" => $unidad,
+                "departamentoss" => $departamentoss,
+                "puesto" => $puesto,
+                "region" => $region
+            ]
         ]);
     }
 }

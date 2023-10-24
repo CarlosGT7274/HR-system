@@ -22,11 +22,7 @@ const porcentajeNoTomadas = 100 - porcentajeTomadas;
                 position: 'bottom'
               }
             }
-          }],
-          title: {
-            text: "Capacitaciones",
-            align: "left",
-          },
+          }]
           };
   
           var chart = new ApexCharts(document.querySelector("#capacitaciones"), options);

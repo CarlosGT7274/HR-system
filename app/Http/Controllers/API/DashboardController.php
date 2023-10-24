@@ -339,14 +339,19 @@ class DashboardController extends Controller
 
         $data['hombres'] = 0;
         $data['mujeres'] = 0;
+        
+        $data['recontratables'] = 0;
+        $data['finiquitos'] = 0;
+        $data['firmas'] = 0;
+        $data['entrevistas'] = 0;
 
         $month = date('m', strtotime($request->date));
 
         $temp_array = [];
         $first = true;
-
+        
         while (count($employees) != 0) {
-            $temp_object = [];
+            $temp_object = [];    
 
             foreach ($employees as $key => $employee) {
 
@@ -356,9 +361,27 @@ class DashboardController extends Controller
 
                 $histMonth = date('m', strtotime($hist['fecha']));
 
+                $infoBaja = $hist['infoBaja'];                
+
                 if ($month <= $histMonth) {
                     if ($first) {
                         $data[$employee['sexo'] == 0 ? 'mujeres' : 'hombres']++;
+                        if ($infoBaja - 8 >= 0){
+                            $data['recontratables']++;
+                            $infoBaja -= 8;
+                        };
+                        if ($infoBaja - 4 >= 0){
+                            $data['finiquitos']++;
+                            $infoBaja -= 4;
+                        };
+                        if ($infoBaja - 2 >= 0){
+                            $data['firmas']++;
+                            $infoBaja -= 2;
+                        };
+                        if ($infoBaja - 1 >= 0){
+                            $data['entrevistas']++;
+                            $infoBaja -= 1;
+                        };
                     }
 
                     if (empty($temp_object)) {
@@ -399,6 +422,13 @@ class DashboardController extends Controller
             $unit['motivos'] =  $this->groupDuplicates($unit['motivos'], 'motivo');
 
             array_push($data['detalles'], $unit);
+        }
+
+        if($data['total'] > 0){
+            $data['recontratables'] /= $data['total'] / 100;
+            $data['finiquitos'] /= $data['total'] / 100;
+            $data['firmas'] /= $data['total'] / 100;
+            $data['entrevistas'] /= $data['total'] / 100;
         }
 
         return response()->json([
