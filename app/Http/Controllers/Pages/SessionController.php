@@ -51,7 +51,6 @@ class SessionController extends Controller
             session(['user' => $response['data']['usuario']]);
             session(['company' => $response['data']['empresa']]);
             session(['permissions' => $response['data']['permisos']]);
-
             return redirect()->route('home');
         }
     }

@@ -7,7 +7,7 @@
                 @csrf
                 <h2 class="md:text-3xl text-2xl text-center font-semibold text-dark">Cambiar Contraseña</h2>
                 <div class="flex flex-col gap-4 my-4">
-                    <x-input id="" icon="fa-at" name="correo" autocomplete="email" type="email"
+                    <x-input defaultValue="" id="" icon="fa-at" name="correo" autocomplete="email" type="email"
                         placeholder="Correo electrónico" needsUnhidden="" />
 
                     @if ($message)
@@ -20,7 +20,7 @@
             </form>
             <a class="text-decoration-none text-sky-700 flex flex-row items-center gap-1 text-lg"
                 href={{ route('login.form') }}>
-                <i class="fa-solid fa-md fa-arrow-left pt-1" style="color: var(--color-primary)"></i>
+                <i class="fa-solid fa-md fa-arrow-left pt-1 text-primary" />
                 <p class="font-semibold text-primary text-base">Iniciar Sesión</p>
             </a>
         </div>

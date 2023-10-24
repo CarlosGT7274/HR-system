@@ -4,6 +4,7 @@ namespace App\Http\Controllers\API\SYS;
 
 use App\Http\Controllers\Controller;
 use App\Mail\ResetPasswordMail;
+use App\Models\SYS\sys_permisos;
 use App\Models\SYS\sys_roles_permisos;
 use App\Models\SYS\sys_usuarios;
 use App\Models\SYS\sys_usuarios_empresas;
@@ -52,7 +53,34 @@ class AuthController extends Controller
         auth()->user()->save();
 
         $roleId = auth()->user()->id_rol;
-        $permissions = sys_roles_permisos::where('id_rol', $roleId)->get();
+        $all_permissions = sys_roles_permisos::select('sys_permisos.id_permiso', 'padre', 'nombre', 'endpoint', 'valor')
+            ->where('id_rol', $roleId)->where('activo', 1)->join('sys_permisos', 'sys_permisos.id_permiso', 'sys_roles_permisos.id_permiso')
+            ->orderBy('sys_permisos.id_permiso', 'asc')->get();
+
+        $permissions = [];
+        foreach ($all_permissions as $permission) {
+            if ($permission['padre'] == 0) {
+                $permissions[$permission['id_permiso']] = [
+                    'nombre' => $permission['nombre'],
+                    'endpoint' => $permission['endpoint'],
+                    'valor' => $permission['valor']
+                ];
+            } else if ($permission['padre'] < 100) {
+                $permissions[$permission['padre']]['sub_permissions'][$permission['id_permiso']] = [
+                    'nombre' => $permission['nombre'],
+                    'endpoint' => $permission['endpoint'],
+                    'valor' => $permission['valor']
+                ];
+            } else {
+                $grandfather = sys_permisos::where('id_permiso', $permission['padre'])->value('padre');
+
+                $permissions[$grandfather]['sub_permissions'][$permission['padre']]['sub_permissions'][$permission['id_permiso']] = [
+                    'nombre' => $permission['nombre'],
+                    'endpoint' => $permission['endpoint'],
+                    'valor' => $permission['valor']
+                ];
+            }
+        }
 
         return response()->json([
             'error' => false,

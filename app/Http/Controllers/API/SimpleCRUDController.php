@@ -63,9 +63,10 @@ class SimpleCRUDController extends Controller
      * @param integer $id Element id 
      * @param boolean $needEncode Bool flag for encode if is needed. 
      * @param array $extraParam Searching extra param ['column' => one column, 'value' => value of the param]
+     * @param array $extraInfo Extra Info that needs to be add to the response  
      * @return array|string Element Information
      */
-    public function readOne($id, $extraParam, $needEncode = false)
+    public function readOne($id, $extraParam, $needEncode = false, $extraInfo = [])
     {
         $data = [];
 
@@ -80,6 +81,44 @@ class SimpleCRUDController extends Controller
                 'error' => true,
                 'mensaje' => 'Registro Inexistente'
             ], 404);
+        }
+
+        if ($needEncode) {
+            $data["info"] = "base64," . base64_encode($data["info"]);
+        }
+
+        if (!empty($extraInfo)) {
+            foreach ($extraInfo as $key => $value) {
+                $data[$key] = $value;
+            }
+        }
+
+        return response()->json([
+            'error' => false,
+            'mensaje' => '',
+            'data' => $data
+        ], 200);
+    }
+
+    /**
+     * Read a Specific row on the data base table by attribute "nombre"
+     *
+     * @param string $name "nombre" value
+     * @param boolean $needEncode Bool flag for encode if is needed. 
+     * @param array $extraParam Searching extra param ['column' => one column, 'value' => value of the param]
+     * @return array|string Element Information
+     */
+    public function searchByName($name, $extraParam, $needEncode = false)
+    {
+        $data = [];
+
+        if (count($extraParam) == 0) {
+            $data = $this->tableModel::where('nombre', 'LIKE', '%', $name, '%')->get();
+        } else {
+            $data = $this->tableModel::where($extraParam['column'], $extraParam['value'])->where(function ($query) use ($name) {
+                $query->where('nombre', 'LIKE', '%' . $name . '%');
+            })
+                ->get();;
         }
 
         if ($needEncode) {

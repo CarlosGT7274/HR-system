@@ -12,18 +12,46 @@
 </head>
 
 <body>
+    @include('components.navbar')
 
-    <main class="flex flex-col lg:flex-row">
+    <div class="flex flex-col sm:flex-row">
         @include('components.sidebar')
 
-        <section class="w-full">
-            @yield('content')
-        </section>
-    </main>
+        @yield('content')
+    </div>
 
     @yield('footer')
 
     @vite('resources/js/app.js')
+
+    <script>
+        const navbar = document.getElementById("navbar-container");
+        const openBtn = document.getElementById("open");
+        const closeBtn = document.getElementById("close");
+
+        function showNav(flag) {
+            if (flag) {
+                navbar.classList.remove("hidden");
+                openBtn.classList.add("hidden");
+                closeBtn.classList.remove("hidden");
+            } else {
+                navbar.classList.add("hidden");
+                openBtn.classList.remove("hidden");
+                closeBtn.classList.add("hidden");
+            }
+        }
+
+        const handleResize = () => {
+            if (window.innerWidth >= 1024) {
+                showNav(true);
+            } else {
+                showNav(false);
+            }
+        };
+
+        window.addEventListener("resize", handleResize);
+    </script>
+
     @yield('js-scripts')
 </body>
 
