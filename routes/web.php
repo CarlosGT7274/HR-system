@@ -117,7 +117,7 @@ Route::middleware('needToken')->group(function () {
         })->name('units.all');
 
         Route::get('{id}', function ($id) use ($controller) {
-            return $controller->getOne($id, 'company.all.one');
+            return $controller->getOne($id, 'company.units.one');
         })->where('id', '[0-9]+')->name('units.one');
 
         Route::get('search', function (Request $request) use ($controller) {
@@ -130,18 +130,83 @@ Route::middleware('needToken')->group(function () {
 
         Route::post('create', function (Request $request) use ($controller) {
             return $controller->create('units.all', $request, [
-                'nombre' => 'required | string | between:0,40'
+                'nombre' => 'required | string',
+                'tipo' => 'required | string',
+                'población' => 'required | string',
+                'estado' => 'required | integer | between:1,32',
+                'región' => 'sometimes | required | string',
+            ], [
+                'población' => 'poblacion',
+                'región' => 'region',
             ]);
         })->name('units.submit');
 
         Route::put('{id}', function ($id, Request $request) use ($controller) {
             return $controller->update($id, 'units.one', $request, [
-                'nombre' => 'sometimes | required | string | between:0,40'
-            ], []);
+                'nombre' => 'sometimes | required | string',
+                'tipo' => 'sometimes | required | string',
+                'poblacion' => 'sometimes | required | string',
+                'estado' => 'integer | between:1,32',
+                'region' => 'sometimes | required | string',
+            ], [
+                'población' => 'poblacion',
+                'región' => 'region',
+            ]);
         })->where('id', '[0-9]+')->name('units.update');
 
         Route::delete('{id}', function ($id) use ($controller) {
-            return $controller->delete($id, 'units.all', 'company.all.one');
+            return $controller->delete($id, 'units.all', 'company.units.one');
         })->where('id', '[0-9]+')->name('units.delete');
+    });
+
+
+    Route::prefix('puestos')->group(function () {
+        $controller = new CompanyController('positions', 'Puestos', 'positions', 'puesto');
+
+        Route::get('', function () use ($controller) {
+            return $controller->getAll('company.positions.all');
+        })->name('positions.all');
+
+        Route::get('{id}', function ($id) use ($controller) {
+            return $controller->getOne($id, 'company.positions.one');
+        })->where('id', '[0-9]+')->name('positions.one');
+
+        Route::get('search', function (Request $request) use ($controller) {
+            return $controller->search($request, 'company.positions.all');
+        })->name('positions.search');
+
+        Route::get('create', function () use ($controller) {
+            return $controller->form('company.positions.form', 'un Puesto');
+        })->name('positions.form');
+
+        Route::post('create', function (Request $request) use ($controller) {
+            return $controller->create('positions.all', $request, [
+                'nombre' => 'required | string',
+                'sueldo_sugerido' => 'required | decimal:0,6 | min:0',
+                'sueldo_máximo' => 'required | decimal:0,6 | min:0',
+                'clave' => 'required | integer | between:1,5',
+            ], [
+                'sueldo_sugerido' => 'sueldoSug',
+                'sueldo_máximo' => 'sueldoMax',
+                'clave' => 'riesgo'
+            ]);
+        })->name('positions.submit');
+
+        Route::put('{id}', function ($id, Request $request) use ($controller) {
+            return $controller->update($id, 'positions.one', $request, [
+                'nombre' => 'sometimes | required | string',
+                'sueldo_sugerido' => 'sometimes | required | decimal:0,6 | min:0',
+                'sueldo_máximo' => 'sometimes | required | decimal:0,6 | min:0',
+                'clave' => 'sometimes | required | integer | between:1,5',
+            ], [
+                'sueldo_sugerido' => 'sueldoSug',
+                'sueldo_máximo' => 'sueldoMax',
+                'clave' => 'riesgo'
+            ]);
+        })->where('id', '[0-9]+')->name('positions.update');
+
+        Route::delete('{id}', function ($id) use ($controller) {
+            return $controller->delete($id, 'positions.all', 'company.positions.one');
+        })->where('id', '[0-9]+')->name('positions.delete');
     });
 });

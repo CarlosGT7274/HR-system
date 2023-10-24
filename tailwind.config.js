@@ -10,7 +10,7 @@ module.exports = {
             dark: "#1f1f1f",
             dlight: "#353535",
             ldark: "#8c8c8b",
-            light: "#f0f0f2",
+            light: "#fafafa",
             primary: "#0F4B80",
             secondary: "#1A80C8",
             tertiary: "#248096",

@@ -9,9 +9,8 @@
 @section('form')
     <form class="flex grow md:grow-0 flex-row gap-2" action="{{ route($base_route . '.search') }}">
         <span class="flex-1">
-            <x-input icon="{{ $base_route == 'departments' ? 'fa-building' : 'fa-person' }}" name="nombre"
-                placeholder="Buscar . . ." autocomplete="" needsUnhidden="" id="in_name" type="search"
-                defaultValue="{{ $nombre }}" />
+            <x-input icon="fa-person" name="nombre" placeholder="Buscar . . ." autocomplete="" needsUnhidden="" id="in_name"
+                type="search" defaultValue="{{ $nombre }}" />
         </span>
 
         <button id="btn-submit" type="submit" class="w-12">

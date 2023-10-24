@@ -16,7 +16,7 @@
                 @yield('inputs')
 
                 <button type="submit"
-                    class="border-2 text-primary border-primary rounded-lg p-2 hover:bg-primary hover:text-light font-semibold mt-5 w-32">
+                    class="border-2 text-primary border-primary rounded-lg p-2 hover:bg-primary hover:text-light font-semibold mt-8 w-32">
                     Guardar
                 </button>
             </form>

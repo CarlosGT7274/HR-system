@@ -29,23 +29,23 @@
                     @method('PUT')
 
                     <div class="w-80 flex gap-2 select-none">
-                        <label for="in_{{ $data['id_' . $id_name] }}"> Nombre: </label>
+                        <label class="w-32" for="in_{{ $data['id_' . $id_name] }}"> Nombre: </label>
                         <input type="text" name="nombre" readonly class="flex-1 cursor-default"
                             value="{{ $data['nombre'] }}" id="in_{{ $data['id_' . $id_name] }}">
                     </div>
 
                     <div>
                         <button type="button" onclick="habilitarEdicion({{ $data['id_' . $id_name] }})">
-                            <i class="fa-solid fa-xl fa-pencil"></i>
+                            <i class="fa-solid fa-lg fa-pencil"></i>
                         </button>
 
                         <button class="me-4 hover:text-success" type="submit" style="display: none;">
-                            <i class="fa-solid fa-xl fa-floppy-disk"></i>
+                            <i class="fa-solid fa-lg fa-floppy-disk"></i>
                         </button>
 
                         <button class="hover:text-danger" type="button" style="display: none;"
                             id="cancelar_{{ $data['id_' . $id_name] }}">
-                            <i class="fa-solid fa-xl fa-xmark"></i>
+                            <i class="fa-solid fa-lg fa-xmark"></i>
                         </button>
                     </div>
                 </form>

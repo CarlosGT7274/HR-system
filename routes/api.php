@@ -320,7 +320,12 @@ Route::prefix('v1')->group(function () {
                 });
 
                 Route::get('{id}', function ($id_company, $id) use ($controller) {
-                    return $controller->readOne($id, ['column' => 'id_empresa', 'value' => $id_company]);
+                    $employees['empleados'] = hr_empleados::select('nombre', 'apellidoP', 'apellidoM')->where('id_departamento', $id)->join('sys_usuarios', 'sys_usuarios.id_usuario', 'hr_empleados.id_usuario')->get();
+                    return $controller->readOne($id, ['column' => 'id_empresa', 'value' => $id_company], false, $employees);
+                })->where('id', '[0-9]+');
+
+                Route::get('{name}', function ($id_company, $name) use ($controller) {
+                    return $controller->searchByName($name, ['column' => 'id_empresa', 'value' => $id_company]);
                 });
 
                 Route::post('', function ($id_company, Request $request) use ($controller) {
@@ -330,8 +335,8 @@ Route::prefix('v1')->group(function () {
                         [
                             'nombre' => 'required | string',
                             'sueldoSug' => 'required | decimal:0,6 | min:0',
-                            'sueldoMax' => 'decimal:0,6 | min:0',
-                            'riesgo' => 'required | integer | min:1',
+                            'sueldoMax' => 'required | decimal:0,6 | min:0',
+                            'riesgo' => 'required | integer | between:1,5',
                         ]
                     );
                 });
@@ -342,9 +347,9 @@ Route::prefix('v1')->group(function () {
                         $request,
                         [
                             'nombre' => 'sometimes | required | string',
-                            'sueldoSug' => 'decimal:0,6 | min:0',
-                            'sueldoMax' => 'decimal:0,6 | min:0',
-                            'riesgo' => 'integer | min:1',
+                            'sueldoSug' => 'sometimes | required | decimal:0,6 | min:0',
+                            'sueldoMax' => 'sometimes | required | decimal:0,6 | min:0',
+                            'riesgo' => 'sometimes | required | integer | between:1,5',
                         ]
                     );
                 });
@@ -362,7 +367,12 @@ Route::prefix('v1')->group(function () {
                 });
 
                 Route::get('{id}', function ($id_company, $id)  use ($controller) {
-                    return $controller->readOne($id, ['column' => 'id_empresa', 'value' => $id_company]);
+                    $employees['empleados'] = hr_empleados::select('nombre', 'apellidoP', 'apellidoM')->where('id_unidad', $id)->join('sys_usuarios', 'sys_usuarios.id_usuario', 'hr_empleados.id_usuario')->get();
+                    return $controller->readOne($id, ['column' => 'id_empresa', 'value' => $id_company], false, $employees);
+                })->where('id', '[0-9]+');
+
+                Route::get('{name}', function ($id_company, $name) use ($controller) {
+                    return $controller->searchByName($name, ['column' => 'id_empresa', 'value' => $id_company]);
                 });
 
                 Route::post('', function ($id_company, Request $request)  use ($controller) {
