@@ -72,22 +72,5 @@
             menu.classList.toggle("hidden");
             menu.classList.toggle("flex");
         }
-<<<<<<< HEAD
-    }
-
-    const handleResize = () => {
-        if (window.innerWidth >= 1024) {
-            showNav(true);
-        } else {
-            showNav(false);
-        }
-    };
-
-    window.addEventListener("resize", handleResize);
-
-    
-</script>
-=======
     </script>
 </aside>
->>>>>>> cancino

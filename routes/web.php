@@ -219,6 +219,11 @@ Route::middleware('needToken')->group(function () {
 
         Route::get('', function () use ($controll) {
             return $controll->getviewAll('system.roles.admincrud');
-        } );   
+        });   
+        
+        Route::get('{id}', function ($id) use ($controll) { 
+            return $controll->editprofile('system.roles.editP', $id);
+        })->name('rol.edit');
+
     });
 });
