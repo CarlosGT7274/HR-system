@@ -14,7 +14,7 @@
             <thead>
               <tr>
                 <th class="px-4 py-2 ">Nombre</th>
-                <th class="px-4 py-2 ">Conceder por Cat</th>
+                <th class="px-4 py-2 ">#</th>
                 <th class="px-4 py-2 ">Conceder</th>
                 <th class="px-4 py-2 ">Denegar</th>
               </tr>
