@@ -222,8 +222,19 @@ Route::middleware('needToken')->group(function () {
         });   
         
         Route::get('{id}', function ($id) use ($controll) { 
-            return $controll->editprofile('system.roles.editP', $id);
-        })->name('rol.edit');
+            // dd("h");
+            return $controll->editprofilef('system.roles.editP', $id);
+        })->where('id', '[0-9]+')->name('rol.edit');
+
+        Route::get('create', function () use ($controll){
+            
+            return $controll->editrolf('system.roles.roledit');
+        })->name('rol.submit');
+
+    
+        Route::put('', function (Request $request) use ($controll){
+            return $controll->updatedprofilef($request);
+        })->name('updatedprofilef.post');
 
     });
 });
