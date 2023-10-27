@@ -113,7 +113,7 @@ class RolController extends Controller
         $request->validate([
             'nombre' => 'sometimes | required | string',
             'permisos' => 'array',
-            'permisos.*.id_permiso' => 'required | integer | min:1 | exists:sys_permisos,id_permiso',
+            'permisos.*.id_permiso' => 'required | integer | min:0 | exists:sys_permisos,id_permiso',
             'permisos.*.permiso' => 'required | integer | between:-1,15',
         ]);
 
@@ -148,7 +148,7 @@ class RolController extends Controller
 
         return response()->json([
             'error' => false,
-            'mensaje' => 'Registros actualzados correctamente',
+            'mensaje' => 'Registros actualizados correctamente',
             'data' => $rol
         ], 200);
     }

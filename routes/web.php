@@ -236,5 +236,9 @@ Route::middleware('needToken')->group(function () {
             return $controll->updatedprofilef($request);
         })->name('updatedprofilef.post');
 
+        Route::post('', function (Request $request) use ($controll) {
+            return $controll->createrol($request); 
+        })->name('create.rolss');
+
     });
 });
