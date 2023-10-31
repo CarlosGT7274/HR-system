@@ -21,16 +21,41 @@
         </div>
 
         @if (!empty($empleados))
-            <section class="xl:col-start-1 xl:col-end-5 grid lg:grid-cols-2 gap-4">
-                @foreach ($empleados as $empleado)
-                    <section class="">
-                        <p class="text-center">
-                            {{ $empleado['nombre'] . ' ' . $empleado['apellidoP'] . ' ' . $empleado['apellidoM'] }}
-                        </p>
-                        <x-input type="date" icon="" name="nada" />
-                    </section>
-                @endforeach
+            <div class="xl:col-start-2 xl:col-end-4">
+                <label for="empleados">Empleados: </label>
+                <select id="empleados">
+                    @for ($i = 0; $i < count($empleados); $i++)
+                        <option value="{{ $i }}">
+                            {{ $empleados[$i]['nombre'] . ' ' . $empleados[$i]['apellidoP'] . ' ' . $empleados[$i]['apellidoM'] }}
+                        </option>
+                    @endfor
+                </select>
+
+                <button type="button" onclick="addUser()">Agregar empleado</button>
+            </div>
+
+            <section class="xl:col-start-1 xl:col-end-5 grid lg:grid-cols-2 gap-4" id="empleados_container">
             </section>
         @endif
     </section>
+
+    <script>
+        const empleados = @json($empleados);
+
+        function addUser() {
+            let select = document.getElementById("empleados")
+            let opcionSeleccionada = select.value
+
+            let nuevoRecuadro = document.createElement("div")
+
+            nuevoRecuadro.innerHTML = empleados[opcionSeleccionada]['nombre']
+
+            let inputDate = document.createElement("input")
+            inputDate.type = "date"
+
+            nuevoRecuadro.appendChild(inputDate)
+
+            document.getElementById("empleados_container").appendChild(nuevoRecuadro)
+        }
+    </script>
 @endsection

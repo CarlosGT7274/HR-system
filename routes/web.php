@@ -22,7 +22,7 @@ use Illuminate\Support\Facades\Route;
  * Create a new controller instance whit all the routes necessary.
  *
  * @param string $prefix Route prefix for all endpoints
- * @param string $uri API uri for the request
+ * @param string $endpoint API endpoint for the request
  * @param string $url_name Base name for all the endpoints 
  * @param string $title Page title 
  * @param string $id_name Name id after the id_ in the data base
@@ -31,10 +31,11 @@ use Illuminate\Support\Facades\Route;
  * @param array $changes Changes should perform to the request for the API 
  * @return void
  */
-function SimpleRoutes($prefix, $uri, $url_name, $title, $id_name, $form_title, $validation_rules, $changes = [], $employeesForForm = false)
+function SimpleRoutes($prefix, $endpoint, $url_name, $title, $id_name, $form_title, $validation_rules, $changes = [], $employeesForForm = false)
 {
-    Route::prefix($prefix)->group(function () use ($uri, $url_name, $title, $id_name, $form_title, $validation_rules, $changes, $employeesForForm) {
-        $controller = new CompanyController($uri, $title, $url_name, $id_name);
+    Route::prefix($prefix)->group(function () use ($endpoint, $url_name, $title, $id_name, $form_title, $validation_rules, $changes, $employeesForForm) {
+
+        $controller = new CompanyController('companies', 'company', $endpoint, $title, $url_name, $id_name);
 
         Route::get('', function () use ($controller) {
             return $controller->getAll();
