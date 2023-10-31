@@ -9,8 +9,10 @@
 
     <nav class="mt-6 text-light select-none">
         <ul>
+            {{-- {{ dd(session('permissions')) }} --}}
             @foreach (session('permissions') as $permission)
-                @if ($permission['nombre'] != 'Dashboard')
+            
+                @if ($permission['nombre'] != 'Dashboard') {{-- Dasboard --}}
                     <li class="flex flex-col items-center px-6 border-b-2 border-ldark">
                         <button onclick="showMenu({{ $loop->index }})"
                             class="flex justify-between items-center w-full py-5 hover:text-ldark">
@@ -20,8 +22,7 @@
                         <ul id="menu{{ $loop->index }}" class="hidden flex-col pb-5 w-full">
                             @foreach ($permission['sub_permissions'] as $sub_permission)
                                 @if ($sub_permission['valor'] >= 0)
-                                    <li
-                                        class="hover:text-light hover:bg-dlight text-ldark rounded cursor-pointer p-0 flex">
+                                    <li class="hover:text-light hover:bg-dlight text-ldark rounded cursor-pointer p-0 flex">
                                         <a class="cursor-pointer ps-3 py-2 w-full"
                                             href="{{ url('/' . $sub_permission['endpoint']) }}">
                                             {{ $sub_permission['nombre'] }}

@@ -3,7 +3,15 @@
 @section('content')
     <div class="flex flex-col w-screen min-h-screen p-4 bg-gray-100">
         <h1 class="text-3xl font-bold mb-4">Editar Permisos del Rol</h1>
-        <form action="{{route('updatedprofilef.post')}}" method="POST" >
+        <form action="{{ route('deleteR.del', ['id' => $data['id_rol']]) }}" method="POST">
+            @method('DELETE')
+            @csrf
+            <button type="submit" class="bg-danger rounded-md py-2 px-4 text-white">Eliminar</button>
+        </form>
+        @if ($delete)
+            <span class="text-danger">{{ $delete }}</span>
+        @endif
+        <form action="{{ route('updatedprofilef.post', ['id' => $data['id_rol']]) }}" method="POST">
             @method('PUT')
             @csrf
             <header class="flex flex-row">
@@ -20,16 +28,17 @@
                     </button>
                 </div>
             </header>
-            
+
             <section>
                 <div class="flex flex-row space-y-2 justify-center items-center">
                     <label for="Nrol" class="font-semibold w-40">Nombre del Rol:</label>
                     <input id="Nrol" name="Nrol" type="text" value="{{ $data['nombre'] }}"
                         class="w-full border rounded-lg p-2 cursor-not-allowed pointer-events-none">
-                    <input type="hidden" name="idrol" value="{{$data['id_rol']}}">
+                    <input type="hidden" name="idrol" value="{{ $data['id_rol'] }}">
                 </div>
 
-                <table class="min-w-full table-auto">
+
+                <table class="min-w-full table">
                     <thead>
                         <tr>
                             <th class="px-4 py-2 ">Nombre</th>
@@ -39,67 +48,63 @@
                             <th class="px-4 py-2 ">Lectura</th>
                             <th class="px-4 py-2 ">Creacion</th>
                             <th class="px-4 py-2 ">Actualizar</th>
-                            <th class="px-4 py-2 ">Eliminacion</th>
+                            <th class="px-4 py-2 ">Eliminación</th>
                         </tr>
                     </thead>
                     <tbody>
-                        @for ($i = 1; $i < count($data['permisos']); $i++)
-                        
+                        @for ($i = 0; $i < count($data['permisos']); $i++)
                             <tr>
-                                {{-- @if ($permisosG[$i]['nombre'] != 'Alpha') --}}
-                                    <td class="border px-4 py-2">{{ $permisosG[$i]['nombre'] }}</td>
-                                    <td class="border px-4 py-2">
-                                        <input type="hidden" name="permisos[{{ $i }}][id_permiso]" value="{{ $permisosG[$i]['id_permiso'] }}">
-                                        
-                                    <input type="checkbox" @if ($data['permisos'][$i]['permiso'] == 15) checked @endif value="15"
-                                    name="permisos[{{$i}}][todos]"
-                                    class="w-full border rounded-lg p-2 cursor-not-allowed pointer-events-none">
-                                </td>
+                                <td class="border px-4 py-2">{{ $permisosG[$i + 1]['nombre'] }}</td>
+                                <input type="hidden" name="permisos[{{ $i }}][id_permiso]"
+                                    value="{{ $data['permisos'][$i]['id_permiso'] }}">
                                 <td class="border px-4 py-2">
-                                    <input type="checkbox" @if ($data['permisos'][$i]['permiso'] >= 0) checked @endif value="0"
-                                        name="permisos[{{$i}}][on]"
-                                        class="w-full border rounded-lg p-2 cursor-not-allowed pointer-events-none">
-                                    </td>
-                                    <td class="border px-4 py-2">
-                                    <input type="checkbox" @if ($data['permisos'][$i]['permiso'] == -1) checked @endif value="-1"
-                                        name="permisos[{{$i}}][off]"
+                                    <input type="checkbox" @if ($data['permisos'][$i]['valor'] == 15) checked value="15" @endif
+                                        name="permisos[{{ $i }}][todos]"
                                         class="w-full border rounded-lg p-2 cursor-not-allowed pointer-events-none">
                                 </td>
                                 <td class="border px-4 py-2">
-                                    <input type="checkbox" @if ($data['permisos'][$i]['permiso'] % 2 == 1) checked @endif value="1"
-                                    name="permisos[{{$i}}][r]"
+                                    <input type="checkbox" @if ($data['permisos'][$i]['valor'] >= 0) checked value="0" @endif
+                                        name="permisos[{{ $i }}][on]"
                                         class="w-full border rounded-lg p-2 cursor-not-allowed pointer-events-none">
-                                    </td>
-                                    <td class="border px-4 py-2">
-                                    <input type="checkbox" @if (
-                                        $data['permisos'][$i]['permiso'] >= 2 &&
-                                        $data['permisos'][$i]['permiso'] - 4 > 0 &&
-                                        $data['permisos'][$i]['permiso'] - 8 > 0) checked @endif value="2"
-                                        name="permisos[{{$i}}][c]"
+                                </td>
+                                <td class="border px-4 py-2">
+                                    <input type="checkbox" @if ($data['permisos'][$i]['valor'] == -1) checked value="-1" @endif
+                                        name="permisos[{{ $i }}][off]"
+                                        class="w-full border rounded-lg p-2 cursor-not-allowed pointer-events-none">
+                                </td>
+                                <td class="border px-4 py-2">
+                                    <input type="checkbox" @if ($data['permisos'][$i]['valor'] % 2 == 1) checked value="1" @endif
+                                        name="permisos[{{ $i }}][r]"
                                         class="w-full border rounded-lg p-2 cursor-not-allowed pointer-events-none">
                                 </td>
                                 <td class="border px-4 py-2">
                                     <input type="checkbox" @if (
-                                        $data['permisos'][$i]['permiso'] >= 4 &&
-                                            ($data['permisos'][$i]['permiso'] - 8 >= 4 || $data['permisos'][$i]['permiso'] < 8)) checked @endif value="4"
-                                        name="permisos[{{$i}}][u]"
+                                        $data['permisos'][$i]['valor'] >= 2 &&
+                                            $data['permisos'][$i]['valor'] - 4 > 0 &&
+                                            $data['permisos'][$i]['valor'] - 8 > 0) checked value="2" @endif
+                                        name="permisos[{{ $i }}][c]"
                                         class="w-full border rounded-lg p-2 cursor-not-allowed pointer-events-none">
-                                    </td>
+                                </td>
                                 <td class="border px-4 py-2">
-                                    <input type="checkbox" @if ($data['permisos'][$i]['permiso'] >= 8) checked @endif value="8"
-                                        name="permisos[{{$i}}][d]"
+                                    <input type="checkbox" @if (
+                                        $data['permisos'][$i]['valor'] >= 4 &&
+                                            ($data['permisos'][$i]['valor'] - 8 >= 4 || $data['permisos'][$i]['valor'] < 8)) checked value="4" @endif
+                                        name="permisos[{{ $i }}][u]"
                                         class="w-full border rounded-lg p-2 cursor-not-allowed pointer-events-none">
-                                    </td>
-                                    {{-- @endif --}}
+                                </td>
+                                <td class="border px-4 py-2">
+                                    <input type="checkbox" @if ($data['permisos'][$i]['valor'] >= 8) checked value="8" @endif
+                                        name="permisos[{{ $i }}][d]"
+                                        class="w-full border rounded-lg p-2 cursor-not-allowed pointer-events-none">
+                                </td>
                             </tr>
-                            @endfor
+                        @endfor
                     </tbody>
                 </table>
+
+
             </section>
         </form>
-
-
-
     </div>
 @endsection
 

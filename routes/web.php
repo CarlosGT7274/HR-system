@@ -213,32 +213,20 @@ Route::middleware('needToken')->group(function () {
     });
 });
 
-Route::middleware('needToken')->group(function () {
-    Route::prefix('Perfiles')->group(function () {
-        $controll = new systemController('Perfiles', 'Perfiles');
+Route::middleware('needToken')->controller(systemController::class)->group(function () {
+    Route::prefix('perfil')->group(function () {
 
-        Route::get('', function () use ($controll) {
-            return $controll->getviewAll('system.roles.admincrud');
-        });   
+        Route::get('', 'getviewAll')->name('raiz');   
         
-        Route::get('{id}', function ($id) use ($controll) { 
-            // dd("h");
-            return $controll->editprofilef('system.roles.editP', $id);
-        })->where('id', '[0-9]+')->name('rol.edit');
+        Route::get('{id}','editprofilef')->where('id', '[0-9]+')->name('rol.edit');
 
-        Route::get('create', function () use ($controll){
-            
-            return $controll->editrolf('system.roles.roledit');
-        })->name('rol.submit');
+        Route::get('create','editrolf')->name('rol.submit');
 
+        Route::post('', 'createrol')->name('create.rolss');
     
-        Route::put('', function (Request $request) use ($controll){
-            return $controll->updatedprofilef($request);
-        })->name('updatedprofilef.post');
+        Route::put('{id}', 'updatedprofilef')->where('id', '[0-9]+')->name('updatedprofilef.post');
 
-        Route::post('', function (Request $request) use ($controll) {
-            return $controll->createrol($request); 
-        })->name('create.rolss');
+        Route::delete('{id}','deleteR')->where('id', '[0-9]+')->name('deleteR.del');
 
     });
 });
