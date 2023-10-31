@@ -22,7 +22,9 @@ use Illuminate\Support\Facades\Route;
  * Create a new controller instance whit all the routes necessary.
  *
  * @param string $prefix Route prefix for all endpoints
- * @param string $endpoint API endpoint for the request
+ * @param string $uri_prefix API endpoint for the request
+ * @param string $extraId Extra Id for the API endpoint
+ * @param string $uri_suffix API endpoint for the request
  * @param string $url_name Base name for all the endpoints 
  * @param string $title Page title 
  * @param string $id_name Name id after the id_ in the data base
@@ -31,11 +33,11 @@ use Illuminate\Support\Facades\Route;
  * @param array $changes Changes should perform to the request for the API 
  * @return void
  */
-function SimpleRoutes($prefix, $endpoint, $url_name, $title, $id_name, $form_title, $validation_rules, $changes = [], $employeesForForm = false)
+function SimpleRoutes($prefix, $uri_prefix, $extraId, $uri_suffix, $url_name, $title, $id_name, $form_title, $validation_rules, $changes = [], $employeesForForm = false)
 {
-    Route::prefix($prefix)->group(function () use ($endpoint, $url_name, $title, $id_name, $form_title, $validation_rules, $changes, $employeesForForm) {
+    Route::prefix($prefix)->group(function () use ($uri_prefix, $extraId, $uri_suffix, $url_name, $title, $id_name, $form_title, $validation_rules, $changes, $employeesForForm) {
 
-        $controller = new CompanyController('companies', 'company', $endpoint, $title, $url_name, $id_name);
+        $controller = new CompanyController($uri_prefix, $extraId, $uri_suffix, $title, $url_name, $id_name);
 
         Route::get('', function () use ($controller) {
             return $controller->getAll();
@@ -88,6 +90,8 @@ Route::controller(SessionController::class)->group(function () {
 Route::middleware('needToken')->group(function () {
     SimpleRoutes(
         'departamentos',
+        'companies',
+        'company',
         'departments',
         'departments',
         'Departamentos',
@@ -100,6 +104,8 @@ Route::middleware('needToken')->group(function () {
 
     SimpleRoutes(
         'tipos-empleados',
+        'companies',
+        'company',
         'employeeTypes',
         'employees-types',
         'Tipos de Empleados',
@@ -112,6 +118,8 @@ Route::middleware('needToken')->group(function () {
 
     SimpleRoutes(
         'unidades',
+        'companies',
+        'company',
         'units',
         'units',
         'Unidades',
@@ -133,6 +141,8 @@ Route::middleware('needToken')->group(function () {
 
     SimpleRoutes(
         'puestos',
+        'companies',
+        'company',
         'positions',
         'positions',
         'Puestos',
@@ -153,6 +163,8 @@ Route::middleware('needToken')->group(function () {
 
     SimpleRoutes(
         'dias-feriados',
+        'companies',
+        'company',
         'holidays',
         'holidays',
         'Días Feriados',
@@ -171,6 +183,8 @@ Route::middleware('needToken')->group(function () {
 
     SimpleRoutes(
         'codigos-de-pago',
+        'companies',
+        'company',
         'payCodes',
         'pay-codes',
         'Códigos de Pago',
@@ -192,6 +206,8 @@ Route::middleware('needToken')->group(function () {
 
     SimpleRoutes(
         'horarios',
+        'companies',
+        'company',
         'schedules',
         'schedules',
         'Horarios',
@@ -224,6 +240,8 @@ Route::middleware('needToken')->group(function () {
 
     SimpleRoutes(
         'capacitaciones',
+        'companies',
+        'company',
         'trainings',
         'trainings',
         'Capacitaciones',
