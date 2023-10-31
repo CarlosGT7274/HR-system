@@ -7,11 +7,11 @@
                 @csrf
                 <h2 class="md:text-3xl text-2xl text-center font-semibold">Cambio de Contraseña</h2>
                 <div class="flex flex-col gap-4 my-4">
-                    <x-input defaultValue="" id="password" icon="fa-key" needsUnhidden="yes" autocomplete="" type="password"
-                        name="contraseña" placeholder="Contraseña" />
+                    <x-input defaultValue="" id="password" icon="fa-key" autocomplete="" type="password" name="contraseña"
+                        placeholder="Contraseña" />
 
-                    <x-input defaultValue="" id="confirmation" icon="fa-key" needsUnhidden="yes" autocomplete=""
-                        type="password" name="de_confirmacion" placeholder="Confirmar Contraseña" />
+                    <x-input defaultValue="" id="confirmation" icon="fa-key" autocomplete="" type="password"
+                        name="de_confirmacion" placeholder="Confirmar Contraseña" />
 
                     <input hidden value="{{ $token }}" name="accessToken">
 

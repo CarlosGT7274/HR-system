@@ -8,7 +8,7 @@
                 <h2 class="md:text-3xl text-2xl text-center font-semibold text-dark">Cambiar Contraseña</h2>
                 <div class="flex flex-col gap-4 my-4">
                     <x-input defaultValue="" id="" icon="fa-at" name="correo" autocomplete="email" type="email"
-                        placeholder="Correo electrónico" needsUnhidden="" />
+                        placeholder="Correo electrónico" />
 
                     @if ($message)
                         <span class="text-danger">{{ $message }}</span>

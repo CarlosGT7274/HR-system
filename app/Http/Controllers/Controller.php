@@ -29,6 +29,7 @@ class Controller extends BaseController
 
         if ($response->getStatusCode() == 500) {
             return ['error' => true, 'mensaje' => 'Error en el Servidor'];
+            // return $response;
         } else {
             $data = json_decode($response->getContent(), true);
             $data['code'] = $response->getStatusCode();

@@ -17,6 +17,55 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
+/**
+ * Create a new controller instance whit all the routes necessary.
+ *
+ * @param string $prefix Route prefix for all endpoints
+ * @param string $uri API uri for the request
+ * @param string $url_name Base name for all the endpoints 
+ * @param string $title Page title 
+ * @param string $id_name Name id after the id_ in the data base
+ * @param string $form_title Title for the creation form
+ * @param array $validation_rules Rules for the request validation
+ * @param array $changes Changes should perform to the request for the API 
+ * @return void
+ */
+function SimpleRoutes($prefix, $uri, $url_name, $title, $id_name, $form_title, $validation_rules, $changes = [], $employeesForForm = false)
+{
+    Route::prefix($prefix)->group(function () use ($uri, $url_name, $title, $id_name, $form_title, $validation_rules, $changes, $employeesForForm) {
+        $controller = new CompanyController($uri, $title, $url_name, $id_name);
+
+        Route::get('', function () use ($controller) {
+            return $controller->getAll();
+        })->name($url_name . '.all');
+
+        Route::get('{id}', function ($id) use ($controller) {
+            return $controller->getOne($id);
+        })->where('id', '[0-9]+')->name($url_name . '.one');
+
+        Route::get('search', function (Request $request) use ($controller) {
+            return $controller->search($request);
+        })->name($url_name . '.search');
+
+        Route::get('create', function () use ($controller, $form_title, $employeesForForm) {
+            return $controller->form($form_title, $employeesForForm);
+        })->name($url_name . '.form');
+
+        Route::post('create', function (Request $request) use ($controller, $validation_rules, $changes) {
+            return $controller->create($request, $validation_rules, $changes);
+        })->name($url_name . '.submit');
+
+        Route::put('{id}', function ($id, Request $request) use ($controller, $validation_rules, $changes) {
+            return $controller->update($id, $request, $validation_rules, $changes);
+        })->where('id', '[0-9]+')->name($url_name . '.update');
+
+        Route::delete('{id}', function ($id) use ($controller) {
+            return $controller->delete($id);
+        })->where('id', '[0-9]+')->name($url_name . '.delete');
+    });
+}
+
+
 Route::middleware('needToken')->get('/', [HomeController::class, 'home'])->name('home');
 
 Route::controller(SessionController::class)->group(function () {
@@ -36,177 +85,160 @@ Route::controller(SessionController::class)->group(function () {
 });
 
 Route::middleware('needToken')->group(function () {
+    SimpleRoutes(
+        'departamentos',
+        'departments',
+        'departments',
+        'Departamentos',
+        'departamento',
+        'un Departamento',
+        [
+            'nombre' => 'required | string | between:0,40'
+        ]
+    );
 
-    Route::prefix('departamentos')->group(function () {
-        $controller = new CompanyController('departments', 'Departamentos', 'departments', 'departamento');
+    SimpleRoutes(
+        'tipos-empleados',
+        'employeeTypes',
+        'employees-types',
+        'Tipos de Empleados',
+        'tipo_empleado',
+        'un Tipo de Empleado',
+        [
+            'nombre' => 'required | string | between:0,40'
+        ]
+    );
 
-        Route::get('', function () use ($controller) {
-            return $controller->getAll('components.simple.all');
-        })->name('departments.all');
+    SimpleRoutes(
+        'unidades',
+        'units',
+        'units',
+        'Unidades',
+        'unidad',
+        'una Unidad',
+        [
+            'nombre' => 'required | string',
+            'tipo' => 'required | string',
+            'población' => 'required | string',
+            'estado' => 'required | integer | between:1,32',
+            'región' => 'sometimes | required | string',
+        ],
+        [
+            'población' => 'poblacion',
+            'región' => 'region',
+            'estado' => 'int'
+        ]
+    );
 
-        Route::get('{id}', function ($id) use ($controller) {
-            return $controller->getOne($id, 'components.simple.one');
-        })->where('id', '[0-9]+')->name('departments.one');
+    SimpleRoutes(
+        'puestos',
+        'positions',
+        'positions',
+        'Puestos',
+        'puesto',
+        'un Puesto',
+        [
+            'nombre' => 'required | string',
+            'sueldo_sugerido' => 'required | decimal:0,6 | min:0',
+            'sueldo_máximo' => 'required | decimal:0,6 | min:0',
+            'clave' => 'required | integer | between:1,5',
+        ],
+        [
+            'sueldo_sugerido' => 'sueldoSug',
+            'sueldo_máximo' => 'sueldoMax',
+            'clave' => 'riesgo'
+        ]
+    );
 
-        Route::get('search', function (Request $request) use ($controller) {
-            return $controller->search($request, 'components.simple.all');
-        })->name('departments.search');
+    SimpleRoutes(
+        'dias-feriados',
+        'holidays',
+        'holidays',
+        'Días Feriados',
+        'dia_feriado',
+        'un Día Feriado',
+        [
+            'nombre' => 'required | string',
+            'tipo' => 'required | integer | between:0,1',
+            'inicio' => 'required | date | date_format:Y-m-d',
+            'fin' => 'required | date | after_or_equal:inicio',
+        ],
+        [
+            'tipo' => 'int'
+        ]
+    );
 
-        Route::get('create', function () use ($controller) {
-            return $controller->form('components.simple.form', 'un Departamento');
-        })->name('departments.form');
+    SimpleRoutes(
+        'codigos-de-pago',
+        'payCodes',
+        'pay-codes',
+        'Códigos de Pago',
+        'codigo_pago',
+        'un Código de Pago',
+        [
+            'descripción' => 'required | string',
+            'número_de_percepción' => 'required | string',
+            'siglas' => 'required | string',
+            'tipo' => 'required | integer | min:1',
+        ],
+        [
+            'tipo' => 'int',
+            'descripción' => 'descripcion',
+            'número_de_percepción' => 'codexport',
+            'abreviatura' => 'siglas'
+        ]
+    );
 
-        Route::post('create', function (Request $request) use ($controller) {
-            return $controller->create('departments.all', $request, [
-                'nombre' => 'required | string | between:0,40'
-            ]);
-        })->name('departments.submit');
+    SimpleRoutes(
+        'horarios',
+        'schedules',
+        'schedules',
+        'Horarios',
+        'horario',
+        'un Horario',
+        [
+            'descripción' => 'required | string',
+            'incluye_hora_de_comida' => 'required | integer | between:0,1',
+            'estado' => 'required | integer | between:0,1',
+            'detalles' => 'required | array | size:7',
+            'detalles.*.día' => 'required | integer | between:1,7',
+            'detalles.*.inicio' => 'required | date_format:H:i:s',
+            'detalles.*.fin' => 'required | date_format:H:i:s',
+            'detalles.*.toleranciaIn' => 'integer | min:0',
+            'detalles.*.toleranciaFin' => 'integer | min:0',
+            'detalles.*.tipo' => 'required | integer | between:0,1'
+        ],
+        [
+            'descripción' => 'descripcion',
+            'incluye_hora_de_comida' => 'conComida',
+            'día' => 'dia',
+            'conComida' => 'int',
+            'dia' => 'int',
+            'estado' => 'int',
+            'tipo' => 'int',
+            'toleranciaIn' => 'int',
+            'toleranciaFin' => 'int'
+        ]
+    );
 
-        Route::delete('{id}', function ($id) use ($controller) {
-            return $controller->delete($id, 'departments.all', 'components.simple.one');
-        })->where('id', '[0-9]+')->name('departments.delete');
-
-        Route::put('{id}', function ($id, Request $request) use ($controller) {
-            return $controller->update($id, 'departments.one', $request, [
-                'nombre' => 'sometimes | required | string | between:0,40'
-            ], []);
-        })->where('id', '[0-9]+')->name('departments.update');
-    });
-
-    Route::prefix('tiposEmpleados')->group(function () {
-        $controller = new CompanyController('employeeTypes', 'Tipos de Empleados', 'employees-types', 'tipo_empleado');
-
-        Route::get('', function () use ($controller) {
-            return $controller->getAll('components.simple.all');
-        })->name('employees-types.all');
-
-        Route::get('{id}', function ($id) use ($controller) {
-            return $controller->getOne($id, 'components.simple.one');
-        })->where('id', '[0-9]+')->name('employees-types.one');
-
-        Route::get('search', function (Request $request) use ($controller) {
-            return $controller->search($request, 'components.simple.all');
-        })->name('employees-types.search');
-
-        Route::get('create', function () use ($controller) {
-            return $controller->form('components.simple.form', 'un Tipo de Empleado');
-        })->name('employees-types.form');
-
-        Route::post('create', function (Request $request) use ($controller) {
-            return $controller->create('employees-types.all', $request, [
-                'nombre' => 'required | string | between:0,40'
-            ]);
-        })->name('employees-types.submit');
-
-        Route::delete('{id}', function ($id) use ($controller) {
-            return $controller->delete($id, 'employees-types.all', 'components.simple.one');
-        })->where('id', '[0-9]+')->name('employees-types.delete');
-
-        Route::put('{id}', function ($id, Request $request) use ($controller) {
-            return $controller->update($id, 'employees-types.one', $request, [
-                'nombre' => 'sometimes | required | string | between:0,40'
-            ], []);
-        })->where('id', '[0-9]+')->name('employees-types.update');
-    });
-
-    Route::prefix('unidades')->group(function () {
-        $controller = new CompanyController('units', 'Unidades', 'units', 'unidad');
-
-        Route::get('', function () use ($controller) {
-            return $controller->getAll('company.units.all');
-        })->name('units.all');
-
-        Route::get('{id}', function ($id) use ($controller) {
-            return $controller->getOne($id, 'company.units.one');
-        })->where('id', '[0-9]+')->name('units.one');
-
-        Route::get('search', function (Request $request) use ($controller) {
-            return $controller->search($request, 'company.units.all');
-        })->name('units.search');
-
-        Route::get('create', function () use ($controller) {
-            return $controller->form('company.units.form', 'una Unidad');
-        })->name('units.form');
-
-        Route::post('create', function (Request $request) use ($controller) {
-            return $controller->create('units.all', $request, [
-                'nombre' => 'required | string',
-                'tipo' => 'required | string',
-                'población' => 'required | string',
-                'estado' => 'required | integer | between:1,32',
-                'región' => 'sometimes | required | string',
-            ], [
-                'población' => 'poblacion',
-                'región' => 'region',
-            ]);
-        })->name('units.submit');
-
-        Route::put('{id}', function ($id, Request $request) use ($controller) {
-            return $controller->update($id, 'units.one', $request, [
-                'nombre' => 'sometimes | required | string',
-                'tipo' => 'sometimes | required | string',
-                'poblacion' => 'sometimes | required | string',
-                'estado' => 'integer | between:1,32',
-                'region' => 'sometimes | required | string',
-            ], [
-                'población' => 'poblacion',
-                'región' => 'region',
-            ]);
-        })->where('id', '[0-9]+')->name('units.update');
-
-        Route::delete('{id}', function ($id) use ($controller) {
-            return $controller->delete($id, 'units.all', 'company.units.one');
-        })->where('id', '[0-9]+')->name('units.delete');
-    });
-
-
-    Route::prefix('puestos')->group(function () {
-        $controller = new CompanyController('positions', 'Puestos', 'positions', 'puesto');
-
-        Route::get('', function () use ($controller) {
-            return $controller->getAll('company.positions.all');
-        })->name('positions.all');
-
-        Route::get('{id}', function ($id) use ($controller) {
-            return $controller->getOne($id, 'company.positions.one');
-        })->where('id', '[0-9]+')->name('positions.one');
-
-        Route::get('search', function (Request $request) use ($controller) {
-            return $controller->search($request, 'company.positions.all');
-        })->name('positions.search');
-
-        Route::get('create', function () use ($controller) {
-            return $controller->form('company.positions.form', 'un Puesto');
-        })->name('positions.form');
-
-        Route::post('create', function (Request $request) use ($controller) {
-            return $controller->create('positions.all', $request, [
-                'nombre' => 'required | string',
-                'sueldo_sugerido' => 'required | decimal:0,6 | min:0',
-                'sueldo_máximo' => 'required | decimal:0,6 | min:0',
-                'clave' => 'required | integer | between:1,5',
-            ], [
-                'sueldo_sugerido' => 'sueldoSug',
-                'sueldo_máximo' => 'sueldoMax',
-                'clave' => 'riesgo'
-            ]);
-        })->name('positions.submit');
-
-        Route::put('{id}', function ($id, Request $request) use ($controller) {
-            return $controller->update($id, 'positions.one', $request, [
-                'nombre' => 'sometimes | required | string',
-                'sueldo_sugerido' => 'sometimes | required | decimal:0,6 | min:0',
-                'sueldo_máximo' => 'sometimes | required | decimal:0,6 | min:0',
-                'clave' => 'sometimes | required | integer | between:1,5',
-            ], [
-                'sueldo_sugerido' => 'sueldoSug',
-                'sueldo_máximo' => 'sueldoMax',
-                'clave' => 'riesgo'
-            ]);
-        })->where('id', '[0-9]+')->name('positions.update');
-
-        Route::delete('{id}', function ($id) use ($controller) {
-            return $controller->delete($id, 'positions.all', 'company.positions.one');
-        })->where('id', '[0-9]+')->name('positions.delete');
-    });
+    SimpleRoutes(
+        'capacitaciones',
+        'trainings',
+        'trainings',
+        'Capacitaciones',
+        'capacitacion',
+        'una Capacitación',
+        [
+            'nombre' => 'required | string',
+            'descripción' => 'sometimes | required | string',
+            'empleados' => 'array',
+            'empleados.*.id_empleado' => 'integer | min:1 | exists:hr_empleados,id_empleado',
+            'empleados.*.fecha' => 'date | date_format:Y-m-d'
+        ],
+        [
+            'descripción' => 'descripcion',
+            'id_empleado' => 'int',
+        ],
+        true
+    );
 });

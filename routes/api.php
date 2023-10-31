@@ -201,6 +201,10 @@ Route::prefix('v1')->group(function () {
 
                 Route::get('{id}', function ($id_company, $id) use ($controller) {
                     return $controller->readOne($id, ['column' => 'id_empresa', 'value' => $id_company]);
+                })->where('id', '[0-9]+');
+
+                Route::get('{name}', function ($id_company, $name) use ($controller) {
+                    return $controller->searchByName($name, ['column' => 'id_empresa', 'value' => $id_company]);
                 });
 
                 Route::post('', function ($id_company, Request $request) use ($controller) {
@@ -242,11 +246,15 @@ Route::prefix('v1')->group(function () {
                 });
 
                 Route::controller(EmpresaController::class)->group(function () {
-                    Route::get('{id}', 'readOneTraining');
+                    Route::get('{id}', 'readOneTraining')->where('id', '[0-9]+');
 
                     Route::post('', 'createTraining');
 
                     Route::put('{id}', 'updateTraining');
+                });
+
+                Route::get('{name}', function ($id_company, $name) use ($controller) {
+                    return $controller->searchByName($name, ['column' => 'id_empresa', 'value' => $id_company]);
                 });
 
                 Route::delete('{id}', function ($id_company, $id) use ($controller) {

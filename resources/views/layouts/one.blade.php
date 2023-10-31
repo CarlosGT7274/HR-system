@@ -64,6 +64,17 @@
                     inputs[i].style.cursor = "auto"
                     inputs[i].style.color = "#0d0d0d"
                     inputs[i].style.borderColor = "#0F4B80"
+
+                    if (inputs[i].type == 'radio') {
+                        const labels = inputs[i].parentElement.getElementsByTagName('label')
+
+                        for (let j = 0; j < labels.length; j++) {
+                            labels[j].style.color = "#0d0d0d"
+                            labels[j].style.cursor = "pointer"
+                        }
+
+                        inputs[i].parentElement.parentElement.style.borderColor = "#0F4B80"
+                    }
                 }
 
                 if (i < selects.length) {
@@ -89,6 +100,19 @@
                     inputs[i].style.cursor = "default"
                     inputs[i].style.color = "#8c8c8b"
                     inputs[i].style.borderColor = "#8c8c8b"
+
+                    if (inputs[i].type === 'radio') {
+                        const labels = inputs[i].parentElement.getElementsByTagName('label')
+
+                        for (let j = 0; j < labels.length; j++) {
+                            labels[j].style.color = "#8c8c8b"
+                            labels[j].style.cursor = "default"
+                        }
+
+                        inputs[i].parentElement.parentElement.style.borderColor = "#8c8c8b"
+                    } else {
+                        inputs[i].value = inputs[i].defaultValue
+                    }
                 }
 
                 if (i < selects.length) {

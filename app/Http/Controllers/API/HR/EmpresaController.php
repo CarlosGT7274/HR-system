@@ -342,9 +342,9 @@ class EmpresaController extends Controller
         ]);
 
         if (empty($request)) {
-            $data = hr_empleados::where('empresa_id', $id_company)->get();
+            $data = hr_empleados::where('empresa_id', $id_company)->join('sys_usuarios', 'sys_usuarios.id_usuario', '=', 'hr_empleados.id_usuario')->get();
         } else {
-            $query = hr_empleados::where('id_empresa', $id_company);
+            $query = hr_empleados::join('sys_usuarios', 'sys_usuarios.id_usuario', '=', 'hr_empleados.id_usuario')->where('id_empresa', $id_company);
 
             foreach ($request->all() as $param => $value) {
                 if ($param === 'agruparpor') {

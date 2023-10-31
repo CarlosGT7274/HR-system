@@ -16,7 +16,62 @@ class CompanyController extends Controller
     {
     }
 
-    public function getAll($view)
+    public function UpdateRequest(Request $request, $changes)
+    {
+        $data = [];
+
+        foreach ($request->request as $llave => $valor) {
+            if (is_array($valor)) {
+                foreach ($valor as $key => $value) {
+                    $data[$llave][$key] = $value;
+
+                    foreach ($value as $sub_key => $sub_value) {
+                        if (array_key_exists($sub_key, $changes)) {
+                            if ($changes[$sub_key] == 'int') {
+                                $data[$llave][$key][$sub_key] = (int)$sub_value;
+                            } else {
+                                $data[$llave][$key][$changes[$sub_key]] = $sub_value;
+                                unset($data[$llave][$key][$sub_key]);
+                            }
+                        }
+                    }
+                }
+            } else {
+                if (array_key_exists($llave, $changes)) {
+                    if ($changes[$llave] == 'int') {
+                        $data[$llave] = (int)$valor;
+                    } else {
+                        $data[$changes[$llave]] = $valor;
+                    }
+                    unset($changes[$llave]);
+                } else {
+                    $data[$llave] = $valor;
+                }
+            }
+        }
+
+        if (!empty($changes)) {
+            foreach ($data as $llave => $valor) {
+
+                if (is_array($valor)) {
+                    foreach ($valor as $key => $value) {
+                        foreach ($value as $sub_key => $sub_value) {
+                            if (array_key_exists($sub_key, $changes)) {
+                                $data[$llave][$key][$sub_key] = (int)$sub_value;
+                            }
+                        }
+                    }
+                }
+
+                if (array_key_exists($llave, $changes)) {
+                    $data[$llave] = (int)$valor;
+                }
+            }
+        }
+        return $data;
+    }
+
+    public function getAll()
     {
         $data = [
             'pageTitle' => $this->pageTitle,
@@ -26,10 +81,10 @@ class CompanyController extends Controller
             'id_name' => $this->id_name
         ];
 
-        return view($view, $data);
+        return view('company.' . $this->baseUrl . '.all', $data);
     }
 
-    public function getOne($id, $view, $failed = false)
+    public function getOne($id, $failed = false)
     {
         $data = [
             'pageTitle' => $this->pageTitle,
@@ -39,10 +94,10 @@ class CompanyController extends Controller
             'id_name' => $this->id_name
         ];
 
-        return view($view, $data);
+        return view('company.' . $this->baseUrl . '.one', $data);
     }
 
-    public function search(Request $request,  $view)
+    public function search(Request $request)
     {
         $request->validate([
             'nombre' => 'required | string',
@@ -56,66 +111,51 @@ class CompanyController extends Controller
             'id_name' => $this->id_name
         ];
 
-        return view($view, $data);
+        return view('company.' . $this->baseUrl . '.all', $data);
     }
 
-    public function form($view, $title)
+    public function form($title, $employeesForForm)
     {
         $data = [
             'pageTitle' => $this->pageTitle,
             'title' => $title,
             'base_route' => $this->baseUrl,
+            'empleados' => $employeesForForm ? $this->apiRequest('companies/' . session('company') . '/employees', 'GET', [])['data'] : [],
         ];
 
-        return view($view, $data);
+        return view('company.' . $this->baseUrl . '.form', $data);
     }
 
-    public function create($route, Request $request, $validationRules, $changes = [])
+    public function create(Request $request, $validationRules, $changes = [])
     {
         $request->validate($validationRules);
 
-        $data = [];
-
-        foreach ($request->request as $key => $valor) {
-            if (array_key_exists($key, $changes)) {
-                $data[$changes[$key]] = $valor;
-            } else {
-                $data[$key] = $valor;
-            }
-        }
+        $data = $this->UpdateRequest($request, $changes);
 
         $this->apiRequest('companies/' . session('company') . '/' . $this->uri, 'POST', $data);
 
-        return redirect()->route($route);
+        return redirect()->route($this->baseUrl . '.all');
     }
 
-    public function delete($id, $route, $failed_view)
+    public function delete($id)
     {
         $response = $this->apiRequest('companies/' . session('company') . '/' . $this->uri . '/' . $id, 'DELETE', []);
 
         if ($response['error']) {
-            return $this->getOne($id, $failed_view, true);
+            return $this->getOne($id, true);
         } else {
-            return redirect()->route($route);
+            return redirect()->route($this->baseUrl . '.all');
         }
     }
 
-    public function update($id, $route, Request $request, $validationRules, $changes = [])
+    public function update($id, Request $request, $validationRules, $changes = [])
     {
         $request->validate($validationRules);
 
-        $data = [];
-
-        foreach ($request->request as $key => $valor) {
-            if (array_key_exists($key, $changes)) {
-                $data[$changes[$key]] = $valor;
-            } else {
-                $data[$key] = $valor;
-            }
-        }
+        $data = $this->UpdateRequest($request, $changes);
 
         $this->apiRequest('companies/' . session('company') . '/' . $this->uri . '/' . $id, 'PUT', $data);
 
-        return redirect()->route($route, ['id' => $id]);
+        return redirect()->route($this->baseUrl . '.one', ['id' => $id]);
     }
 }
