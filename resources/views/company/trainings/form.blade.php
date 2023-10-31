@@ -34,7 +34,7 @@
                 <button type="button" onclick="addUser()">Agregar empleado</button>
             </div>
 
-            <section class="xl:col-start-1 xl:col-end-5 grid lg:grid-cols-2 gap-4" id="empleados_container">
+            <section class="xl:col-start-1 xl:col-end-5 grid lg:grid-cols-2 gap-16" id="empleados_container">
             </section>
         @endif
     </section>
@@ -47,11 +47,13 @@
             let opcionSeleccionada = select.value
 
             let nuevoRecuadro = document.createElement("div")
+            nuevoRecuadro.className = "flex flex-col";
 
             nuevoRecuadro.innerHTML = empleados[opcionSeleccionada]['nombre']
 
             let inputDate = document.createElement("input")
             inputDate.type = "date"
+            inputDate.className = "mt-2";
 
             nuevoRecuadro.appendChild(inputDate)
 

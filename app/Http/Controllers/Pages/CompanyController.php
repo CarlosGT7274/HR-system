@@ -107,7 +107,7 @@ class CompanyController extends Controller
             'id_name' => $this->id_name
         ];
 
-        return view('company.' . $this->baseUrl . '.all', $data);
+        return view($this->baseUrl . '.all', $data);
     }
 
     public function getOne($id, $failed = false)
@@ -120,7 +120,7 @@ class CompanyController extends Controller
             'id_name' => $this->id_name
         ];
 
-        return view('company.' . $this->baseUrl . '.one', $data);
+        return view($this->baseUrl . '.one', $data);
     }
 
     public function search(Request $request)
@@ -137,7 +137,7 @@ class CompanyController extends Controller
             'id_name' => $this->id_name
         ];
 
-        return view('company.' . $this->baseUrl . '.all', $data);
+        return view($this->baseUrl . '.all', $data);
     }
 
     public function form($title, $employeesForForm)
@@ -146,10 +146,10 @@ class CompanyController extends Controller
             'pageTitle' => $this->pageTitle,
             'title' => $title,
             'base_route' => $this->baseUrl,
-            'empleados' => $employeesForForm ? $this->apiRequest($this->uri_prefix . '/employees', 'GET', [])['data'] : [],
+            'empleados' => $employeesForForm ? $this->apiRequest($this->uri_prefix . '/' . session('company') . '/employees', 'GET', [])['data'] : [],
         ];
 
-        return view('company.' . $this->baseUrl . '.form', $data);
+        return view($this->baseUrl . '.form', $data);
     }
 
     public function create(Request $request, $validationRules, $changes = [])
