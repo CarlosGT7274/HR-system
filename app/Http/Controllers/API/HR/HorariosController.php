@@ -5,6 +5,7 @@ namespace App\Http\Controllers\API\HR;
 use App\Http\Controllers\Controller;
 use App\Models\HR\Company\Schedule\hr_detalles_horarios;
 use App\Models\HR\Company\Schedule\hr_horarios;
+use App\Models\HR\Employee\General\hr_empleados;
 use Illuminate\Http\Request;
 
 class HorariosController extends Controller
@@ -40,7 +41,7 @@ class HorariosController extends Controller
      * @param int $id
      * @return array|string
      */
-    public function readOne($id)
+    public function readOne($id_company, $id)
     {
         $horario = hr_horarios::find($id);
 
@@ -58,6 +59,8 @@ class HorariosController extends Controller
         }
 
         $horario['detalles'] = $detalles;
+
+        $horario['empleados'] = hr_empleados::select('nombre', 'apellidoP', 'apellidoM')->where('id_tipo_empleado', $id)->join('sys_usuarios', 'sys_usuarios.id_usuario', 'hr_empleados.id_usuario')->get();
 
         return response()->json([
             'error' => false,
