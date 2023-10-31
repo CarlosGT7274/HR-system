@@ -33,7 +33,8 @@ use Illuminate\Support\Facades\Route;
 function SimpleRoutes($prefix, $endpoint, $url_name, $title, $id_name, $form_title, $validation_rules, $changes = [], $employeesForForm = false)
 {
     Route::prefix($prefix)->group(function () use ($endpoint, $url_name, $title, $id_name, $form_title, $validation_rules, $changes, $employeesForForm) {
-        $controller = new CompanyController('company/' . session('company'), $endpoint, $title, $url_name, $id_name);
+
+        $controller = new CompanyController('companies', 'company', $endpoint, $title, $url_name, $id_name);
 
         Route::get('', function () use ($controller) {
             return $controller->getAll();

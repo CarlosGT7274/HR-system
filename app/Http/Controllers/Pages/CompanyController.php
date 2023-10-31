@@ -12,7 +12,7 @@ class CompanyController extends Controller
      *
      * @return void
      */
-    public function __construct(private $uri_prefix = '', private $endpoint, private $pageTitle, private $baseUrl, private $id_name)
+    public function __construct(private $uri_prefix, private $extraId, private $uri_suffix, private $pageTitle, private $baseUrl, private $id_name)
     {
     }
 
@@ -71,11 +71,31 @@ class CompanyController extends Controller
         return $data;
     }
 
+    public function getEndpoint()
+    {
+        $endpoint = $this->uri_prefix;
+
+        switch ($this->extraId) {
+            case 'company':
+                $endpoint .= '/' . session('company');
+                break;
+
+            default:
+                # code...
+                break;
+        }
+
+        if ($this->uri_suffix != '') {
+            $endpoint .= '/' . $this->uri_suffix;
+        }
+        return $endpoint;
+    }
+
     public function getAll()
     {
         $data = [
             'pageTitle' => $this->pageTitle,
-            'data' => $this->apiRequest($this->uri_prefix . '/' . $this->endpoint, 'GET', [])['data'],
+            'data' => $this->apiRequest($this->getEndpoint(), 'GET', [])['data'],
             'nombre' => '',
             'base_route' => $this->baseUrl,
             'id_name' => $this->id_name
@@ -88,7 +108,7 @@ class CompanyController extends Controller
     {
         $data = [
             'pageTitle' => $this->pageTitle,
-            'data' => $this->apiRequest($this->uri_prefix . '/' . $this->endpoint . '/' . $id, 'GET', [])['data'],
+            'data' => $this->apiRequest($this->getEndpoint() . '/' . $id, 'GET', [])['data'],
             'failed' => $failed,
             'base_route' => $this->baseUrl,
             'id_name' => $this->id_name
@@ -105,7 +125,7 @@ class CompanyController extends Controller
 
         $data = [
             'pageTitle' => $this->pageTitle,
-            'data' => $this->apiRequest($this->uri_prefix . '/' . $this->endpoint . '/' . $request->nombre, 'GET', [])['data'],
+            'data' => $this->apiRequest($this->getEndpoint() . '/' . $request->nombre, 'GET', [])['data'],
             'nombre' => $request->nombre,
             'base_route' => $this->baseUrl,
             'id_name' => $this->id_name
@@ -132,14 +152,14 @@ class CompanyController extends Controller
 
         $data = $this->UpdateRequest($request, $changes);
 
-        $this->apiRequest($this->uri_prefix . '/' . $this->endpoint, 'POST', $data);
+        $this->apiRequest($this->getEndpoint(), 'POST', $data);
 
         return redirect()->route($this->baseUrl . '.all');
     }
 
     public function delete($id)
     {
-        $response = $this->apiRequest($this->uri_prefix . '/' . $this->endpoint . '/' . $id, 'DELETE', []);
+        $response = $this->apiRequest($this->getEndpoint() . '/' . $id, 'DELETE', []);
 
         if ($response['error']) {
             return $this->getOne($id, true);
@@ -154,7 +174,7 @@ class CompanyController extends Controller
 
         $data = $this->UpdateRequest($request, $changes);
 
-        $this->apiRequest($this->uri_prefix . '/' . $this->endpoint . '/' . $id, 'PUT', $data);
+        $this->apiRequest($this->getEndpoint() . '/' . $id, 'PUT', $data);
 
         return redirect()->route($this->baseUrl . '.one', ['id' => $id]);
     }
