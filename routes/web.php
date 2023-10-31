@@ -70,7 +70,10 @@ function SimpleRoutes($prefix, $uri_prefix, $extraId, $uri_suffix, $url_name, $t
 }
 
 
-Route::middleware('needToken')->get('/', [HomeController::class, 'home'])->name('home');
+Route::middleware('needToken')->controller(HomeController::class)->group(function (){
+    Route::get('/', 'home')->name('home');
+    Route::post('/', 'graph')->name('attendance.graph');
+});
 
 Route::controller(SessionController::class)->group(function () {
     Route::get('login', 'login')->name('login.form');
