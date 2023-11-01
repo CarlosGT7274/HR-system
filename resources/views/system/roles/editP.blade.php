@@ -42,7 +42,7 @@
                     <thead>
                         <tr>
                             <th class="px-4 py-2 ">Nombre</th>
-                            <th class="px-4 py-2 ">#</th>
+                            <th class="px-4 py-2 ">Todos</th>
                             <th class="px-4 py-2 ">Conceder</th>
                             <th class="px-4 py-2 ">Denegar</th>
                             <th class="px-4 py-2 ">Lectura</th>
@@ -60,22 +60,22 @@
                                 <td class="border px-4 py-2">
                                     <input type="checkbox" @if ($data['permisos'][$i]['valor'] == 15) checked value="15" @endif
                                         name="permisos[{{ $i }}][todos]"
-                                        class="w-full border rounded-lg p-2 cursor-not-allowed pointer-events-none">
+                                        class="w-full border rounded-lg p-2 cursor-not-allowed pointer-events-none ">
                                 </td>
                                 <td class="border px-4 py-2">
                                     <input type="checkbox" @if ($data['permisos'][$i]['valor'] >= 0) checked value="0" @endif
                                         name="permisos[{{ $i }}][on]"
-                                        class="w-full border rounded-lg p-2 cursor-not-allowed pointer-events-none">
+                                        class="w-full border rounded-lg p-2 cursor-not-allowed pointer-events-none ">
                                 </td>
                                 <td class="border px-4 py-2">
                                     <input type="checkbox" @if ($data['permisos'][$i]['valor'] == -1) checked value="-1" @endif
                                         name="permisos[{{ $i }}][off]"
-                                        class="w-full border rounded-lg p-2 cursor-not-allowed pointer-events-none">
+                                        class="w-full border rounded-lg p-2 cursor-not-allowed pointer-events-none ">
                                 </td>
                                 <td class="border px-4 py-2">
                                     <input type="checkbox" @if ($data['permisos'][$i]['valor'] % 2 == 1) checked value="1" @endif
                                         name="permisos[{{ $i }}][r]"
-                                        class="w-full border rounded-lg p-2 cursor-not-allowed pointer-events-none">
+                                        class="w-full border rounded-lg p-2 cursor-not-allowed pointer-events-none ">
                                 </td>
                                 <td class="border px-4 py-2">
                                     <input type="checkbox" @if (
@@ -83,20 +83,60 @@
                                             $data['permisos'][$i]['valor'] - 4 > 0 &&
                                             $data['permisos'][$i]['valor'] - 8 > 0) checked value="2" @endif
                                         name="permisos[{{ $i }}][c]"
-                                        class="w-full border rounded-lg p-2 cursor-not-allowed pointer-events-none">
+                                        class="w-full border rounded-lg p-2 cursor-not-allowed pointer-events-none ">
                                 </td>
                                 <td class="border px-4 py-2">
                                     <input type="checkbox" @if (
                                         $data['permisos'][$i]['valor'] >= 4 &&
                                             ($data['permisos'][$i]['valor'] - 8 >= 4 || $data['permisos'][$i]['valor'] < 8)) checked value="4" @endif
                                         name="permisos[{{ $i }}][u]"
-                                        class="w-full border rounded-lg p-2 cursor-not-allowed pointer-events-none">
+                                        class="w-full border rounded-lg p-2 cursor-not-allowed pointer-events-none ">
                                 </td>
                                 <td class="border px-4 py-2">
                                     <input type="checkbox" @if ($data['permisos'][$i]['valor'] >= 8) checked value="8" @endif
                                         name="permisos[{{ $i }}][d]"
-                                        class="w-full border rounded-lg p-2 cursor-not-allowed pointer-events-none">
+                                        class="w-full border rounded-lg p-2 cursor-not-allowed pointer-events-none ">
                                 </td>
+                                <script>
+                                    (function() {
+                                        const checkboxs = document.querySelector('input[name="permisos[{{ $i }}][todos]"]');
+                                        const offCheckbox = document.querySelector('input[name="permisos[{{ $i }}][off]"]');
+
+                                        checkboxs.addEventListener('change', function() {
+                                            // checkboxes misma fila
+                                            const checkboxesEnFila = this.parentElement.parentElement.querySelectorAll(
+                                                'input[type="checkbox"]');
+                                            if (this.checked) {
+                                                // Si se marca el checkbox con valor 15, activar todos los otros checkboxes excepto el de name "off" y valor -1
+                                                if (this.name !== "permisos[{{ $i }}][off]" && this.value !== "-1" ) {
+                                                    offCheckbox.checked = false;
+                                                }
+
+                                                checkboxesEnFila.forEach(function(cb) {
+                                                    if (cb !== this && (cb.name !== "permisos[{{ $i }}][off]" || cb
+                                                            .value !== "-1")) {
+                                                        cb.checked = true;
+                                                    }
+                                                });
+                                            }
+                                        });
+
+                                        offCheckbox.addEventListener('click', function() {
+                                            // Si se marca el checkbox con valor -1 y name "off", desmarcar todos los otros checkboxes en la misma fila
+                                            const checkboxesEnFila = this.parentElement.parentElement.querySelectorAll(
+                                                'input[type="checkbox"]');
+
+                                                checkboxesEnFila.forEach(function(cb) {
+                                                    if (cb !== this && (cb.name !== "permisos[{{ $i }}][off]" && cb.value !== "-1")
+                                                    
+                                                    ) {
+                                                        cb.checked = false;
+                                                    }
+                                                });
+                                            
+                                        });
+                                    })();
+                                </script>
                             </tr>
                         @endfor
                     </tbody>
