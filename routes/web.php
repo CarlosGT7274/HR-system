@@ -72,7 +72,8 @@ function SimpleRoutes($prefix, $uri_prefix, $extraId, $uri_suffix, $url_name, $t
 
 Route::middleware('needToken')->controller(HomeController::class)->group(function (){
     Route::get('/', 'home')->name('home');
-    Route::post('/', 'graph')->name('attendance.graph');
+    Route::get('/dashboard', 'dashboard')->name('dashboard.show');
+    Route::post('/dashboard', 'graph')->name('attendance.graph');
 });
 
 Route::controller(SessionController::class)->group(function () {
@@ -263,4 +264,47 @@ Route::middleware('needToken')->group(function () {
         ],
         true
     );
+
+    SimpleRoutes(
+        'permisos',
+        'privileges',
+        '',
+        '',
+        'system.permisos',
+        'Permisos',
+        'permiso',
+        'un Permiso',
+        [
+            'nombre_del_permiso' => 'required | string',
+            'padre' => 'integer | exists:sys_permisos,id_permiso',
+            'endpoint' => 'required | string',
+            'activo' => 'integer | between:0,1',
+        ],
+        [
+            'nombre_del_permiso' => 'nombre',
+            'activo' => 'int',
+            'padre' => 'int'
+        ]
+
+    );
+
+
+});
+
+Route::middleware('needToken')->controller(systemController::class)->group(function () {
+    Route::prefix('perfil')->group(function () {
+
+        Route::get('', 'getviewAll')->name('raiz');   
+        
+        Route::get('{id}','editprofilef')->where('id', '[0-9]+')->name('rol.edit');
+
+        Route::get('create','editrolf')->name('rol.submit');
+
+        Route::post('', 'createrol')->name('create.rolss');
+    
+        Route::put('{id}', 'updatedprofilef')->where('id', '[0-9]+')->name('updatedprofilef.post');
+
+        Route::delete('{id}','deleteR')->where('id', '[0-9]+')->name('deleteR.del');
+
+    });
 });

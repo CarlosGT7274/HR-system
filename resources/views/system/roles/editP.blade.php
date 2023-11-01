@@ -97,46 +97,6 @@
                                         name="permisos[{{ $i }}][d]"
                                         class="w-full border rounded-lg p-2 cursor-not-allowed pointer-events-none ">
                                 </td>
-                                <script>
-                                    (function() {
-                                        const checkboxs = document.querySelector('input[name="permisos[{{ $i }}][todos]"]');
-                                        const offCheckbox = document.querySelector('input[name="permisos[{{ $i }}][off]"]');
-
-                                        checkboxs.addEventListener('change', function() {
-                                            // checkboxes misma fila
-                                            const checkboxesEnFila = this.parentElement.parentElement.querySelectorAll(
-                                                'input[type="checkbox"]');
-                                            if (this.checked) {
-                                                // Si se marca el checkbox con valor 15, activar todos los otros checkboxes excepto el de name "off" y valor -1
-                                                if (this.name !== "permisos[{{ $i }}][off]" && this.value !== "-1" ) {
-                                                    offCheckbox.checked = false;
-                                                }
-
-                                                checkboxesEnFila.forEach(function(cb) {
-                                                    if (cb !== this && (cb.name !== "permisos[{{ $i }}][off]" || cb
-                                                            .value !== "-1")) {
-                                                        cb.checked = true;
-                                                    }
-                                                });
-                                            }
-                                        });
-
-                                        offCheckbox.addEventListener('click', function() {
-                                            // Si se marca el checkbox con valor -1 y name "off", desmarcar todos los otros checkboxes en la misma fila
-                                            const checkboxesEnFila = this.parentElement.parentElement.querySelectorAll(
-                                                'input[type="checkbox"]');
-
-                                                checkboxesEnFila.forEach(function(cb) {
-                                                    if (cb !== this && (cb.name !== "permisos[{{ $i }}][off]" && cb.value !== "-1")
-                                                    
-                                                    ) {
-                                                        cb.checked = false;
-                                                    }
-                                                });
-                                            
-                                        });
-                                    })();
-                                </script>
                             </tr>
                         @endfor
                     </tbody>
@@ -185,6 +145,90 @@
             permisosC.forEach(checkbox => {
                 checkbox.checked = checkbox.defaultValue;
             });
+        });
+
+
+        const checkboxesEnFila = document.querySelectorAll('input[type="checkbox"]');
+
+        checkboxesEnFila.forEach(function(cb) {
+            const tipo = cb.name.split('[')[2]
+            if (tipo === 'off]') {
+                cb.addEventListener('click', function() {
+
+                    const checkboxesEnFila = this.parentElement.parentElement.querySelectorAll(
+                        'input[type="checkbox"]');
+
+                    if (this.checked) {
+                        checkboxesEnFila.forEach(function(cb) {
+                            const name = cb.name.split('[')[2]
+                            cb.checked = name === "off]" ? true :
+                                false;
+                        });
+                    }
+
+                });
+            } else if (tipo === 'todos]') {
+                cb.addEventListener('change', function() {
+
+                    const checkboxesEnFila = this.parentElement.parentElement.querySelectorAll(
+                        'input[type="checkbox"]');
+
+                    if (this.checked) {
+                        checkboxesEnFila.forEach(function(cb) {
+                            const name = cb.name.split('[')[2]
+                            cb.checked = name !== "off]" ? true :
+                                false;
+                        });
+                    }
+                });
+            } else if (tipo === 'on]') {
+                cb.addEventListener('change', function() {
+
+                    const checkboxesEnFila = this.parentElement.parentElement.querySelectorAll(
+                        'input[type="checkbox"]');
+
+                    if (!this.checked) {
+                        checkboxesEnFila.forEach(function(cb) {
+                            const name = cb.name.split('[')[2]
+                            if (name === "off]") {
+                                cb.checked = true;  
+                            } else {
+                                cb.checked =  false;
+                            }
+                        });
+                    }
+                    else {
+                        checkboxesEnFila.forEach(function(cb) {
+                            const name = cb.name.split('[')[2]
+                            if (name === "off]") {
+                                cb.checked = false;  
+                            }
+                        });
+                    }
+                });
+            } else {
+                cb.addEventListener('change', function() {
+
+                    const checkboxesEnFila = this.parentElement.parentElement.querySelectorAll(
+                        'input[type="checkbox"]');
+
+                    checkboxesEnFila.forEach(function(cb) {
+                        const name = cb.name.split('[')[2];
+                        if (name === "off]") {
+                            cb.checked = false;
+                        } else if (name === "on]") {
+                            cb.checked = true;
+                        } else if (name === "todos]") {
+                            cb.checked = false;
+                        }
+                    });
+
+                    if (this.checked) {
+                        this.checked = true;
+                    } 
+
+                });
+            }
         });
     </script>
 @endsection

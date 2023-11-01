@@ -7,12 +7,6 @@ use Illuminate\Http\Request;
 
 class CompanyController extends Controller
 {
-    private $menuItems = [
-        ['title' => 'Personal', 'subMenu' => ['Unidad', 'Departamentos', 'Puestos', 'Conceptos', 'Empleados', 'Aprobaciones', 'Vacaciones', 'Renuncias']],
-        ['title' => 'Dispositivos', 'subMenu' => ['Dispositivos', 'Sincronizar Datos', 'Cargar eventos USB', 'Descargar eventos', 'Enrolamiento remoto']],
-        ['title' => 'Asistencias', 'subMenu' => ['Asistencia', 'Incidencias', 'Excepciones', 'Tiempos Extras', 'Calendario', 'Horarios y Turnos', 'Consultas y Reportes']],
-        ['title' => 'Sistema', 'subMenu' => ['Perfiles', 'Usuarios', 'Bitacora', 'Configurar correo']]
-    ];
     /**
      * Create a new controller instance.
      *
@@ -142,6 +136,8 @@ class CompanyController extends Controller
 
     public function form($title, $employeesForForm)
     {
+        // dd($employeesForForm);
+
         $data = [
             'pageTitle' => $this->pageTitle,
             'title' => $title,
@@ -154,10 +150,12 @@ class CompanyController extends Controller
 
     public function create(Request $request, $validationRules, $changes = [])
     {
-        $request->validate($validationRules);
-
+ 
+        // $request->validate($validationRules);
+  
         $data = $this->UpdateRequest($request, $changes);
 
+        // dd($this->apiRequest($this->getEndpoint(), 'POST', $data));
         $this->apiRequest($this->getEndpoint(), 'POST', $data);
 
         return redirect()->route($this->baseUrl . '.all');

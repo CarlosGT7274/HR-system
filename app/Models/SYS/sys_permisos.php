@@ -16,7 +16,7 @@ class sys_permisos extends \App\Models\modeloBase
      *
      * @var bool
      */
-    public $incrementing = true;
+    public $incrementing = false;
 
     /**
      * The data type of the auto-incrementing ID.
@@ -32,6 +32,8 @@ class sys_permisos extends \App\Models\modeloBase
     protected $fillable = [
         'nombre',
         "padre",
-        "habilitado"
+        'endpoint',
+        "habilitado",
+        "id_permiso"
     ];
 }

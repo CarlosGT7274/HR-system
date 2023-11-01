@@ -79,81 +79,89 @@
 
                 <button type="submit" class="bg-secondary hover:bg-primary text-light font-bold py-2 px-4 rounded-lg focus:outline-none focus:shadow-outline ms-3s">Enviar</button>
 
-
             </div>
 
 
         </form>
 
-
-
+        <div class="flex items-center justify-center mt-2">
+            <a href="/dashboard" class="px-2 py-3 bg-danger rounded-lg text-light">Limpiar Filtros</a>
+        </div>
 
         <div id="graphics" class="grid grid-cols-1 md:grid-cols-3 gap-4 w-full px-4 md:px-8 ">
 
-            <div class=" col-span-3 flex flex-col shadow-lg rounded-[15px] ">
-                <header class="px-5 py-2 mt-2 mb-4 border-b border-dark ">
-                    <h2 class="font-semibold text-slate-800 dark:text-slate-100">General</h2>
-                </header>
-                <div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-12 xl:flex-row bg-white">
-                    <div
-                        class="flex xl:flex-col justify-evenly xl:justify-around content-center px-3 py-2 xl:py-0 w-full md:col-start-1 md:col-end-3 xl:col-span-1">
-                        <div class="flex flex-col items-center">
-                            <h3><i class="fa-solid fa-xl fa-people-group"></i></h3>
-                            <span class="font-semibold">{{ $general['data']['total'] }}</span>
+            <div class="flex flex-col  col-start-1 col-end-4 md:col-start-1">
+                @if (session('permissions')[1]['sub_permissions'][102]['valor'] >= 0)    
+                <div class="md:col-start-1 md:col-end-4 flex flex-col shadow-lg rounded-[15px] ">
+                    <header class="px-5 py-2 mt-2 mb-4 border-b border-dark ">
+                        <h2 class="font-semibold text-slate-800 dark:text-slate-100">General</h2>
+                    </header>
+                    <div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-12 xl:flex-row bg-white">
+                        <div
+                            class="flex xl:flex-col justify-evenly xl:justify-around content-center px-3 py-2 xl:py-0 w-full md:col-start-1 md:col-end-3 xl:col-span-2">
+                            <div class="flex flex-col items-center">
+                                <h3><i class="fa-solid fa-xl fa-people-group"></i></h3>
+                                <span class="font-semibold">{{ $general['data']['total'] }}</span>
+                            </div>
+                            <div class="flex flex-col items-center">
+                                <h3><i class="fa-solid fa-xl fa-person text-secondary"></i></h3>
+                                <span class="font-semibold">{{ $general['data']['hombres']['total'] }}</span>
+                            </div>
+                            <div class="flex flex-col items-center">
+                                <h3><i class="fa-solid fa-xl fa-person-dress text-fuchsia-400"></i></h3>
+                                <span class="font-semibold">{{ $general['data']['mujeres']['total'] }}</span>
+                            </div>
                         </div>
-                        <div class="flex flex-col items-center">
-                            <h3><i class="fa-solid fa-xl fa-person text-secondary"></i></h3>
-                            <span class="font-semibold">{{ $general['data']['hombres']['total'] }}</span>
+    
+                        <div class="w-full p-3 xl:p-0 xl:col-span-3">
+                            <h2>Edades</h2>
+                            <div id="general" class="w-full p-3 xl:p-0 xl:col-span-3">
+                                <input type="hidden" name="" id="jsonG" value="{{ json_encode($general) }}">
+                            </div>
                         </div>
-                        <div class="flex flex-col items-center">
-                            <h3><i class="fa-solid fa-xl fa-person-dress text-fuchsia-400"></i></h3>
-                            <span class="font-semibold">{{ $general['data']['mujeres']['total'] }}</span>
+    
+                        <div class="w-full p-3 xl:p-0 xl:col-span-3">
+                            <h2>Trabajadores con hijos</h2>
+                            <div id="childs" class="w-full p-3 xl:p-0 xl:col-span-3">
+                            </div>
                         </div>
-                    </div>
-
-                    <div class="w-full p-3 xl:p-0 xl:col-span-3">
-                        <h2>Edades</h2>
-                        <div id="general" class="w-full p-3 xl:p-0 xl:col-span-3">
-                            <input type="hidden" name="" id="jsonG" value="{{ json_encode($general) }}">
+    
+                        <div class="w-full p-3 xl:p-0 xl:col-span-4">
+                            <h2>capacitaciones</h2>    
+                            <div id="capacitaciones" class="w-full p-3 xl:p-0 xl:col-span-3">
+                                <input type="hidden" name="" id="jsonCa" value="{{ json_encode($general) }}">
+                            </div>
                         </div>
-                    </div>
-
-                    <div class="w-full p-3 xl:p-0 xl:col-span-3">
-                        <h2>Trabajadores con hijos</h2>
-                        <div id="childs" class="w-full p-3 xl:p-0 xl:col-span-3">
-                        </div>
-                    </div>
-
-                    <div class="w-full p-3 xl:p-0 xl:col-span-3">
-                        <h2>capacitaciones</h2>    
-                        <div id="capacitaciones" class="w-full p-3 xl:p-0 xl:col-span-3">
-                            <input type="hidden" name="" id="jsonCa" value="{{ json_encode($general) }}">
-                        </div>
-                    </div>
-
-                    <div class="w-full p-3 xl:p-0 xl:col-span-2">
-                        <header class="px-5">
-                            <h2 class="font-semibold text-slate-800 dark:text-slate-100 text-sm">Cumpleaños del Mes</h2>
-                        </header>
-                        <ul class="overflow-y-auto h-32">
-                            @foreach ($birthdays as $employee)
-                                @if (is_array($employee))
-                                    @foreach ($employee as $key => $employeeData)
-                                        <li class="bg-light p-4 ">
-                                            <div class="text-sm font-semibold">{{ $employeeData['nombre'] }}
-                                                {{ $employeeData['apellidoP'] }} {{ $employeeData['apellidoM'] }}</div>
-                                            <div class="text-dlight text-xs">{{ $employeeData['cumpleaños'] }}</div>
-                                        </li>
-                                    @endforeach
-                                @endif
-                            @endforeach
-                        </ul>
+    
                     </div>
                 </div>
-            </div>
+                @endif
 
+                @if (session('permissions')[1]['sub_permissions'][103]['valor'] >= 0)
+                <div class="w-full p-3 md:col-start-1 md:col-end-4 bg-white dark:bg-slate-800 shadow-lg rounded-[15px]">
+                    <header class="px-5 py-2 mt-2 mb-4 border-b border-dark ">
+                        <h2 class="font-semibold text-slate-800 dark:text-slate-100">Cumpleaños del Mes</h2>
+                    </header>
+                    <ul class="overflow-y-auto h-36 flex flex-row flex-wrap gap-x-3 gap-y-2">
+                        @foreach ($birthdays as $employee)
+                            @if (is_array($employee))
+                                @foreach ($employee as $key => $employeeData)
+                                    <li class="p-4 shadow-md shadow-ldark rounded-md h-16">
+                                        <div class="text-sm font-semibold">{{ $employeeData['nombre'] }}
+                                            {{ $employeeData['apellidoP'] }} {{ $employeeData['apellidoM'] }}</div>
+                                        <div class="text-dlight text-xs">{{ $employeeData['cumpleaños'] }}</div>
+                                    </li>
+                                @endforeach
+                            @endif
+                        @endforeach
+                    </ul>
+                </div>
+                @endif
+            </div>
+                
             
             <div class="md:col-start-1 md:col-end-4">
+                @if (session('permissions')[1]['sub_permissions'][101]['valor'] >= 0 )
                 <div class="bg-white dark:bg-slate-800 shadow-lg rounded-[15px]   h-11/12">
                     <header class="px-5 py-4 border-b border-slate-100 dark:border-slate-700 flex items-center">
                         <h2 class="font-semibold text-slate-800 dark:text-slate-100">Asistencias</h2>
@@ -162,7 +170,9 @@
                         <input type="hidden" name="" id="jsonatt" value="{{ json_encode($attendance) }}">
                     </div>
                 </div>
+                @endif
             
+                @if (session('permissions')[1]['sub_permissions'][105]['valor'] >= 0 )
                 <div class="w-full bg-white dark:bg-slate-800 shadow-lg rounded-[15px] mt-4 md:mt-0 h-11/12">
                     <header class="px-5 py-4 border-b border-slate-100 dark:border-slate-700">
                         <h2 class="font-semibold text-slate-800 dark:text-slate-100">Salarios</h2>
@@ -171,9 +181,11 @@
                         <input type="hidden" name="" id="jsonS" value="{{ json_encode($salaries) }}">
                     </div>
                 </div>
+                @endif
 
             </div>
 
+            @if (session('permissions')[1]['sub_permissions'][104]['valor'] >= 0)    
             <div class="flex flex-col bg-white shadow-lg rounded-[15px] col-start-1 col-end-4 md:col-start-1">
                 <header class="px-5 py-4 border-b border-slate-100 dark:border-slate-700">
                     <h2 class="font-semibold text-slate-800 dark:text-slate-100">Bajas</h2>
@@ -239,6 +251,7 @@
                     </div>
                 @endif
             </div>
+            @endif
             <br>
         </div>
 

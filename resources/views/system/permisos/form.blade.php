@@ -22,8 +22,14 @@
 
         <div class="xl:col-start-2 xl:col-end-5">
             <label for="region">Activo</label>
-            <x-input id="region" icon="" autocomplete="" type="number" min="" max="" step="" name="activo"
-                placeholder="¿activo?" defaultValue="" />
+            <x-input id="region" icon="" autocomplete="" type="number" min="" max="1" step="" name="activo"
+                placeholder="¿Esta activo?" defaultValue="" />
+        </div>
+
+        <div class="xl:col-start-6 xl:col-end-9">
+            <label for="region">id_permiso</label>
+            <x-input id="region" icon="" autocomplete="" type="number" min="" max="" step="" name="id_permiso"
+                placeholder="id_permiso" defaultValue="" />
         </div>
 
         {{-- <div class="xl:col-start-6 xl:col-end-9">

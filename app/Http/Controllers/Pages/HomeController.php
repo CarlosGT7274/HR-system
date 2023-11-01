@@ -25,6 +25,13 @@ class HomeController extends Controller
 
     public function home()
     {
+        return view('home.welcome', [
+            'pageTitle' => 'Home'
+        ]);
+    }
+
+    public function dashboard()
+    {
         $fechaActual = Carbon::now()->format('Y-m-d');
 
         $attendance = $this->apiRequest('dashboard/attendance', 'GET', [
