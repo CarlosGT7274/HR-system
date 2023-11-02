@@ -28,11 +28,11 @@ class att_terminal extends \App\Models\modeloBase
      * @var string[]
      */
     protected $fillable = [
-        'terminal_no',
+        'teminal_no',
         'terminal_status',
         'terminal_name',
         'terminal_location',
-        'terminal_conecttype',
+        'termnal_conecttype',
         'terminal_conectpwd',
         'terminal_domainname',
         'terminal_tcpip',
@@ -46,7 +46,7 @@ class att_terminal extends \App\Models\modeloBase
         'terminal_faces',
         'terminal_zem',
         'terminal_kind',
-        'terminal_IsSelect',
+        'IsSelect',
         'terminal_timechk',
         'terminal_lastchk'
     ];

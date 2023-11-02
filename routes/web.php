@@ -275,19 +275,117 @@ Route::middleware('needToken')->group(function () {
         'permiso',
         'un Permiso',
         [
+            'clave'=> 'required | integer | min:0',
             'nombre_del_permiso' => 'required | string',
-            'padre' => 'integer | exists:sys_permisos,id_permiso',
+            'clave_del_padre' => 'required | integer | exists:sys_permisos,id_permiso',
             'endpoint' => 'required | string',
-            'activo' => 'integer | between:0,1',
+            'activo' => 'required | integer | between:0,1',
         ],
         [
             'nombre_del_permiso' => 'nombre',
+            'clave' => 'id_permiso',
+            'clave_del_padre'=> 'padre',
             'activo' => 'int',
             'padre' => 'int'
         ]
 
     );
 
+    SimpleRoutes(
+        'empresas',
+        'companies',
+        '',
+        '',
+        'system.companies',
+        'Empresas',
+        'empresa',
+        'Nueva Empresa',
+        [
+            'razón_social' => 'required | string | min:1',
+            'rfc' => 'required | string | min:1 | max:13',
+            'giro_comercial' => 'required | string | min:1',
+            'contacto' => 'required | string | min:1',
+            'teléfono' => 'required | string | min:1 | max:10',
+            'email' => 'required | string | min:1 | email',
+            'fax' => 'nullable | string | min:1',
+            'web' => 'nullable | string | min:1',
+            'calle' => 'required | string | min:1',
+            'colonia' => 'required | string | min:1',
+            'población' => 'required | string | min:1',
+            'estado' => 'required | integer',
+            'logo' => 'nullable | string | min:1'
+        ],
+        [
+            "razón_social" => 'razonSocial',
+            "giro_comercial" => 'giroComercial',
+            'teléfono' => 'telefono',
+            'población' => 'poblacion'
+        ]
+    );
+
+    SimpleRoutes(
+        'biometricos',
+        'biometrics',
+    	'',
+        'terminals',
+        'biometrics.terminals',
+        'Terminales',
+        'terminal_id',
+        'una Terminal',
+        [
+            'terminal_id' => 'required | integer | min:0',
+            'teminal_no' => 'required | integer | min:0',
+            'terminal_status' => 'required | integer | min:0',
+            'terminal_name' => 'required | string',
+            'terminal_location' => 'required | string',
+            'termnal_conecttype' => 'required | integer | min:0',
+            'terminal_conectpwd' => 'required | string',
+            'terminal_domainname' => 'required | string',
+            'terminal_tcpip' => 'required | string',
+            'terminal_port' => 'required | integer | min:0',
+            'terminal_serial' => 'required | string',
+            'terminal_baudrate' => 'required | integer | min:0',
+            'terminal_type' => 'required | string',
+            'terminal_users' => 'required | integer | min:0',
+            'terminal_fingerprints' => 'required | integer | min:0',
+            'terminal_punches' => 'required | integer | min:0',
+            'terminal_faces' => 'required | integer | min:0',
+            'terminal_zem' => 'required | string',
+            'terminal_kind' => 'required | integer | min:0',
+            'IsSelect' => 'required | integer | min:0',
+            'terminal_timechk' => 'required | integer | min:0',
+            'terminal_lastchk' => 'required | date | date_format:Y-m-d H:i:s',
+        ],
+        [
+            'terminal_id'=> 'int',
+            'teminal_no' => 'int',
+            'termnal_conecttype' => 'int',
+            'IsSelect'=> 'int'
+        ]
+    );
+    
+    SimpleRoutes(
+        'excepciones',
+        'biometrics',
+        '',
+        'exceptions',
+        'biometrics.exceptions',
+        'Excepciones',
+        'id',
+        'una excepcion',
+        [
+            'fecha_excep' => 'required | date | date_format:Y-m-d H:i:s',
+            'tiempoini' => 'required | date | date_format:Y-m-d H:i:s',
+            'tiempofin' => 'required | date | date_format:Y-m-d H:i:s',
+            'observacion' => 'required | string',
+            'id_codpag' => 'required | integer | min:0 | exists:hr_codigos_pagos,id_codigo_pago',
+            'id_trabajador' => 'required | integer | min:0 | exists:hr_empleados,id_empleado',
+        ],
+        [
+            'id_codpag' => 'int',
+            'id_trabajador' => 'int'
+        ]
+    );
 
 });
 

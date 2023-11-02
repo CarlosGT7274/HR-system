@@ -84,13 +84,13 @@ class EmpresaController extends Controller
             'contacto' => 'required | string | min:1',
             'telefono' => 'required | string | min:1 | max:10',
             'email' => 'required | string | min:1 | email',
-            'fax' => 'string | min:1',
-            'web' => 'string | min:1',
+            'fax' => 'nullable | string | min:1',
+            'web' => 'nullable | string | min:1',
             'calle' => 'required | string | min:1',
             'colonia' => 'required | string | min:1',
             'poblacion' => 'required | string | min:1',
             'estado' => 'required | integer',
-            'logo' => 'string | min:1'
+            'logo' => 'nullable | string | min:1'
         ]);
 
         $empresa = hr_empresas::create($request->all());
@@ -133,14 +133,14 @@ class EmpresaController extends Controller
             'contacto' => 'string | min:1',
             'telefono' => 'string | min:1 | max:10',
             'email' => 'string | min:1 | email',
-            'fax' => 'string | min:1',
-            'web' => 'string | min:1',
+            'fax' => 'nullable | string | min:1',
+            'web' => 'nullable | string | min:1',
             'calle' => 'string | min:1',
             'colonia' => 'string | min:1',
             'poblacion' => 'string | min:1',
             'ciudad' => 'string | min:1',
             'estado' => 'integer',
-            'logo' => 'string | min:1'
+            'logo' => 'nullable | string | min:1'
         ]);
 
         return response()->json([

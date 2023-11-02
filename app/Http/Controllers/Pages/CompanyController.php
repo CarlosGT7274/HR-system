@@ -150,14 +150,13 @@ class CompanyController extends Controller
 
     public function create(Request $request, $validationRules, $changes = [])
     {
- 
-        // $request->validate($validationRules);
+        $request->validate($validationRules);
+        // dd($request);
   
         $data = $this->UpdateRequest($request, $changes);
-
+        // dd($data);
         // dd($this->apiRequest($this->getEndpoint(), 'POST', $data));
         $this->apiRequest($this->getEndpoint(), 'POST', $data);
-
         return redirect()->route($this->baseUrl . '.all');
     }
 
@@ -174,10 +173,13 @@ class CompanyController extends Controller
 
     public function update($id, Request $request, $validationRules, $changes = [])
     {
+        dd($request->all());
+        // $request->validate($validationRules);
         $request->validate($validationRules);
-
+        
         $data = $this->UpdateRequest($request, $changes);
-
+        // dd($data);
+        // dd($this->apiRequest($this->getEndpoint() . '/' . $id, 'PUT', $data));
         $this->apiRequest($this->getEndpoint() . '/' . $id, 'PUT', $data);
 
         return redirect()->route($this->baseUrl . '.one', ['id' => $id]);
