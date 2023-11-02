@@ -912,7 +912,7 @@ ENGINE = InnoDB;
 DROP TABLE IF EXISTS `db_hr_control_system`.`hr_politicas_pagos` ;
 
 CREATE TABLE IF NOT EXISTS `db_hr_control_system`.`hr_politicas_pagos` (
-  `id_poitica_pago` INT UNSIGNED NOT NULL AUTO_INCREMENT,
+  `id_politica_pago` INT UNSIGNED NOT NULL AUTO_INCREMENT,
   `nombre` VARCHAR(45) NOT NULL,
   `activo` BIT(1) NOT NULL DEFAULT b'0',
   `pagaFeriados` BIT(1) NOT NULL DEFAULT b'0',

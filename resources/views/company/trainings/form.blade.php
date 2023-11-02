@@ -1,21 +1,21 @@
 @extends('layouts.form')
 
 @section('inputs')
-    <section class="grid xl:grid-cols-4 w-5/6 md:w-2/3 lg:w-5/6 xl:gap-x-20 gap-y-12">
-        <div class="xl:col-start-1 xl:col-end-3">
+    <section class="w-5/6 md:w-2/3 lg:w-5/6 xl:gap-x-20 gap-y-12">
+        <div>
             <label for="name">Nombre</label>
             <x-input id="name" icon="" autocomplete="" type="text" name="nombre"
                 placeholder="Nombre de la capacitación" defaultValue="" />
         </div>
 
-        <div class="xl:col-start-3 xl:col-end-5">
+        <div class="flex flex-col">
             <label for="descripción">Descripción</label>
-            <x-input id="descripción" icon="" autocomplete="" type="text" name="descripción"
-                placeholder="Descripción de la capacitación" defaultValue="" />
+            <textarea class="my-2 p-3 border-2 border-ldark hover:border-primary resize-none" name="descripción"
+                placeholder="Descripción de la capacitación" id="" cols="30" rows="10"></textarea>
         </div>
 
         @if (!empty($empleados))
-            <div class="xl:col-start-2 xl:col-end-4">
+            <div>
                 <label for="empleados">Empleados</label>
                 <div
                     class="mb-1 border-b-2 border-b-ldark flex flex-row gap-2 items-center justify-around hover:border-b-primary p-2">
@@ -33,7 +33,7 @@
                 </div>
             </div>
 
-            <section class="xl:col-start-1 xl:col-end-5 grid lg:grid-cols-2 gap-16" id="empleados_container">
+            <section class="grid md:grid-cols-2 xl:grid-cols-4 gap-16" id="empleados_container">
             </section>
         @endif
     </section>

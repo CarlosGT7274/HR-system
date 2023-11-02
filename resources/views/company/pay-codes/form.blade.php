@@ -25,7 +25,7 @@
             <div
                 class="mb-1 border-b-2 border-b-ldark flex flex-row gap-2 items-center justify-around hover:border-b-primary p-2">
                 <x-radio name="tipo" id="D" value=1 label="Percepción" checked="yes" readonly="" />
-                <x-radio name="tipo" id="P" value=0 label="Deducción" checked="" readonly="" />
+                <x-radio name="tipo" id="P" value=-1 label="Deducción" checked="" readonly="" />
             </div>
         </div>
     </section>

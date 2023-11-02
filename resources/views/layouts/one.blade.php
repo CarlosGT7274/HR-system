@@ -57,8 +57,18 @@
     <script>
         function habilitarEdicion() {
             const inputs = document.getElementsByTagName("input")
+            const textareas = document.getElementsByTagName("textarea")
             const selects = document.getElementsByTagName("select")
-            for (let i = 0; i < inputs.length || i < selects.length; i++) {
+            const buttons = document.querySelectorAll('button:disabled');
+
+            for (let i = 0; i < inputs.length || i < selects.length || i < buttons.length || i < textareas.length; i++) {
+                if (i < textareas.length) {
+                    textareas[i].removeAttribute("readonly")
+                    textareas[i].style.cursor = "auto"
+                    textareas[i].style.color = "#0d0d0d"
+                    textareas[i].style.borderColor = "#0F4B80"
+
+                }
                 if (i < inputs.length) {
                     inputs[i].removeAttribute("readonly")
                     inputs[i].style.cursor = "auto"
@@ -77,10 +87,18 @@
                     }
                 }
 
+
                 if (i < selects.length) {
                     selects[i].removeAttribute("disabled")
                     selects[i].style.cursor = "auto"
                     selects[i].style.borderColor = "#0F4B80"
+                }
+
+                if (i < buttons.length) {
+                    buttons[i].removeAttribute("disabled")
+                    buttons[i].style.cursor = "auto"
+                    buttons[i].classList.remove('disabled_addUser_btn')
+                    buttons[i].classList.add('addUser_btn')
                 }
             }
 
@@ -92,9 +110,18 @@
 
         function cancelarEdicion() {
             const inputs = document.getElementsByTagName("input")
+            const textareas = document.getElementsByTagName("textarea")
             const selects = document.getElementsByTagName("select")
+            const buttons = document.querySelectorAll('button[name="boton"]');
 
-            for (let i = 0; i < inputs.length || i < selects.length; i++) {
+            for (let i = 0; i < inputs.length || i < selects.length || i < buttons.length || i < textareas.length; i++) {
+                if (i < textareas.length) {
+                    textareas[i].setAttribute("readonly", "readonly")
+                    textareas[i].style.cursor = "default"
+                    textareas[i].style.color = "#8c8c8b"
+                    textareas[i].style.borderColor = "#8c8c8b"
+
+                }
                 if (i < inputs.length) {
                     inputs[i].setAttribute("readonly", "readonly")
                     inputs[i].style.cursor = "default"
@@ -112,6 +139,7 @@
                         inputs[i].parentElement.parentElement.style.borderColor = "#8c8c8b"
                     } else {
                         inputs[i].value = inputs[i].defaultValue
+
                     }
                 }
 
@@ -119,6 +147,13 @@
                     selects[i].setAttribute("disabled", "disabled")
                     selects[i].style.cursor = "auto"
                     selects[i].style.borderColor = "#8c8c8b"
+                }
+
+                if (i < buttons.length) {
+                    buttons[i].setAttribute("disabled", "disabled")
+                    buttons[i].style.cursor = "default"
+                    buttons[i].classList.remove('addUser_btn')
+                    buttons[i].classList.add('disabled_addUser_btn')
                 }
             }
 

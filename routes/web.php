@@ -22,7 +22,7 @@ use Illuminate\Support\Facades\Route;
  *
  * @param string $prefix Route prefix for all endpoints
  * @param string $uri_prefix API endpoint for the request
- * @param string $extraId Extra Id for the API endpoint
+ * @param array | string $extraId Extra Id for the API endpoint
  * @param string $uri_suffix API endpoint for the request
  * @param string $url_name Base name for all the endpoints 
  * @param string $title Page title 
@@ -193,8 +193,8 @@ Route::middleware('needToken')->group(function () {
         [
             'descripción' => 'required | string',
             'número_de_percepción' => 'required | string',
-            'siglas' => 'required | string',
-            'tipo' => 'required | integer | min:1',
+            'abreviatura' => 'required | string',
+            'tipo' => 'required | integer | between:-1,1',
         ],
         [
             'tipo' => 'int',
@@ -203,6 +203,29 @@ Route::middleware('needToken')->group(function () {
             'abreviatura' => 'siglas'
         ]
     );
+
+    Route::prefix('codigos-de-pago/{$id_pay_code}')->group(function ($id_pay_code) {
+        SimpleRoutes(
+            'politicas-de-pago',
+            'companies',
+            ['payCode', $id_pay_code],
+            'payPolitics',
+            'company.pay-politics',
+            'Políticas de Pago',
+            'politica_pago',
+            'una Política de Pago',
+            [
+                'nombre' => 'required | string',
+                'activo' => 'required | integer | between:0,1',
+                'paga_días_feriados' => 'required | integer | between:0,1',
+                'paga_horas_extras' => 'required | integer | between:0,1'
+            ],
+            [
+                'paga_días_feriados' => 'pagaFeriados',
+                'paga_horas_extras' => 'pagaExtras'
+            ]
+        );
+    });
 
     SimpleRoutes(
         'horarios',
