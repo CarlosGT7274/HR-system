@@ -470,10 +470,8 @@ Route::middleware('needToken')->group(function () {
             'tiempofin' => 'datetime'
         ]
     );
-});
 
-Route::middleware('needToken')->controller(systemController::class)->group(function () {
-    Route::prefix('perfil')->group(function () {
+    Route::prefix('perfil')->controller(systemController::class)->group(function () {
 
         Route::get('', 'getviewAll')->name('raiz');
 
