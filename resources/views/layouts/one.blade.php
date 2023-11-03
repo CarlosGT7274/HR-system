@@ -4,13 +4,15 @@
     <main class="w-full p-6">
         <article class="w-full flex flex-col">
             <header class="h-12 border-b-2 border-primary mb-2 flex flex-row justify-between items-baseline gap-5">
-                <a href="{{ route($base_route . '.all') }}">
+                <a
+                    href="{{ $father_url != '' ? route($father_url . '.one', ['id' => $father_id]) : route($base_route . '.all') }}">
                     <i class="fa-solid fa-arrow-left fa-xl"></i>
                 </a>
 
                 @yield('title')
 
-                <form method="POST" action="{{ route($base_route . '.delete', ['id' => $data['id_' . $id_name]]) }}">
+                <form method="POST"
+                    action="{{ $father_id ? route($base_route . '.delete', ['id' => $data['id_' . $id_name], 'father_id' => $father_id]) : route($base_route . '.delete', ['id' => $data['id_' . $id_name]]) }}">
                     @csrf
                     @method('DELETE')
                     <button type="submit">
@@ -21,7 +23,7 @@
 
 
             <form class="mt-6 border-b-2 border-b-ldark pb-5" method="POST"
-                action="{{ route($base_route . '.update', ['id' => $data['id_' . $id_name]]) }}">
+                action="{{ $father_id ? route($base_route . '.update', ['id' => $data['id_' . $id_name], 'father_id' => $father_id]) : route($base_route . '.update', ['id' => $data['id_' . $id_name]]) }}">
                 @csrf
                 @method('PUT')
 

@@ -6,15 +6,14 @@
 
             <header class="h-12 border-b-2 border-primary mb-2 flex flex-row items-baseline gap-5">
                 <a
-                    @if ($base_route == 'company.pay-politics') href="{{ route($base_route . '.all', ['father_id' => $father_id]) }}"    
-                @else
-                href="{{ route($base_route . '.all') }}" @endif>
+                    href="{{ $father_url != '' ? route($father_url . '.one', ['id' => $father_id]) : route($base_route . '.all') }}">
                     <i class="fa-solid fa-arrow-left fa-xl"></i>
                 </a>
                 <h1 class="text-2xl font-semibold">Registro de {{ $title }}</h1>
             </header>
 
-            <form class="mt-8 flex flex-col items-center" method="POST" action="{{ route($base_route . '.submit') }}">
+            <form class="mt-8 flex flex-col items-center" method="POST"
+                action="{{ $father_id ? route($base_route . '.submit', ['father_id' => $father_id]) : route($base_route . '.submit') }}">
                 @csrf
                 @yield('inputs')
 

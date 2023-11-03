@@ -68,6 +68,60 @@ function SimpleRoutes($prefix, $uri_prefix, $extraId, $uri_suffix, $url_name, $t
     });
 }
 
+/**
+ * Create a new controller instance whit all the routes necessary.
+ *
+ * @param string $prefix Route prefix for all endpoints
+ * @param string $endpoint Route suffix after father id for all Routes
+ * @param string $uri_prefix API endpoint for the request
+ * @param array | string $extraId Extra Id for the API endpoint
+ * @param string $uri_suffix API endpoint for the request
+ * @param string $url_name Base name for all the endpoints 
+ * @param string $title Page title 
+ * @param string $id_name Name id after the id_ in the data base
+ * @param string $form_title Title for the creation form
+ * @param array $validation_rules Rules for the request validation
+ * @param array $changes Changes should perform to the request for the API 
+ * @return void
+ */
+function ChildRoutes($prefix, $endpoint, $uri_prefix, $extraId, $uri_suffix, $url_name, $title, $id_name, $form_title, $validation_rules, $changes = [], $employeesForForm = false)
+{
+    Route::prefix($prefix)->group(function () use ($endpoint, $uri_prefix, $extraId, $uri_suffix, $url_name, $title, $id_name, $form_title, $validation_rules, $changes, $employeesForForm) {
+        $controller = new CompanyController($uri_prefix, $extraId, $uri_suffix, $title, $url_name, $id_name, 'company.pay-codes');
+
+        Route::get('{father_id}/' . $endpoint . '/{id}', function ($father_id, $id) use ($controller) {
+            return $controller->getOne($id, false,  $father_id);
+        })->where('id', '[0-9]+')->name($url_name . '.one');
+
+        Route::get('{father_id}/' . $endpoint . '/create', function ($father_id) use ($controller, $form_title, $employeesForForm) {
+            return $controller->form($form_title, $employeesForForm, $father_id);
+        })->name($url_name . '.form');
+
+        Route::post('{father_id}/' . $endpoint . '/create', function ($father_id, Request $request) use ($controller, $validation_rules, $changes) {
+            return $controller->create(
+                $request,
+                $validation_rules,
+                $changes,
+                $father_id
+            );
+        })->name($url_name . '.submit');
+
+        Route::put('{father_id}/' . $endpoint . '/{id}', function ($father_id, $id, Request $request) use ($controller, $validation_rules, $changes) {
+            return $controller->update(
+                $id,
+                $request,
+                $validation_rules,
+                $changes,
+                $father_id
+            );
+        })->where('id', '[0-9]+')->name($url_name . '.update');
+
+        Route::delete('{father_id}/' . $endpoint . '/{id}', function ($father_id, $id) use ($controller) {
+            return $controller->delete($id, $father_id);
+        })->where('id', '[0-9]+')->name($url_name . '.delete');
+    });
+}
+
 
 Route::middleware('needToken')->get('/', [HomeController::class, 'home'])->name('home');
 
@@ -204,28 +258,30 @@ Route::middleware('needToken')->group(function () {
         ]
     );
 
-    Route::prefix('codigos-de-pago/{father_id}')->group(function ($father_id) {
-        SimpleRoutes(
-            'politicas-de-pago',
-            'companies',
-            ['payCode', $father_id],
-            'payPolitics',
-            'company.pay-politics',
-            'Políticas de Pago',
-            'politica_pago',
-            'una Política de Pago',
-            [
-                'nombre' => 'required | string',
-                'activo' => 'required | integer | between:0,1',
-                'paga_días_feriados' => 'required | integer | between:0,1',
-                'paga_horas_extras' => 'required | integer | between:0,1'
-            ],
-            [
-                'paga_días_feriados' => 'pagaFeriados',
-                'paga_horas_extras' => 'pagaExtras'
-            ]
-        );
-    });
+    ChildRoutes(
+        'codigos-de-pago',
+        'politicas-de-pago',
+        'companies',
+        'payCode',
+        'payPolitics',
+        'company.pay-politics',
+        'Políticas de Pago',
+        'politica_pago',
+        'una Política de Pago',
+        [
+            'nombre' => 'required | string',
+            'activo' => 'required | integer | between:0,1',
+            'paga_días_feriados' => 'required | integer | between:0,1',
+            'paga_horas_extras' => 'required | integer | between:0,1'
+        ],
+        [
+            'paga_días_feriados' => 'pagaFeriados',
+            'paga_horas_extras' => 'pagaExtras',
+            'pagaFeriados' => 'int',
+            'pagaExtras' => 'int',
+            'activo' => 'int'
+        ]
+    );
 
     SimpleRoutes(
         'horarios',

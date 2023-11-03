@@ -13,7 +13,7 @@ class CompanyController extends Controller
      *
      * @return void
      */
-    public function __construct(private $uri_prefix, private $extraId, private $uri_suffix, private $pageTitle, private $baseUrl, private $id_name)
+    public function __construct(private $uri_prefix, private $extraId, private $uri_suffix, private $pageTitle, private $baseUrl, private $id_name, private $father_url = '')
     {
     }
 
@@ -72,31 +72,21 @@ class CompanyController extends Controller
         return $data;
     }
 
-    public function getEndpoint()
+    public function getEndpoint($father_id = '')
     {
         $endpoint = $this->uri_prefix;
 
-        if (is_array($this->extraId)) {
-            switch ($this->extraId[0]) {
-                case 'payCode':
-                    $endpoint .= '/' . session('company') . '/payCodes' . '/' . $this->extraId[1];
-                    dd($endpoint);
-                    break;
+        switch ($this->extraId) {
+            case 'payCode':
+                $endpoint .= '/' . session('company') . '/payCodes' . '/' . $father_id;
+                break;
+            case 'company':
+                $endpoint .= '/' . session('company');
+                break;
 
-                default:
-                    # code...
-                    break;
-            }
-        } else if (is_string($this->extraId)) {
-            switch ($this->extraId) {
-                case 'company':
-                    $endpoint .= '/' . session('company');
-                    break;
-
-                default:
-                    # code...
-                    break;
-            }
+            default:
+                # code...
+                break;
         }
 
         if ($this->uri_suffix != '') {
@@ -112,20 +102,24 @@ class CompanyController extends Controller
             'data' => $this->apiRequest($this->getEndpoint(), 'GET', [])['data'],
             'nombre' => '',
             'base_route' => $this->baseUrl,
-            'id_name' => $this->id_name
+            'id_name' => $this->id_name,
         ];
 
         return view($this->baseUrl . '.all', $data);
     }
 
-    public function getOne($id, $failed = false)
+    public function getOne($id, $failed = false, $father_id = '')
     {
+        // dd($this->getEndpoint($father_id));
+
         $data = [
             'pageTitle' => $this->pageTitle,
-            'data' => $this->apiRequest($this->getEndpoint() . '/' . $id, 'GET', [])['data'],
+            'data' => $this->apiRequest($this->getEndpoint($father_id) . '/' . $id, 'GET', [])['data'],
             'failed' => $failed,
             'base_route' => $this->baseUrl,
-            'id_name' => $this->id_name
+            'id_name' => $this->id_name,
+            'father_id' => $father_id,
+            'father_url' => $this->father_url
         ];
 
         return view($this->baseUrl . '.one', $data);
@@ -142,55 +136,57 @@ class CompanyController extends Controller
             'data' => $this->apiRequest($this->getEndpoint() . '/' . $request->nombre, 'GET', [])['data'],
             'nombre' => $request->nombre,
             'base_route' => $this->baseUrl,
-            'id_name' => $this->id_name
+            'id_name' => $this->id_name,
         ];
 
         return view($this->baseUrl . '.all', $data);
     }
 
-    public function form($title, $employeesForForm)
+    public function form($title, $employeesForForm, $father_id = '')
     {
         $data = [
             'pageTitle' => $this->pageTitle,
             'title' => $title,
             'base_route' => $this->baseUrl,
             'empleados' => $employeesForForm ? $this->apiRequest($this->uri_prefix . '/' . session('company') . '/employees', 'GET', [])['data'] : [],
+            'father_id' => $father_id,
+            'father_url' => $this->father_url
         ];
 
         return view($this->baseUrl . '.form', $data);
     }
 
-    public function create(Request $request, $validationRules, $changes = [])
+    public function create(Request $request, $validationRules, $changes = [], $father_id = '')
     {
         $request->validate($validationRules);
 
         $data = $this->UpdateRequest($request, $changes);
 
-        $this->apiRequest($this->getEndpoint(), 'POST', $data);
+        $this->apiRequest($this->getEndpoint($father_id), 'POST', $data);
 
-        return redirect()->route($this->baseUrl . '.all');
+        return $father_id ? redirect()->route($this->father_url . '.one', ['id' => $father_id]) : redirect()->route($this->baseUrl . '.all');
     }
 
-    public function delete($id)
+    public function delete($id, $father_id = '')
     {
-        $response = $this->apiRequest($this->getEndpoint() . '/' . $id, 'DELETE', []);
+        $response = $this->apiRequest($this->getEndpoint($father_id) . '/' . $id, 'DELETE', []);
 
         if ($response['error']) {
-            return $this->getOne($id, true);
+            return $this->getOne($id, true, $father_id);
         } else {
-            return redirect()->route($this->baseUrl . '.all');
+            return $father_id ? redirect()->route($this->father_url . '.one', ['id' => $father_id]) : redirect()->route($this->baseUrl . '.all');
         }
     }
 
-    public function update($id, Request $request, $validationRules, $changes = [])
+    public function update($id, Request $request, $validationRules, $changes = [], $father_id = '')
     {
         // dd($request->all());
         $request->validate($validationRules);
 
         $data = $this->UpdateRequest($request, $changes);
 
-        $this->apiRequest($this->getEndpoint() . '/' . $id, 'PUT', $data);
+        $this->apiRequest($this->getEndpoint($father_id) . '/' . $id, 'PUT', $data);
 
-        return redirect()->route($this->baseUrl . '.one', ['id' => $id]);
+        return $father_id ? redirect()->route($this->baseUrl . '.one', ['id' => $id, 'father_id' => $father_id]) : redirect()->route($this->baseUrl . '.one', ['id' => $id]);
     }
 }

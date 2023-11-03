@@ -5,42 +5,31 @@
 @endsection
 
 @section('inputs')
-    {{-- @if ($errors->has('descripción'))
-        {{ dd($errors) }}
-    @endif
-
-    <section class="w-5/6 md:w-2/3 xl:w-5/6 grid grid-cols-2 gap-x-8 gap-y-8 mx-auto">
+    <section class="w-5/6 md:w-2/3 xl:w-5/6 grid lg:grid-cols-2 gap-x-8 gap-y-8 mx-auto">
         <div class="flex flex-row items-center gap-2 p-2">
-            <label class="w-32" for="descripcion">Descripción: </label>
-            <input type="text" class="border-b-2 border-ldark cursor-default p-1 text-ldark flex-1" name="descripción"
-                readonly value="{{ $data['descripcion'] }}" id="descripcion">
+            <label for="nombre">Nombre: </label>
+            <input class="border-b-2 border-ldark cursor-default p-1 text-ldark flex-1" readonly id="nombre" type="text"
+                name="nombre" placeholder="Nombre de la Política" value="{{ $data['nombre'] }}" />
         </div>
-
         <div class="flex flex-row items-center gap-2 p-2">
-            <label class="w-32" for="cod">Número de Percepción: </label>
-            <input type="text" class="border-b-2 border-ldark cursor-default p-1 text-ldark flex-1" readonly
-                name="número_de_percepción" value="{{ $data['codexport'] }}" id="cod">
+            <label for="cod">Activo: </label>
+            <input class="border-b-2 border-ldark cursor-default p-1 text-ldark flex-1" readonly id="cod"
+                type="number" min="0" max="1" name="activo" placeholder="Está Activo?"
+                value="{{ $data['activo'] }}" />
         </div>
-
         <div class="flex flex-row items-center gap-2 p-2">
-            <label class="w-32" for="abv">Abreviatura:</label>
-            <input type="text" class="border-b-2 border-ldark cursor-default p-1 text-ldark flex-1" name="abreviatura"
-                readonly value="{{ $data['siglas'] }}" id="abv">
+            <label for="sig">Paga Días Feriados: </label>
+            <input class="border-b-2 border-ldark cursor-default p-1 text-ldark flex-1" readonly id="sig"
+                type="number" min="0" max="1" name="paga_días_feriados"
+                placeholder="Indica si se pagan Feriados" value="{{ $data['pagaFeriados'] }}" />
         </div>
-
         <div class="flex flex-row items-center gap-2 p-2">
-            <h2 class="w-32">Tipo: </h2>
-            <div class="border-b-2 border-ldark cursor-default p-1 text-ldark flex-1 flex flex-row justify-evenly">
-                @if ($data['tipo'] == -1)
-                    <x-radio name="tipo" id="D" value=1 label="Percepción" checked="" readonly="yes" />
-                    <x-radio name="tipo" id="P" value=-1 label="Deducción" checked="yes" readonly="yes" />
-                @else
-                    <x-radio name="tipo" id="D" value=1 label="Percepción" checked="yes" readonly="yes" />
-                    <x-radio name="tipo" id="P" value=-1 label="Deducción" checked="" readonly="yes" />
-                @endif
-            </div>
+            <label for="sig">Paga horas Extras: </label>
+            <input class="border-b-2 border-ldark cursor-default p-1 text-ldark flex-1" readonly id="sig"
+                type="number" min="0" max="1" name="paga_horas_extras"
+                placeholder="Indica si se pagan Feriados" value="{{ $data['pagaExtras'] }}" />
         </div>
-    </section> --}}
+    </section>
 @endsection
 
 @section('extra-info')

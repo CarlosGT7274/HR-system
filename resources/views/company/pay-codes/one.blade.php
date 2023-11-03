@@ -9,7 +9,7 @@
         {{ dd($errors) }}
     @endif
 
-    <section class="w-5/6 md:w-2/3 xl:w-5/6 grid grid-cols-2 gap-x-8 gap-y-8 mx-auto">
+    <section class="w-5/6 md:w-2/3 xl:w-5/6 grid lg:grid-cols-2 gap-x-8 gap-y-8 mx-auto">
         <div class="flex flex-row items-center gap-2 p-2">
             <label class="w-32" for="descripcion">Descripción: </label>
             <input type="text" class="border-b-2 border-ldark cursor-default p-1 text-ldark flex-1" name="descripción"
@@ -53,13 +53,13 @@
         </header>
         <div class="mt-3 grid grid-cols-2 md:grid-cols-3 xl:grid-cols-5 gap-10">
             @foreach ($data['politics'] as $item)
-                <a class="border-b-2 border-ldark w-full text-center select-none h-12 flex items-center justify-center cursor-pointer"
-                    href="">
+                <a class="border-b-2 border-ldark hover:border-primary w-full text-center font-semibold cursor-pointer select-none h-16 hover:text-primary flex items-center justify-center"
+                    href="{{ route('company.pay-politics.one', ['father_id' => $data['id_codigo_pago'], 'id' => $item['id_politica_pago']]) }}">
                     {{ $item['nombre'] }}
                 </a>
             @endforeach
             <a class="border-b-2 border-ldark hover:border-success w-full text-center font-semibold cursor-pointer select-none h-16 hover:text-success flex items-center justify-center"
-                href="{{ route('company.pay-politics.form', ['id_pay_code' => $data['id_codigo_pago']]) }}">
+                href="{{ route('company.pay-politics.form', ['father_id' => $data['id_codigo_pago']]) }}">
                 <i class="fa-solid fa-plus fa-xl"></i>
             </a>
         </div>
