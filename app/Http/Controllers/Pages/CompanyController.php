@@ -28,8 +28,12 @@ class CompanyController extends Controller
                     foreach ($value as $sub_key => $sub_value) {
                         if (array_key_exists($sub_key, $changes)) {
                             if ($changes[$sub_key] == 'int') {
-                                $data[$llave][$key][$sub_key] = (int)$sub_value;
-                            } else {
+                                $data[$llave][$key][$sub_key] = (int) $sub_value;
+                            } 
+                            else if ($changes[$sub_key] == 'datetime') {
+                                $data[$llave][$key][$sub_key] = str_replace('T', ' ', $sub_value);
+                            }
+                            else {
                                 $data[$llave][$key][$changes[$sub_key]] = $sub_value;
                                 unset($data[$llave][$key][$sub_key]);
                             }
@@ -39,7 +43,10 @@ class CompanyController extends Controller
             } else {
                 if (array_key_exists($llave, $changes)) {
                     if ($changes[$llave] == 'int') {
-                        $data[$llave] = (int)$valor;
+                        $data[$llave] = (int) $valor;
+                    } 
+                    else if ($changes[$llave] == 'datetime') {
+                        $data[$llave] = str_replace('T', ' ', $valor);
                     } else {
                         $data[$changes[$llave]] = $valor;
                     }
@@ -57,14 +64,25 @@ class CompanyController extends Controller
                     foreach ($valor as $key => $value) {
                         foreach ($value as $sub_key => $sub_value) {
                             if (array_key_exists($sub_key, $changes)) {
-                                $data[$llave][$key][$sub_key] = (int)$sub_value;
+                                if ($changes[$sub_key] == 'int') {
+                                    $data[$llave][$key][$sub_key] = (int) $sub_value;
+                                } 
+                                else if ($changes[$sub_key] == 'datetime') {
+                                    $data[$llave][$key][$sub_key] = str_replace('T', ' ', $sub_value);
+                                }
                             }
                         }
                     }
                 }
-
-                if (array_key_exists($llave, $changes)) {
-                    $data[$llave] = (int)$valor;
+                else {
+                    if (array_key_exists($llave, $changes)) {
+                        if ($changes[$llave] == 'int') {
+                            $data[$llave] = (int) $valor;
+                        } 
+                        else if ($changes[$llave] == 'datetime') {
+                            $data[$llave] = str_replace('T', ' ', $valor);
+                        }
+                    }
                 }
             }
         }
@@ -152,7 +170,7 @@ class CompanyController extends Controller
     {
         $request->validate($validationRules);
         // dd($request);
-  
+
         $data = $this->UpdateRequest($request, $changes);
         // dd($data);
         // dd($this->apiRequest($this->getEndpoint(), 'POST', $data));
@@ -173,13 +191,10 @@ class CompanyController extends Controller
 
     public function update($id, Request $request, $validationRules, $changes = [])
     {
-        dd($request->all());
-        // $request->validate($validationRules);
         $request->validate($validationRules);
-        
+
         $data = $this->UpdateRequest($request, $changes);
-        // dd($data);
-        // dd($this->apiRequest($this->getEndpoint() . '/' . $id, 'PUT', $data));
+        
         $this->apiRequest($this->getEndpoint() . '/' . $id, 'PUT', $data);
 
         return redirect()->route($this->baseUrl . '.one', ['id' => $id]);

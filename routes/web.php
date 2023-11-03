@@ -374,16 +374,19 @@ Route::middleware('needToken')->group(function () {
         'id',
         'una excepcion',
         [
-            'fecha_excep' => 'required | date | date_format:Y-m-d H:i:s',
-            'tiempoini' => 'required | date | date_format:Y-m-d H:i:s',
-            'tiempofin' => 'required | date | date_format:Y-m-d H:i:s',
+            'fecha_excep' => 'required | string | regex:/^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}$/',
+            'tiempoini' => 'required | string | regex:/^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}$/',
+            'tiempofin' => 'required | string | regex:/^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}$/',
             'observacion' => 'required | string',
             'id_codpag' => 'required | integer | min:0 | exists:hr_codigos_pagos,id_codigo_pago',
             'id_trabajador' => 'required | integer | min:0 | exists:hr_empleados,id_empleado',
         ],
         [
             'id_codpag' => 'int',
-            'id_trabajador' => 'int'
+            'id_trabajador' => 'int',
+            'fecha_excep' => 'datetime',
+            'tiempoini' => 'datetime',
+            'tiempofin' => 'datetime'
         ]
     );
 

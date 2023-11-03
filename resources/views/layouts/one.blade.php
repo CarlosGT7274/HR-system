@@ -10,10 +10,8 @@
 
                 @yield('title')
 
-                <form method="POST"
-                {{-- {{dd($id_name)}} --}}
-                    @if (substr($id_name, -3) === '_id') action="{{ route($base_route . '.delete', ['id' => $data[$id_name]]) }}"
-                    @elseif($id_name = 'id') action="{{ route($base_route . '.delete', ['id' => $data[$id_name]]) }}"
+                <form method="POST" {{-- {{dd($id_name)}} --}}
+                    @if (substr($id_name, -2) === 'id') action="{{ route($base_route . '.delete', ['id' => $data[$id_name]]) }}"
                 @else
                     action="{{ route($base_route . '.delete', ['id' => $data['id_' . $id_name]]) }}" @endif>
                     @csrf
@@ -26,8 +24,7 @@
 
 
             <form class="mt-6 border-b-2 border-b-ldark pb-5" method="POST"
-                @if (substr($id_name, -3) === '_id') action="{{ route($base_route . '.update', ['id' => $data[$id_name]]) }}"
-                @elseif($id_name = 'id') action="{{ route($base_route . '.delete', ['id' => $data[$id_name]]) }}"
+                @if (substr($id_name, -2) === 'id') action="{{ route($base_route . '.update', ['id' => $data[$id_name]]) }}"
             @else
                 action="{{ route($base_route . '.update', ['id' => $data['id_' . $id_name]]) }}" @endif>
                 @csrf
