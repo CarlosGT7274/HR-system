@@ -205,8 +205,23 @@ class EmpresaController extends Controller
             ], 404);
         }
 
-        $employees = hr_capacitaciones_empleados::where('id_capacitacion', $training->id_capacitacion)->get();
+        $employees = hr_capacitaciones_empleados::select('hr_empleados.id_empleado', 'nombre', 'apellidoP', 'apellidoM', 'fecha')->where('id_capacitacion', $training->id_capacitacion)->join('hr_empleados', 'hr_capacitaciones_empleados.id_empleado', '=', 'hr_empleados.id_empleado')->join('sys_usuarios', 'sys_usuarios.id_usuario', '=', 'hr_empleados.id_usuario')->get();
         $training['empleados'] = $employees;
+
+        $all_empleados = hr_empleados::where('id_empresa', $id_company)->join('sys_usuarios', 'sys_usuarios.id_usuario', '=', 'hr_empleados.id_usuario')->get();
+        $empleados = hr_capacitaciones_empleados::select('id_empleado')->where('id_capacitacion', $training->id_capacitacion)->get();
+
+        $nuevosEmpleados = []; // Crear un nuevo array para almacenar los empleados que no se deben eliminar
+
+        foreach ($all_empleados as $key => $employee) {
+            if ($empleados->contains('id_empleado', $employee['id_empleado'])) {
+                unset($all_empleados[$key]);
+            } else {
+                $nuevosEmpleados[] = $employee;
+            }
+        }
+
+        $training['all_empleados'] = $nuevosEmpleados;
 
         return response()->json([
             'error' => false,
@@ -271,7 +286,7 @@ class EmpresaController extends Controller
         ], 200);
     }
 
-    public function updateTraining($id, Request $request)
+    public function updateTraining($id_company, $id, Request $request)
     {
         $training = hr_capacitaciones::find($id);
 

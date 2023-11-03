@@ -1,11 +1,11 @@
 @extends('layouts.one')
 
 @section('title')
-    <h1 class="text-2xl font-semibold flex-1">{{ $data['descripcion'] }}</h1>
+    <h1 class="text-2xl font-semibold flex-1">{{ $data['nombre'] }}</h1>
 @endsection
 
 @section('inputs')
-    @if ($errors->has('descripción'))
+    {{-- @if ($errors->has('descripción'))
         {{ dd($errors) }}
     @endif
 
@@ -40,11 +40,11 @@
                 @endif
             </div>
         </div>
-    </section>
+    </section> --}}
 @endsection
 
 @section('extra-info')
-    <section class="mt-8">
+    {{-- <section class="mt-8">
         <header>
             @if ($failed)
                 <span class="text-danger"> No se pudo eliminar debido a que tiene empleados asignados</span>
@@ -58,10 +58,10 @@
                     {{ $item['nombre'] }}
                 </a>
             @endforeach
-            <a class="border-b-2 border-ldark hover:border-success w-full text-center font-semibold cursor-pointer select-none h-16 hover:text-success flex items-center justify-center"
-                href="{{ route('company.pay-politics.form', ['id_pay_code' => $data['id_codigo_pago']]) }}">
+            {{-- <a class="border-b-2 border-ldark hover:border-success w-full text-center font-semibold cursor-pointer select-none h-16 hover:text-success flex items-center justify-center"
+                href="{{ route('company.pay-politics.form', ['id_pay_code' => 2]) }}">
                 <i class="fa-solid fa-plus fa-xl"></i>
             </a>
         </div>
-    </section>
+    </section> --}}
 @endsection

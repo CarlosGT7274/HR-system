@@ -37,7 +37,7 @@
         <div class="flex flex-row items-center gap-2 p-2">
             <label class="w-32" for="name">Codigo de pago: </label>
             <input type="number" step='' min='0' max='' class="border-b-2 border-ldark cursor-default p-1 text-ldark flex-1" 
-            name="id_codpag" readonly
+            name="id_codpago" readonly
                 value="{{ $data['id_codpago'] }}" id="name">
         </div>
         <div class="flex flex-row items-center gap-2 p-2">

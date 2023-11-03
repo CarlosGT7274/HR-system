@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\Pages\CompanyController;
 use App\Http\Controllers\Pages\HomeController;
+use App\Http\Controllers\Pages\RegistersController;
 use App\Http\Controllers\Pages\SessionController;
 use App\Http\Controllers\Pages\systemController;
 use Illuminate\Http\Request;
@@ -23,7 +24,7 @@ use Illuminate\Support\Facades\Route;
  *
  * @param string $prefix Route prefix for all endpoints
  * @param string $uri_prefix API endpoint for the request
- * @param string $extraId Extra Id for the API endpoint
+ * @param array | string $extraId Extra Id for the API endpoint
  * @param string $uri_suffix API endpoint for the request
  * @param string $url_name Base name for all the endpoints 
  * @param string $title Page title 
@@ -197,8 +198,8 @@ Route::middleware('needToken')->group(function () {
         [
             'descripción' => 'required | string',
             'número_de_percepción' => 'required | string',
-            'siglas' => 'required | string',
-            'tipo' => 'required | integer | min:1',
+            'abreviatura' => 'required | string',
+            'tipo' => 'required | integer | between:-1,1',
         ],
         [
             'tipo' => 'int',
@@ -207,6 +208,29 @@ Route::middleware('needToken')->group(function () {
             'abreviatura' => 'siglas'
         ]
     );
+
+    Route::prefix('codigos-de-pago/{father_id}')->group(function ($father_id) {
+        SimpleRoutes(
+            'politicas-de-pago',
+            'companies',
+            ['payCode', $father_id],
+            'payPolitics',
+            'company.pay-politics',
+            'Políticas de Pago',
+            'politica_pago',
+            'una Política de Pago',
+            [
+                'nombre' => 'required | string',
+                'activo' => 'required | integer | between:0,1',
+                'paga_días_feriados' => 'required | integer | between:0,1',
+                'paga_horas_extras' => 'required | integer | between:0,1'
+            ],
+            [
+                'paga_días_feriados' => 'pagaFeriados',
+                'paga_horas_extras' => 'pagaExtras'
+            ]
+        );
+    });
 
     SimpleRoutes(
         'horarios',
@@ -378,11 +402,11 @@ Route::middleware('needToken')->group(function () {
             'tiempoini' => 'required | string | regex:/^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}$/',
             'tiempofin' => 'required | string | regex:/^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}$/',
             'observacion' => 'required | string',
-            'id_codpag' => 'required | integer | min:0 | exists:hr_codigos_pagos,id_codigo_pago',
+            'id_codpago' => 'required | integer | min:0 | exists:hr_codigos_pagos,id_codigo_pago',
             'id_trabajador' => 'required | integer | min:0 | exists:hr_empleados,id_empleado',
         ],
         [
-            'id_codpag' => 'int',
+            'id_codpago' => 'int',
             'id_trabajador' => 'int',
             'fecha_excep' => 'datetime',
             'tiempoini' => 'datetime',
@@ -407,5 +431,12 @@ Route::middleware('needToken')->controller(systemController::class)->group(funct
 
         Route::delete('{id}','deleteR')->where('id', '[0-9]+')->name('deleteR.del');
 
+    });
+});
+
+Route::middleware('needToken')->controller(RegistersController::class)->group(function () {
+    Route::prefix('registros')->group(function () {
+
+        Route::get('','getAllContent')->name('raiz');
     });
 });

@@ -7,34 +7,39 @@
 
         @if ($type == 'number')
             <input class="w-full h-10" name="{{ $name }}" type="{{ $type }}" min="{{ $min }}"
-                step="{{ $step }}" max="{{ $max }}" placeholder="{{ $placeholder }}">
-        @else
-            @if ($type == 'date' || $type == 'time')
-                @if ($type == 'date')
-                    <input class="w-full h-10" name="{{ $name }}" type="{{ $type }}">
-                @else
-                    <input class="w-full h-10" name="{{ $name }}" type="{{ $type }}" step="1">
-                @endif
+                step="{{ $step }}" max="{{ $max }}" placeholder="{{ $placeholder }}"
+                value="{{ old($name) }}">
+        @elseif ($type == 'date' || $type == 'time' || $type == 'datetime-local')
+            @if ($type == 'date')
+                <input class="w-full h-10" name="{{ $name }}" type="{{ $type }}"
+                    value="{{ old($name) }}">
             @else
-                <input class="w-full h-10" id="{{ $id }}" autocomplete="{{ $autocomplete }}"
-                    name="{{ $name }}" type="{{ $type }}" placeholder="{{ $placeholder }}"
-                    value="{{ $defaultValue }}">
-
-                @if ($type == 'password')
-                    <button type="button" id="{{ $id . 'preview' }}">
-                        <i class="fa-solid fa-lg fa-eye" style="color: var(--color-dlight)"></i>
-                    </button>
-                    <script>
-                        document.getElementById(`${@json($id)}preview`).addEventListener("click", function() {
-                            if (document.getElementById(@json($id)).type === "password") {
-                                document.getElementById(@json($id)).type = "text";
-                            } else {
-                                document.getElementById(@json($id)).type = "password";
-                            }
-                        });
-                    </script>
-                @endif
+                <input class="w-full h-10"  id="{{ $id }}" name="{{ $name }}" type="{{ $type }}" step="1"
+                    value="{{ old($name) }}">
             @endif
+        @elseif ($type == 'password')
+            <input class="w-full h-10" id="{{ $id }}" name="{{ $name }}" type="{{ $type }}"
+                placeholder="{{ $placeholder }}" value="{{ old($name) }}">
+
+            <button type="button" id="{{ $id . 'preview' }}">
+                <i class="fa-solid fa-lg fa-eye" style="color: var(--color-dlight)"></i>
+            </button>
+            <script>
+                document.getElementById(`${@json($id)}preview`).addEventListener("click", function() {
+                    if (document.getElementById(@json($id)).type === "password") {
+                        document.getElementById(@json($id)).type = "text";
+                    } else {
+                        document.getElementById(@json($id)).type = "password";
+                    }
+                });
+            </script>
+        @elseif ($type == 'email')
+            <input class="w-full h-10" id="{{ $id }}" autocomplete="{{ $autocomplete }}"
+                name="{{ $name }}" type="{{ $type }}" placeholder="{{ $placeholder }}"
+                value="{{ old($name) }}">
+        @else
+            <input class="w-full h-10" id="{{ $id }}" name="{{ $name }}" type="{{ $type }}"
+                placeholder="{{ $placeholder }}" value="{{ old($name) }}">
         @endif
 
     </div>

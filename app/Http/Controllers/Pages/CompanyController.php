@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Pages;
 
 use App\Http\Controllers\Controller;
+use App\Models\HR\Company\General\hr_capacitaciones;
 use Illuminate\Http\Request;
 
 class CompanyController extends Controller
@@ -93,14 +94,27 @@ class CompanyController extends Controller
     {
         $endpoint = $this->uri_prefix;
 
-        switch ($this->extraId) {
-            case 'company':
-                $endpoint .= '/' . session('company');
-                break;
+        if (is_array($this->extraId)) {
+            switch ($this->extraId[0]) {
+                case 'payCode':
+                    $endpoint .= '/' . session('company') . '/payCodes' . '/' . $this->extraId[1];
+                    dd($endpoint);
+                    break;
 
-            default:
-                # code...
-                break;
+                default:
+                    # code...
+                    break;
+            }
+        } else if (is_string($this->extraId)) {
+            switch ($this->extraId) {
+                case 'company':
+                    $endpoint .= '/' . session('company');
+                    break;
+
+                default:
+                    # code...
+                    break;
+            }
         }
 
         if ($this->uri_suffix != '') {
@@ -173,8 +187,9 @@ class CompanyController extends Controller
 
         $data = $this->UpdateRequest($request, $changes);
         // dd($data);
-        // dd($this->apiRequest($this->getEndpoint(), 'POST', $data));
+        // return $this->apiRequest($this->getEndpoint(), 'POST', $data);
         $this->apiRequest($this->getEndpoint(), 'POST', $data);
+        
         return redirect()->route($this->baseUrl . '.all');
     }
 
@@ -191,6 +206,7 @@ class CompanyController extends Controller
 
     public function update($id, Request $request, $validationRules, $changes = [])
     {
+        // dd($request->all());
         $request->validate($validationRules);
 
         $data = $this->UpdateRequest($request, $changes);

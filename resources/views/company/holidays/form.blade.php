@@ -5,7 +5,7 @@
         <div>
             <label for="name">Nombre</label>
             <x-input id="name" icon="" autocomplete="" type="text" name="nombre"
-                placeholder="Nombre del Dia Feriado" defaultValue="" />
+                placeholder="Nombre del Dia Feriado" />
         </div>
 
         <div>

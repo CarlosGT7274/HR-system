@@ -500,7 +500,8 @@ Route::prefix('v1')->group(function () {
                 });
 
                 Route::get('{id}', function ($id_company, $id) use ($controller) {
-                    return $controller->readOne($id, ['column' => 'id_empresa', 'value' => $id_company]);
+                    $extraInfo['politics'] = hr_politicas_pagos::select('id_politica_pago', 'nombre')->where('id_codigo_pago', $id)->get();
+                    return $controller->readOne($id, ['column' => 'id_empresa', 'value' => $id_company], false, $extraInfo);
                 });
 
                 Route::post('', function ($id_company, Request $request) use ($controller) {
@@ -511,7 +512,7 @@ Route::prefix('v1')->group(function () {
                             'descripcion' => 'required | string',
                             'codexport' => 'required | string',
                             'siglas' => 'required | string',
-                            'tipo' => 'required | integer | min:1',
+                            'tipo' => 'required | integer | between:-1,1',
                         ]
                     );
                 });
@@ -524,7 +525,7 @@ Route::prefix('v1')->group(function () {
                             'descripcion' => 'sometimes | required | string',
                             'codexport' => 'sometimes | required | string',
                             'siglas' => 'sometimes | required | string',
-                            'tipo' => 'integer | min:1',
+                            'tipo' => 'integer | between:-1,1',
                         ]
                     );
                 });
@@ -1112,7 +1113,7 @@ Route::prefix('v1')->group(function () {
                         'tiempoini' => 'required | date | date_format:Y-m-d H:i:s',
                         'tiempofin' => 'required | date | date_format:Y-m-d H:i:s',
                         'observacion' => 'required | string',
-                        'id_codpag' => 'required | integer | min:0 | exists:hr_codigos_pagos,id_codigo_pago',
+                        'id_codpago' => 'required | integer | min:0 | exists:hr_codigos_pagos,id_codigo_pago',
                         'id_trabajador' => 'required | integer | min:0 | exists:hr_empleados,id_empleado',
                     ]
                 );
@@ -1127,7 +1128,7 @@ Route::prefix('v1')->group(function () {
                         'tiempoini' => 'date | date_format:Y-m-d H:i:s',
                         'tiempofin' => 'date | date_format:Y-m-d H:i:s',
                         'observacion' => 'sometimes | required | string',
-                        'id_codpag' => 'integer | min:0 | exists:hr_codigos_pagos,id_codigo_pago',
+                        'id_codpago' => 'integer | min:0 | exists:hr_codigos_pagos,id_codigo_pago',
                         'id_trabajador' => 'integer | min:0 | exists:hr_empleados,id_empleado',
                     ]
                 );

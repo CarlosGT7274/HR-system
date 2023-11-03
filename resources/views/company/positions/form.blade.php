@@ -4,8 +4,8 @@
     <section class="w-5/6 md:w-2/3 lg:w-5/6 grid lg:grid-cols-2 lg:gap-x-20 gap-y-12">
         <div>
             <label for="name">Nombre</label>
-            <x-input id="name" icon="" autocomplete="" type="text" name="nombre" placeholder="Nombre del Puesto"
-                defaultValue="" />
+            <x-input id="name" icon="" autocomplete="" type="text" name="nombre"
+                placeholder="Nombre del Puesto" />
         </div>
 
         <div>
