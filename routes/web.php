@@ -204,11 +204,11 @@ Route::middleware('needToken')->group(function () {
         ]
     );
 
-    Route::prefix('codigos-de-pago/{$id_pay_code}')->group(function ($id_pay_code) {
+    Route::prefix('codigos-de-pago/{father_id}')->group(function ($father_id) {
         SimpleRoutes(
             'politicas-de-pago',
             'companies',
-            ['payCode', $id_pay_code],
+            ['payCode', $father_id],
             'payPolitics',
             'company.pay-politics',
             'Políticas de Pago',

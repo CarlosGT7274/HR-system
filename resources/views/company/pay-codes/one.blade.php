@@ -58,6 +58,10 @@
                     {{ $item['nombre'] }}
                 </a>
             @endforeach
+            <a class="border-b-2 border-ldark hover:border-success w-full text-center font-semibold cursor-pointer select-none h-16 hover:text-success flex items-center justify-center"
+                href="{{ route('company.pay-politics.form', ['id_pay_code' => $data['id_codigo_pago']]) }}">
+                <i class="fa-solid fa-plus fa-xl"></i>
+            </a>
         </div>
     </section>
 @endsection

@@ -5,7 +5,7 @@
         <div>
             <label for="des">Descripción</label>
             <x-input id="des" icon="" autocomplete="" type="text" name="descripción"
-                placeholder="Descripción del Horario" defaultValue="" />
+                placeholder="Descripción del Horario" />
         </div>
 
         <div>

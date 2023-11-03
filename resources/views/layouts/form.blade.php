@@ -5,7 +5,10 @@
         <article class="w-full flex flex-col">
 
             <header class="h-12 border-b-2 border-primary mb-2 flex flex-row items-baseline gap-5">
-                <a href="{{ route($base_route . '.all') }}">
+                <a
+                    @if ($base_route == 'company.pay-politics') href="{{ route($base_route . '.all', ['father_id' => $father_id]) }}"    
+                @else
+                href="{{ route($base_route . '.all') }}" @endif>
                     <i class="fa-solid fa-arrow-left fa-xl"></i>
                 </a>
                 <h1 class="text-2xl font-semibold">Registro de {{ $title }}</h1>

@@ -5,7 +5,7 @@
         <div>
             <label for="name">Nombre</label>
             <x-input id="name" icon="" autocomplete="" type="text" name="nombre"
-                placeholder="Nombre de la capacitación" defaultValue="" />
+                placeholder="Nombre de la capacitación" />
         </div>
 
         <div class="flex flex-col">

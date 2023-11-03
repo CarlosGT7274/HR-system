@@ -7,18 +7,22 @@
 
         @if ($type == 'number')
             <input class="w-full h-10" name="{{ $name }}" type="{{ $type }}" min="{{ $min }}"
-                step="{{ $step }}" max="{{ $max }}" placeholder="{{ $placeholder }}">
+                step="{{ $step }}" max="{{ $max }}" placeholder="{{ $placeholder }}"
+                value="{{ old($name) }}">
         @else
-            @if ($type == 'date' || $type == 'time')
+            @if ($type == 'date' || $type == 'time' || $type == 'datetime-local')
                 @if ($type == 'date')
-                    <input class="w-full h-10" name="{{ $name }}" type="{{ $type }}">
+                    <input class="w-full h-10" name="{{ $name }}" type="{{ $type }}"
+                        value="{{ old($name) }}">
                 @else
-                    <input class="w-full h-10" name="{{ $name }}" type="{{ $type }}" step="1">
+                    <input class="w-full h-10" name="{{ $name }}" type="{{ $type }}" step="1"
+                        value="{{ old($name) }}">
                 @endif
             @else
+                if
                 <input class="w-full h-10" id="{{ $id }}" autocomplete="{{ $autocomplete }}"
                     name="{{ $name }}" type="{{ $type }}" placeholder="{{ $placeholder }}"
-                    value="{{ $defaultValue }}">
+                    value="{{ old($name) }}">
 
                 @if ($type == 'password')
                     <button type="button" id="{{ $id . 'preview' }}">
