@@ -4,6 +4,7 @@ use App\Http\Controllers\Pages\CompanyController;
 use App\Http\Controllers\Pages\HomeController;
 use App\Http\Controllers\Pages\RegistersController;
 use App\Http\Controllers\Pages\SessionController;
+use App\Http\Controllers\Pages\EmployeesController;
 use App\Http\Controllers\Pages\systemController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
