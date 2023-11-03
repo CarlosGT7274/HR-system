@@ -31,7 +31,7 @@ class att_excepciones extends \App\Models\modeloBase
         'tiempoini',
         'tiempofin',
         'observacion',
-        'id_codpag',
+        'id_codpago',
         'id_trabajador'
     ];
 }

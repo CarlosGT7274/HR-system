@@ -12,7 +12,7 @@ class sys_roles_permisos extends \App\Models\modeloBase
     protected $fillable = [
         'id_rol',
         "id_permiso",
-        "permiso"
+        "valor"
     ];
 
     /**

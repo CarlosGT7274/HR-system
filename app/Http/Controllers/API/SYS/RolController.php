@@ -82,12 +82,12 @@ class RolController extends Controller
         ]);
 
         $permisos = [];
-
+        // dd($request['permisos']);
         foreach ($request['permisos'] as $permiso) {
             $permiso = sys_roles_permisos::create([
                 'id_rol' => $rol->id_rol,
-                'id_permiso' => $permiso->id_permiso,
-                'permiso' => $permiso->permiso,
+                'id_permiso' => $permiso['id_permiso'],
+                'valor' => $permiso['permiso'],
             ]);
 
             array_push($permisos, $permiso);
@@ -113,7 +113,7 @@ class RolController extends Controller
         $request->validate([
             'nombre' => 'sometimes | required | string',
             'permisos' => 'array',
-            'permisos.*.id_permiso' => 'required | integer | min:1 | exists:sys_permisos,id_permiso',
+            'permisos.*.id_permiso' => 'required | integer | min:0 | exists:sys_permisos,id_permiso',
             'permisos.*.permiso' => 'required | integer | between:-1,15',
         ]);
 
@@ -142,13 +142,13 @@ class RolController extends Controller
 
                 sys_roles_permisos::where('id_rol', $id)
                     ->where('id_permiso', $permiso['id_permiso'])
-                    ->update(['permiso' => $permiso['permiso']]);
+                    ->update(['valor' => $permiso['permiso']]);
             }
         }
 
         return response()->json([
             'error' => false,
-            'mensaje' => 'Registros actualzados correctamente',
+            'mensaje' => 'Registros actualizados correctamente',
             'data' => $rol
         ], 200);
     }
@@ -177,7 +177,7 @@ class RolController extends Controller
 
         return response()->json([
             'error' => $attempt ? false : true,
-            'mensaje' => $attempt ? 'Eliminado Correctamente' : 'No se puede borrar el rol'
+            'mensaje' => $attempt ? 'Eliminado Correctamente' : 'No se puede borrar el rol, Porque esta asignado a un usuario'
         ], 200);
     }
 }

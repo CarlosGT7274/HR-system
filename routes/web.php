@@ -2,7 +2,9 @@
 
 use App\Http\Controllers\Pages\CompanyController;
 use App\Http\Controllers\Pages\HomeController;
+use App\Http\Controllers\Pages\RegistersController;
 use App\Http\Controllers\Pages\SessionController;
+use App\Http\Controllers\Pages\systemController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -123,7 +125,11 @@ function ChildRoutes($prefix, $endpoint, $uri_prefix, $extraId, $uri_suffix, $ur
 }
 
 
-Route::middleware('needToken')->get('/', [HomeController::class, 'home'])->name('home');
+Route::middleware('needToken')->controller(HomeController::class)->group(function () {
+    Route::get('/', 'home')->name('home');
+    Route::get('/dashboard', 'dashboard')->name('dashboard.show');
+    Route::post('/dashboard', 'graph')->name('attendance.graph');
+});
 
 Route::controller(SessionController::class)->group(function () {
     Route::get('login', 'login')->name('login.form');
@@ -132,8 +138,7 @@ Route::controller(SessionController::class)->group(function () {
 
     Route::get('resetPassword', 'getEmail')->name('resetPassword.form');
 
-    Route::post('resetPassword', 'sendToken')->name('resetPassword.submit');
-
+    Route::post('resetPassword', 'sedToken')->name('resetPassword.submit');
     Route::get('changePassword', 'changePassword')->name('changePassword.form');
 
     Route::post('changePassword', 'updatePassword')->name('changePassword.submit');
@@ -339,4 +344,153 @@ Route::middleware('needToken')->group(function () {
         ],
         true
     );
+
+    SimpleRoutes(
+        'permisos',
+        'privileges',
+        '',
+        '',
+        'system.permisos',
+        'Permisos',
+        'permiso',
+        'un Permiso',
+        [
+            'clave' => 'required | integer | min:0',
+            'nombre_del_permiso' => 'required | string',
+            'clave_del_padre' => 'required | integer | exists:sys_permisos,id_permiso',
+            'endpoint' => 'required | string',
+            'activo' => 'required | integer | between:0,1',
+        ],
+        [
+            'nombre_del_permiso' => 'nombre',
+            'clave' => 'id_permiso',
+            'clave_del_padre' => 'padre',
+            'activo' => 'int',
+            'padre' => 'int'
+        ]
+
+    );
+
+    SimpleRoutes(
+        'empresas',
+        'companies',
+        '',
+        '',
+        'system.companies',
+        'Empresas',
+        'empresa',
+        'Nueva Empresa',
+        [
+            'razón_social' => 'required | string | min:1',
+            'rfc' => 'required | string | min:1 | max:13',
+            'giro_comercial' => 'required | string | min:1',
+            'contacto' => 'required | string | min:1',
+            'teléfono' => 'required | string | min:1 | max:10',
+            'email' => 'required | string | min:1 | email',
+            'fax' => 'nullable | string | min:1',
+            'web' => 'nullable | string | min:1',
+            'calle' => 'required | string | min:1',
+            'colonia' => 'required | string | min:1',
+            'población' => 'required | string | min:1',
+            'estado' => 'required | integer',
+            'logo' => 'nullable | string | min:1'
+        ],
+        [
+            "razón_social" => 'razonSocial',
+            "giro_comercial" => 'giroComercial',
+            'teléfono' => 'telefono',
+            'población' => 'poblacion'
+        ]
+    );
+
+    SimpleRoutes(
+        'biometricos',
+        'biometrics',
+        '',
+        'terminals',
+        'biometrics.terminals',
+        'Terminales',
+        'terminal_id',
+        'una Terminal',
+        [
+            'terminal_id' => 'required | integer | min:0',
+            'teminal_no' => 'required | integer | min:0',
+            'terminal_status' => 'required | integer | min:0',
+            'terminal_name' => 'required | string',
+            'terminal_location' => 'required | string',
+            'termnal_conecttype' => 'required | integer | min:0',
+            'terminal_conectpwd' => 'required | string',
+            'terminal_domainname' => 'required | string',
+            'terminal_tcpip' => 'required | string',
+            'terminal_port' => 'required | integer | min:0',
+            'terminal_serial' => 'required | string',
+            'terminal_baudrate' => 'required | integer | min:0',
+            'terminal_type' => 'required | string',
+            'terminal_users' => 'required | integer | min:0',
+            'terminal_fingerprints' => 'required | integer | min:0',
+            'terminal_punches' => 'required | integer | min:0',
+            'terminal_faces' => 'required | integer | min:0',
+            'terminal_zem' => 'required | string',
+            'terminal_kind' => 'required | integer | min:0',
+            'IsSelect' => 'required | integer | min:0',
+            'terminal_timechk' => 'required | integer | min:0',
+            'terminal_lastchk' => 'required | date | date_format:Y-m-d H:i:s',
+        ],
+        [
+            'terminal_id' => 'int',
+            'teminal_no' => 'int',
+            'termnal_conecttype' => 'int',
+            'IsSelect' => 'int'
+        ]
+    );
+
+    SimpleRoutes(
+        'excepciones',
+        'biometrics',
+        '',
+        'exceptions',
+        'biometrics.exceptions',
+        'Excepciones',
+        'id',
+        'una excepcion',
+        [
+            'fecha_excep' => 'required | string | regex:/^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}$/',
+            'tiempoini' => 'required | string | regex:/^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}$/',
+            'tiempofin' => 'required | string | regex:/^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}$/',
+            'observacion' => 'required | string',
+            'id_codpago' => 'required | integer | min:0 | exists:hr_codigos_pagos,id_codigo_pago',
+            'id_trabajador' => 'required | integer | min:0 | exists:hr_empleados,id_empleado',
+        ],
+        [
+            'id_codpago' => 'int',
+            'id_trabajador' => 'int',
+            'fecha_excep' => 'datetime',
+            'tiempoini' => 'datetime',
+            'tiempofin' => 'datetime'
+        ]
+    );
+});
+
+Route::middleware('needToken')->controller(systemController::class)->group(function () {
+    Route::prefix('perfil')->group(function () {
+
+        Route::get('', 'getviewAll')->name('raiz');
+
+        Route::get('{id}', 'editprofilef')->where('id', '[0-9]+')->name('rol.edit');
+
+        Route::get('create', 'editrolf')->name('rol.submit');
+
+        Route::post('', 'createrol')->name('create.rolss');
+
+        Route::put('{id}', 'updatedprofilef')->where('id', '[0-9]+')->name('updatedprofilef.post');
+
+        Route::delete('{id}', 'deleteR')->where('id', '[0-9]+')->name('deleteR.del');
+    });
+});
+
+Route::middleware('needToken')->controller(RegistersController::class)->group(function () {
+    Route::prefix('registros')->group(function () {
+
+        Route::get('', 'getAllContent')->name('raiz');
+    });
 });

@@ -9,8 +9,10 @@
 
     <nav class="mt-6 text-light select-none">
         <ul>
+            {{-- {{ dd(session('permissions')) }} --}}
             @foreach (session('permissions') as $permission)
                 @if ($permission['nombre'] != 'Dashboard')
+                    {{-- Dasboard --}}
                     <li class="flex flex-col items-center px-6 border-b-2 border-ldark">
                         <button onclick="showMenu({{ $loop->index }})"
                             class="flex justify-between items-center w-full py-5 hover:text-ldark">
@@ -32,19 +34,21 @@
                         </ul>
                     </li>
                 @else
-                    <li>
-                        <a href="{{ route('home') }}"
-                            class="flex items-center gap-6 hover:text-ldark border-ldark border-b-2 pb-5 ps-4 cursor-pointer">
-                            <object class="grid grid-cols-2 gap-1 h-6 items-center">
-                                <i class="fa-regular fa-square fa-2xs"></i>
-                                <i class="fa-regular fa-square fa-2xs"></i>
-                                <i class="fa-regular fa-square fa-2xs"></i>
-                                <i class="fa-regular fa-square fa-2xs"></i>
-                            </object>
+                    @if ($permission['valor'] >= 0)
+                        <li>
+                            <a href="{{ route('dashboard.show') }}"
+                                class="flex items-center gap-6 hover:text-ldark border-ldark border-b-2 pb-5 ps-4 cursor-pointer">
+                                <object class="grid grid-cols-2 gap-1 h-6 items-center">
+                                    <i class="fa-regular fa-square fa-2xs"></i>
+                                    <i class="fa-regular fa-square fa-2xs"></i>
+                                    <i class="fa-regular fa-square fa-2xs"></i>
+                                    <i class="fa-regular fa-square fa-2xs"></i>
+                                </object>
 
-                            <p class="text-base"> {{ $permission['nombre'] }}</p>
-                        </a>
-                    </li>
+                                <p class="text-base"> {{ $permission['nombre'] }}</p>
+                            </a>
+                        </li>
+                    @endif
                 @endif
             @endforeach
 

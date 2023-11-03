@@ -1,5 +1,7 @@
 <?php
 
+use App\Models\SYS\sys_roles;
+use App\Models\SYS\sys_roles_permisos;
 use Illuminate\Validation\Rule;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
@@ -74,37 +76,48 @@ Route::prefix('v1')->group(function () {
     //* ----------------------------------------------------------------------------
 
     Route::prefix('privileges')->group(function () {
-
-        Route::get('', function () {
-            $controller = new SimpleCRUDController(new sys_permisos);
+        $controller = new SimpleCRUDController(new sys_permisos);
+        
+        Route::get('', function () use ($controller){
             return $controller->readAll([]);
         });
 
-        Route::get('{id}', function ($id) {
-            $controller = new SimpleCRUDController(new sys_permisos);
+        Route::get('{id}', function ($id) use ($controller){
             return $controller->readOne($id, []);
         });
 
-        Route::post('', function (Request $request) {
-            $controller = new SimpleCRUDController(new sys_permisos);
-            return $controller->create(
+        Route::post('', function (Request $request) use ($controller){
+            
+            $response = $controller->create(
                 $request,
                 [],
                 [
+                    'id_permiso' => 'integer | min:0',
                     'nombre' => 'required | string',
                     'padre' => 'integer | exists:sys_permisos,id_permiso',
                     'endpoint' => 'required | string',
                     'activo' => 'integer | between:0,1',
                 ]
             );
+
+            foreach( sys_roles::all() as $rol){
+                sys_roles_permisos::create([
+                    'id_rol' => $rol['id_rol'],
+                    'id_permiso' => $request['id_permiso'],
+                    'valor' => -1,
+                ]);
+            }
+
+            return $response;
+            
         });
 
-        Route::put('{id}', function ($id, Request $request) {
-            $controller = new SimpleCRUDController(new sys_permisos);
+        Route::put('{id}', function ($id, Request $request) use ($controller){
             return $controller->update(
                 $id,
                 $request,
                 [
+                    'id_permiso' => 'integer | min:0',
                     'nombre' => 'sometimes | required | string',
                     'padre' => 'integer | exists:sys_permisos,id_permiso',
                     'endpoint' => 'sometimes | required | string',
@@ -113,8 +126,7 @@ Route::prefix('v1')->group(function () {
             );
         });
 
-        Route::delete('{id}', function ($id) {
-            $controller = new SimpleCRUDController(new sys_permisos);
+        Route::delete('{id}', function ($id) use ($controller){
             return $controller->delete($id);
         });
     });
@@ -1101,7 +1113,7 @@ Route::prefix('v1')->group(function () {
                         'tiempoini' => 'required | date | date_format:Y-m-d H:i:s',
                         'tiempofin' => 'required | date | date_format:Y-m-d H:i:s',
                         'observacion' => 'required | string',
-                        'id_codpag' => 'required | integer | min:0 | exists:hr_codigos_pagos,id_codigo_pago',
+                        'id_codpago' => 'required | integer | min:0 | exists:hr_codigos_pagos,id_codigo_pago',
                         'id_trabajador' => 'required | integer | min:0 | exists:hr_empleados,id_empleado',
                     ]
                 );
@@ -1116,7 +1128,7 @@ Route::prefix('v1')->group(function () {
                         'tiempoini' => 'date | date_format:Y-m-d H:i:s',
                         'tiempofin' => 'date | date_format:Y-m-d H:i:s',
                         'observacion' => 'sometimes | required | string',
-                        'id_codpag' => 'integer | min:0 | exists:hr_codigos_pagos,id_codigo_pago',
+                        'id_codpago' => 'integer | min:0 | exists:hr_codigos_pagos,id_codigo_pago',
                         'id_trabajador' => 'integer | min:0 | exists:hr_empleados,id_empleado',
                     ]
                 );

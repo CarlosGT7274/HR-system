@@ -10,6 +10,12 @@ export default defineConfig({
         laravel({
             input: [
                 getResource("js", "app"),
+                getResource("js", "attendance"),
+                getResource("js", "salaries"),
+                getResource("js", "general"),
+                getResource("js", "birthdays"),
+                getResource("js", "rotations"),
+                getResource("js", "capacitaciones"),
                 getResource("js", "scheduleInputs"),
 
                 getResource("css", "app"),

@@ -36,7 +36,6 @@ class DashboardController extends Controller
      */
     public function getEmployees(Request $request, $active = 1, $birthdays = false)
     {
-
         $request->validate([
             'date' => 'required | date | date_format:Y-m-d',
             'position' => 'integer | min:1 | exists:hr_puestos,id_puesto',
@@ -340,37 +339,62 @@ class DashboardController extends Controller
 
         $data['hombres'] = 0;
         $data['mujeres'] = 0;
+        
+        $data['recontratables'] = 0;
+        $data['finiquitos'] = 0;
+        $data['firmas'] = 0;
+        $data['entrevistas'] = 0;
 
         $month = date('m', strtotime($request->date));
 
         $temp_array = [];
         $first = true;
-
+        
         while (count($employees) != 0) {
-            $temp_object = [];
+            $temp_object = [];    
 
             foreach ($employees as $key => $employee) {
 
                 $hist = hr_historial::where('id_empleado', $employee['id_empleado'])->firstWhere('movimiento', 'B');
+                $nomP = hr_puestos::where('id_puesto', $hist['id_puesto'])->value('nombre');
+                $nomU = hr_unidades::where('id_unidad', $hist['id_unidad'])->value('nombre');
 
                 $histMonth = date('m', strtotime($hist['fecha']));
+
+                $infoBaja = $hist['infoBaja'];                
 
                 if ($month <= $histMonth) {
                     if ($first) {
                         $data[$employee['sexo'] == 0 ? 'mujeres' : 'hombres']++;
+                        if ($infoBaja - 8 >= 0){
+                            $data['recontratables']++;
+                            $infoBaja -= 8;
+                        };
+                        if ($infoBaja - 4 >= 0){
+                            $data['finiquitos']++;
+                            $infoBaja -= 4;
+                        };
+                        if ($infoBaja - 2 >= 0){
+                            $data['firmas']++;
+                            $infoBaja -= 2;
+                        };
+                        if ($infoBaja - 1 >= 0){
+                            $data['entrevistas']++;
+                            $infoBaja -= 1;
+                        };
                     }
 
                     if (empty($temp_object)) {
-                        $temp_object = ['unidad' => $hist['id_unidad'], 'puestos' => [], 'motivos' => []];
+                        $temp_object = ['unidad' => $nomU, 'puestos' => [], 'motivos' => []];
 
-                        array_push($temp_object['puestos'], ['total' => 1, 'puesto' => $hist['id_puesto']]);
+                        array_push($temp_object['puestos'], ['total' => 1, 'puesto' => $nomP]);
 
                         array_push($temp_object['motivos'], ['total' => 1, 'motivo' => $hist['observaciones']]);
 
                         unset($employees[$key]);
-                    } else if ($hist['id_unidad'] == $temp_object['unidad']) {
+                    } else if ($nomU == $temp_object['unidad']) {
 
-                        array_push($temp_object['puestos'], ['total' => 1, 'puesto' => $hist['id_puesto']]);
+                        array_push($temp_object['puestos'], ['total' => 1, 'puesto' => $nomP]);
 
                         array_push($temp_object['motivos'], ['total' => 1, 'motivo' => $hist['observaciones']]);
 
@@ -398,6 +422,13 @@ class DashboardController extends Controller
             $unit['motivos'] =  $this->groupDuplicates($unit['motivos'], 'motivo');
 
             array_push($data['detalles'], $unit);
+        }
+
+        if($data['total'] > 0){
+            $data['recontratables'] /= $data['total'] / 100;
+            $data['finiquitos'] /= $data['total'] / 100;
+            $data['firmas'] /= $data['total'] / 100;
+            $data['entrevistas'] /= $data['total'] / 100;
         }
 
         return response()->json([

@@ -1254,3 +1254,21 @@ INSERT INTO `db_hr_control_system`.`sys_permisos` (`id_permiso`, `padre`, `nombr
 (4079, 407, 'Prenomina', 'rprenomina', 1);
 
 COMMIT;
+
+-- -----------------------------------------------------
+-- Data for table `db_hr_control_system`.`sys_permisos`
+-- -----------------------------------------------------
+START TRANSACTION;
+USE `db_hr_control_system`;
+
+INSERT INTO `hr_detalles_horarios`(`id_horario`, `dia`, `inicio`, `fin`, `toleranciaIn`, `toleranciaFin`, `tipo`) 
+VALUES 
+(1, 1, '08:00:00', '17:00:00', 5, 5, 0), 
+(1, 2, '08:00:00', '17:00:00', 5, 5, 1), 
+(1, 3, '08:00:00', '17:00:00', 5, 5, 0), 
+(1, 4, '08:00:00', '17:00:00', 5, 5, 1), 
+(1, 5, '08:00:00', '17:00:00', 5, 5, 0), 
+(1, 6, '08:00:00', '12:00:00', 5, 5, 1), 
+(1, 7, '08:00:00', '12:00:00', 5, 5, 0);
+
+COMMIT;

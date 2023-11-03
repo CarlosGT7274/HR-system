@@ -10,8 +10,8 @@ use App\Models\HR\Employee\General\hr_vacaciones;
 use App\Models\HR\Employee\Incidencies\hr_faltas;
 use App\Models\HR\Employee\Incidencies\hr_incidencias;
 use App\Models\HR\Employee\Incidencies\hr_movimientos_vacaciones;
-use App\Models\Sys\sys_usuarios;
-use App\Models\Sys\sys_usuarios_empresas;
+use App\Models\SYS\sys_usuarios;
+use App\Models\SYS\sys_usuarios_empresas;
 use Illuminate\Http\Request;
 
 class EmpleadosController extends Controller
