@@ -17,22 +17,22 @@
         </div>
         <div class="flex flex-row items-center gap-2 p-2">
             <label class="w-32" for="name">Estado: </label>
-            <input type="text" class="border-b-2 border-ldark cursor-default p-1 text-ldark flex-1" name="terminal_status" readonly
+            <input type="text" class="border-b-2 border-ldark cursor-default p-1 text-ldark flex-1" name="estado" readonly
                 value="{{ $data['terminal_status'] }}" id="name">
         </div>
         <div class="flex flex-row items-center gap-2 p-2">
             <label class="w-32" for="name">Nombre: </label>
-            <input type="text" class="border-b-2 border-ldark cursor-default p-1 text-ldark flex-1" name="terminal_name" readonly
+            <input type="text" class="border-b-2 border-ldark cursor-default p-1 text-ldark flex-1" name="nombre" readonly
                 value="{{ $data['terminal_name'] }}" id="name" >
         </div>
         <div class="flex flex-row items-center gap-2 p-2">
             <label class="w-32" for="name">Ubicación: </label>
-            <input type="text" class="border-b-2 border-ldark cursor-default p-1 text-ldark flex-1" name="terminal_location" readonly
+            <input type="text" class="border-b-2 border-ldark cursor-default p-1 text-ldark flex-1" name="ubicacion" readonly
                 value="{{ $data['terminal_location'] }}" id="name" >
         </div>
         <div class="flex flex-row items-center gap-2 p-2">
             <label class="w-32" for="name">Tipo de conexión: </label>
-            <input type="number" step='' min='0' max='' class="border-b-2 border-ldark cursor-default p-1 text-ldark flex-1" name="termnal_conecttype" readonly
+            <input type="number" step='' min='0' max='' class="border-b-2 border-ldark cursor-default p-1 text-ldark flex-1" name="tipoconexion" readonly
                 value="{{ $data['termnal_conecttype'] }}" id="name">
         </div>
         <div class="flex flex-row items-center gap-2 p-2">

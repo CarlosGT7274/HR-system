@@ -18,25 +18,25 @@
         <div>
             <label for="tipo">Estado:</label>
             <x-input id="tipo" icon="" autocomplete="" type="number" max="1" min="0"
-                name="terminal_status" step="" placeholder="terminal_status" defaultValue="" />
+                name="estado" step="" placeholder="Estado" defaultValue="" />
         </div>
 
         <div>
             <label for="poblacion">Nombre:</label>
-            <x-input id="poblacion" icon="" autocomplete="" type="text" name="terminal_name"
-                placeholder="terminal_name" defaultValue="" />
+            <x-input id="poblacion" icon="" autocomplete="" type="text" name="nombre"
+                placeholder="Nombre" defaultValue="" />
         </div>
 
         <div>
             <label for="region">Ubicación:</label>
-            <x-input id="region" icon="" autocomplete="" type="text" step="" name="terminal_location"
-                placeholder="terminal_location" defaultValue="" />
+            <x-input id="region" icon="" autocomplete="" type="text" step="" name="ubicacion"
+                placeholder="Ubicacion" defaultValue="" />
         </div>
 
         <div>
             <label for="region">Tipo de conexión:</label>
-            <x-input id="region" icon="" autocomplete="" type="number" step='' min='0' max='' name="termnal_conecttype"
-                placeholder="termnal_conecttype" defaultValue="" />
+            <x-input id="region" icon="" autocomplete="" type="number" step='' min='0' max='' name="tipoconexion"
+                placeholder="Tipo de conexión" defaultValue="" />
         </div>
 
         <div>

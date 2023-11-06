@@ -3,6 +3,7 @@
 use App\Http\Controllers\Pages\CompanyController;
 use App\Http\Controllers\Pages\HomeController;
 use App\Http\Controllers\Pages\RegistersController;
+use App\Http\Controllers\Pages\ReportesController;
 use App\Http\Controllers\Pages\SessionController;
 use App\Http\Controllers\Pages\EmployeesController;
 use App\Http\Controllers\Pages\systemController;
@@ -416,10 +417,10 @@ Route::middleware('needToken')->group(function () {
         [
             'terminal_id' => 'required | integer | min:0',
             'teminal_no' => 'required | integer | min:0',
-            'terminal_status' => 'required | integer | min:0',
-            'terminal_name' => 'required | string',
-            'terminal_location' => 'required | string',
-            'termnal_conecttype' => 'required | integer | min:0',
+            'estado' => 'required | integer | min:0',
+            'nombre' => 'required | string',
+            'ubicacion' => 'required | string',
+            'tipoconexion' => 'required | integer | min:0',
             'terminal_conectpwd' => 'required | string',
             'terminal_domainname' => 'required | string',
             'terminal_tcpip' => 'required | string',
@@ -438,6 +439,10 @@ Route::middleware('needToken')->group(function () {
             'terminal_lastchk' => 'required | date | date_format:Y-m-d H:i:s',
         ],
         [
+            'estado' => 'terminal_status',
+            'nombre' => 'terminal_name',
+            'ubicacion' => 'terminal_location',
+            'tipoconexion' => 'termnal_conecttype',
             'terminal_id' => 'int',
             'teminal_no' => 'int',
             'termnal_conecttype' => 'int',
@@ -494,4 +499,12 @@ Route::middleware('needToken')->controller(RegistersController::class)->group(fu
 
         Route::get('', 'getAllContent')->name('raiz');
     });
+});
+
+Route::middleware('needToken')->controller(ReportesController::class)->group(function () {
+    // Route::prefix('Reportes')->group(function () {
+
+        Route::get('Asistencias','homeAsistencias')->name('');
+
+    // });
 });

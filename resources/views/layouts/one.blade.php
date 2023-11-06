@@ -12,7 +12,12 @@
                 @yield('title')
 
                 <form method="POST"
-                    action="{{ $father_id ? route($base_route . '.delete', ['id' => $data['id_' . $id_name], 'father_id' => $father_id]) : route($base_route . '.delete', ['id' => $data['id_' . $id_name]]) }}">
+                @if (substr($id_name, -2) == 'id') 
+                    action="{{ $father_id ? route($base_route . '.delete', ['id' => $data[$id_name], 'father_id' => $father_id]) : route($base_route . '.delete', ['id' => $data[$id_name]]) }}"
+                @else
+                    action="{{ $father_id ? route($base_route . '.delete', ['id' => $data['id_' . $id_name], 'father_id' => $father_id]) : route($base_route . '.delete', ['id' => $data['id_' . $id_name]]) }}"
+                @endif
+                >
                     @csrf
                     @method('DELETE')
                     <button type="submit">
@@ -23,7 +28,12 @@
 
 
             <form class="mt-6 border-b-2 border-b-ldark pb-5" method="POST"
-                action="{{ $father_id ? route($base_route . '.update', ['id' => $data['id_' . $id_name], 'father_id' => $father_id]) : route($base_route . '.update', ['id' => $data['id_' . $id_name]]) }}">
+                @if (substr($id_name, -2) == 'id') 
+                    action="{{ $father_id ? route($base_route . '.update', ['id' => $data[$id_name], 'father_id' => $father_id]) : route($base_route . '.update', ['id' => $data[$id_name]]) }}"
+                @else
+                    action="{{ $father_id ? route($base_route . '.update', ['id' => $data['id_' . $id_name], 'father_id' => $father_id]) : route($base_route . '.update', ['id' => $data['id_' . $id_name]]) }}"
+                @endif
+                    >
                 @csrf
                 @method('PUT')
 

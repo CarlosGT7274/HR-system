@@ -8,7 +8,7 @@
     <section class="w-5/6 md:w-2/3 xl:w-5/6 grid xl:grid-cols-2 gap-x-8 gap-y-8 mx-auto">
         <div class="flex flex-row items-center gap-2 p-2">
             <label class="w-32" for="name">ID: </label>
-            <input type="number" class="border-b-2 border-ldark cursor-default p-1 text-ldark flex-1" name="id_permiso" readonly
+            <input type="number" class="border-b-2 border-ldark cursor-default p-1 text-ldark flex-1" name="clave" readonly
                 value="{{ $data['id_permiso'] }}" id="name" min="0">
         </div>
         <div class="flex flex-row items-center gap-2 p-2">
@@ -28,7 +28,7 @@
         </div>
         <div class="flex flex-row items-center gap-2 p-2">
             <label class="w-32" for="name">padre: </label>
-            <input type="number" class="border-b-2 border-ldark cursor-default p-1 text-ldark flex-1" name="padre" readonly
+            <input type="number" class="border-b-2 border-ldark cursor-default p-1 text-ldark flex-1" name="clave_del_padre" readonly
                 value="{{ $data['padre'] }}" id="name" min="0">
         </div>
     </section>

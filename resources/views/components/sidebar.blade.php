@@ -1,5 +1,5 @@
 <aside id="navbar-container"
-    class="h-[100vh] sticky top-0 flex flex-col lg:rounded-r sm:w-[22rem] md:w-96 bg-dark ease-in-out transition duration-1000 z-10">
+    class="h-[100vh] sticky top-0 flex flex-col lg:rounded-r sm:w-[352px] md:w-[384px] bg-dark ease-in-out transition duration-1000 z-10">
     <header class="hidden lg:block select-none">
         <a href="" class="hidden lg:flex justify-start py-6 ps-2 items-center">
             @include('svg.logo')
