@@ -8,12 +8,6 @@ use Illuminate\Support\Carbon;
 
 class HomeController extends Controller
 {
-    private $menuItems = [
-        ['title' => 'Personal', 'subMenu' => ['Unidad', 'Departamentos', 'Puestos', 'Conceptos', 'Empleados', 'Aprobaciones', 'Vacaciones', 'Renuncias']],
-        ['title' => 'Dispositivos', 'subMenu' => ['Dispositivos', 'Sincronizar Datos', 'Cargar eventos USB', 'Descargar eventos', 'Enrolamiento remoto']],
-        ['title' => 'Asistencias', 'subMenu' => ['Asistencia', 'Incidencias', 'Excepciones', 'Tiempos Extras', 'Calendario', 'Horarios y Turnos', 'Consultas y Reportes']],
-        ['title' => 'Sistema', 'subMenu' => ['Perfiles', 'Usuarios', 'Bitacora', 'Configurar correo']]
-    ];
     /**
      * Create a new controller instance.
      *
@@ -39,8 +33,10 @@ class HomeController extends Controller
         ]);
 
         $unidades = $this->apiRequest('companies/' . session('company') . '/units', 'get', []);
+
         $departamentos = $this->apiRequest('companies/' . session('company') . '/departments', 'get', []);
-        $posciones = $this->apiRequest('companies/' . session('company') . '/positions', 'get', []);
+
+        $posiciones = $this->apiRequest('companies/' . session('company') . '/positions', 'get', []);
 
         $general1 = $this->apiRequest('dashboard/general', 'get', [
             'date' => $fechaActual
@@ -59,18 +55,17 @@ class HomeController extends Controller
         ]);
 
         return view('home.home', [
-            'pageTitle' => 'Home', 
-            'menuItems' => $this->menuItems, 
-            'attendance' => $attendance, 
-            "general" => $general1, 
-            "salaries" => $salaries1, 
+            'pageTitle' => 'Home',
+            'attendance' => $attendance,
+            "general" => $general1,
+            "salaries" => $salaries1,
             "birthdays" => $birthdays1,
             "rotations" => $rotations1,
             "unidades" => $unidades['data'],
             "departamentos" => $departamentos['data'],
-            "posiciones" => $posciones['data'],
+            "posiciones" => $posiciones['data'],
             "filtros" => [
-                "value" => '',
+                "fecha" => '',
                 "unidad" => '',
                 "departamentoss" => '',
                 "puesto" => '',
@@ -88,18 +83,18 @@ class HomeController extends Controller
             "posiciones" => 'string | regex:/^\d+$/ | nullable',
             'departamento' => 'string | regex:/^\d+$/ | nullable',
         ]);
-        
+
         $apiParams = [];
 
         $value = $request->fecha;
         $unidad = $request->unidad;
-        $departamentoss = $request->departamento;
+        $departamentos = $request->departamento;
         $puesto = $request->posiciones;
         $region = $request->region;
-        
 
-        foreach($request->all() as $key => $param){
-            if($param != null && $key != '_token'){
+
+        foreach ($request->all() as $key => $param) {
+            if ($param != null && $key != '_token') {
                 $newKey = '';
 
                 switch ($key) {
@@ -120,49 +115,43 @@ class HomeController extends Controller
                         break;
                 }
 
-                
+
                 $apiParams[$newKey] = $param;
             }
         }
 
-        // dd($request['region']);
-    // dd($apiParams);
-
         $unidades = $this->apiRequest('companies/' . session('company') . '/units', 'get', []);
+
         $departamentos = $this->apiRequest('companies/' . session('company') . '/departments', 'get', []);
-        $posciones = $this->apiRequest('companies/' . session('company') . '/positions', 'get', []);
-        // dd($posciones);
+
+        $posiciones = $this->apiRequest('companies/' . session('company') . '/positions', 'get', []);
+
         $general = $this->apiRequest('dashboard/general', 'get', $apiParams);
-        
+
         $salaries = $this->apiRequest("dashboard/salaries", "get", $apiParams);
-        
+
         $birthdays = $this->apiRequest("dashboard/birthdays", "get", $apiParams);
-        
-        // dd($birthdays);
-        
+
         $rotations = $this->apiRequest("dashboard/rotations", "get", $apiParams);
 
         $apiParams['paramDate'] = $request->fecha;
 
         $attendance = $this->apiRequest('dashboard/attendance', 'get', $apiParams);
 
-        // dd($attendance);
-        
         return view('home.home', [
-            'pageTitle' => 'Home', 
-            'menuItems' => $this->menuItems, 
-            'attendance' => $attendance, 
-            'general' => $general, 
-            "salaries" => $salaries, 
+            'pageTitle' => 'Home',
+            'attendance' => $attendance,
+            'general' => $general,
+            "salaries" => $salaries,
             "birthdays" => $birthdays,
             "rotations" => $rotations,
             "unidades" => $unidades['data'],
             "departamentos" => $departamentos['data'],
-            "posiciones" => $posciones['data'],
+            "posiciones" => $posiciones['data'],
             "filtros" => [
-                "value" => $value,
+                "fecha" => $value,
                 "unidad" => $unidad,
-                "departamentoss" => $departamentoss,
+                "departamentoss" => $departamentos,
                 "puesto" => $puesto,
                 "region" => $region
             ]

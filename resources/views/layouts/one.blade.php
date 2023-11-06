@@ -1,15 +1,14 @@
 @extends('layouts.base')
 
 @section('content')
-    <main class="w-full p-6">
-        <article class="w-full flex flex-col">
-            <header class="h-12 border-b-2 border-primary mb-2 flex flex-row justify-between items-baseline gap-5">
-                <a
-                    href="{{ $father_url != '' ? route($father_url . '.one', ['id' => $father_id]) : route($base_route . '.all') }}">
-                    <i class="fa-solid fa-arrow-left fa-xl"></i>
-                </a>
+    <article class="w-full flex flex-col">
+        <header class="h-12 border-b-2 border-primary mb-2 flex flex-row justify-between items-baseline gap-5">
+            <a
+                href="{{ $father_url != '' ? route($father_url . '.one', ['id' => $father_id]) : route($base_route . '.all') }}">
+                <i class="fa-solid fa-arrow-left fa-xl"></i>
+            </a>
 
-                @yield('title')
+            @yield('title')
 
                 <form method="POST"
                 @if (substr($id_name, -2) == 'id') 
@@ -22,12 +21,13 @@
                     @method('DELETE')
                     <button type="submit">
                         <i class="fa-solid fa-lg fa-trash-can hover:text-danger"></i>
-                    </button>
-                </form>
-            </header>
+                    <i class="fa-solid fa-lg fa-trash-can hover:text-danger"></i>
+                </button>
+            </form>
+        </header>
 
 
-            <form class="mt-6 border-b-2 border-b-ldark pb-5" method="POST"
+        <form class="mt-6 border-b-2 border-b-ldark pb-5" method="POST"
                 @if (substr($id_name, -2) == 'id') 
                     action="{{ $father_id ? route($base_route . '.update', ['id' => $data[$id_name], 'father_id' => $father_id]) : route($base_route . '.update', ['id' => $data[$id_name]]) }}"
                 @else
@@ -37,31 +37,29 @@
                 @csrf
                 @method('PUT')
 
-                <header class="mb-4 flex flex-row gap-5 items-center">
-                    <h2 class="text-xl font-semibold">Atributos</h2>
-                    <div>
-                        <button id="activar" type="button" onclick="habilitarEdicion()">
-                            <i class="fa-solid fa-lg fa-pencil"></i>
-                        </button>
+            <header class="mb-4 flex flex-row gap-5 items-center">
+                <h2 class="text-xl font-semibold">Atributos</h2>
+                <div>
+                    <button id="activar" type="button" onclick="habilitarEdicion()">
+                        <i class="fa-solid fa-lg fa-pencil"></i>
+                    </button>
 
-                        <button id="enviar" class="me-4 hover:text-success hidden" type="submit">
-                            <i class="fa-solid fa-floppy-disk fa-lg"></i>
-                        </button>
+                    <button id="enviar" class="me-4 hover:text-success hidden" type="submit">
+                        <i class="fa-solid fa-floppy-disk fa-lg"></i>
+                    </button>
 
-                        <button class="hover:text-danger hidden" onclick="cancelarEdicion()" type="button" id="cancelar">
-                            <i class="fa-solid fa-xmark fa-lg"></i>
-                        </button>
-                    </div>
-                </header>
+                    <button class="hover:text-danger hidden" onclick="cancelarEdicion()" type="button" id="cancelar">
+                        <i class="fa-solid fa-xmark fa-lg"></i>
+                    </button>
+                </div>
+            </header>
 
-                @yield('inputs')
+            @yield('inputs')
+        </form>
 
-            </form>
+        @yield('extra-info')
 
-            @yield('extra-info')
-
-        </article>
-    </main>
+    </article>
 @endsection
 
 

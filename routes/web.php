@@ -1,16 +1,16 @@
 <?php
 
 use App\Http\Controllers\Pages\CompanyController;
+use App\Http\Controllers\Pages\EmployeeController;
 use App\Http\Controllers\Pages\HomeController;
 use App\Http\Controllers\Pages\RegistersController;
 use App\Http\Controllers\Pages\ReportesController;
 use App\Http\Controllers\Pages\SessionController;
-use App\Http\Controllers\Pages\EmployeesController;
 use App\Http\Controllers\Pages\systemController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
-/*
+/**
 |--------------------------------------------------------------------------
 | Web Routes
 |--------------------------------------------------------------------------
@@ -19,7 +19,7 @@ use Illuminate\Support\Facades\Route;
 | routes are loaded by the RouteServiceProvider and all of them will
 | be assigned to the "web" middleware group. Make something great!
 |
-*/
+ */
 
 /**
  * Create a new controller instance whit all the routes necessary.
@@ -75,8 +75,8 @@ function SimpleRoutes($prefix, $uri_prefix, $extraId, $uri_suffix, $url_name, $t
 /**
  * Create a new controller instance whit all the routes necessary.
  *
- * @param string $prefix Route prefix for all endpoints
- * @param string $endpoint Route suffix after father id for all Routes
+ * @param string $father_route Route of the father for all endpoints
+ * @param string $endpoint Route endpoint after father id for all Routes
  * @param string $uri_prefix API endpoint for the request
  * @param array | string $extraId Extra Id for the API endpoint
  * @param string $uri_suffix API endpoint for the request
@@ -88,9 +88,9 @@ function SimpleRoutes($prefix, $uri_prefix, $extraId, $uri_suffix, $url_name, $t
  * @param array $changes Changes should perform to the request for the API 
  * @return void
  */
-function ChildRoutes($prefix, $endpoint, $uri_prefix, $extraId, $uri_suffix, $url_name, $title, $id_name, $form_title, $validation_rules, $changes = [], $employeesForForm = false)
+function ChildRoutes($father_route, $endpoint, $uri_prefix, $extraId, $uri_suffix, $url_name, $title, $id_name, $form_title, $validation_rules, $changes = [], $employeesForForm = false)
 {
-    Route::prefix($prefix)->group(function () use ($endpoint, $uri_prefix, $extraId, $uri_suffix, $url_name, $title, $id_name, $form_title, $validation_rules, $changes, $employeesForForm) {
+    Route::prefix($father_route)->group(function () use ($endpoint, $uri_prefix, $extraId, $uri_suffix, $url_name, $title, $id_name, $form_title, $validation_rules, $changes, $employeesForForm) {
         $controller = new CompanyController($uri_prefix, $extraId, $uri_suffix, $title, $url_name, $id_name, 'company.pay-codes');
 
         Route::get('{father_id}/' . $endpoint . '/{id}', function ($father_id, $id) use ($controller) {
@@ -347,6 +347,21 @@ Route::middleware('needToken')->group(function () {
         true
     );
 
+    Route::prefix('perfil')->controller(systemController::class)->group(function () {
+
+        Route::get('', 'getAll')->name('rol.all');
+
+        Route::get('{id}', 'getOne')->where('id', '[0-9]+')->name('rol.one');
+
+        Route::get('create', 'form')->name('rol.form');
+
+        Route::post('create', 'create')->name('rol.create');
+
+        Route::put('{id}', 'update')->where('id', '[0-9]+')->name('rol.update');
+
+        Route::delete('{id}', 'delete')->where('id', '[0-9]+')->name('rol.delete');
+    });
+
     SimpleRoutes(
         'permisos',
         'privileges',
@@ -370,7 +385,6 @@ Route::middleware('needToken')->group(function () {
             'activo' => 'int',
             'padre' => 'int'
         ]
-
     );
 
     SimpleRoutes(
@@ -402,6 +416,49 @@ Route::middleware('needToken')->group(function () {
             "giro_comercial" => 'giroComercial',
             'teléfono' => 'telefono',
             'población' => 'poblacion'
+        ]
+    );
+
+    Route::prefix('empleados')->controller(EmployeeController::class)->group(function () {
+
+        Route::get('', 'getAll')->name('employees.all');
+
+        Route::get('{id}', 'getOne')->where('id', '[0-9]+')->name('employees.one');
+
+        Route::get('create', 'form')->name('employees.form');
+
+        Route::post('create', 'create')->name('employees.create');
+
+        Route::put('{id}', 'update')->where('id', '[0-9]+')->name('employees.update');
+
+        Route::delete('{id}', 'delete')->where('id', '[0-9]+')->name('employees.delete');
+    });
+});
+
+Route::middleware('needToken')->group(function () {
+    SimpleRoutes(
+        'excepciones',
+        'biometrics',
+        '',
+        'exceptions',
+        'biometrics.exceptions',
+        'Excepciones',
+        'id',
+        'una excepcion',
+        [
+            'fecha_excep' => 'required | string | regex:/^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}$/',
+            'tiempoini' => 'required | string | regex:/^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}$/',
+            'tiempofin' => 'required | string | regex:/^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}$/',
+            'observacion' => 'required | string',
+            'id_codpago' => 'required | integer | min:0 | exists:hr_codigos_pagos,id_codigo_pago',
+            'id_trabajador' => 'required | integer | min:0 | exists:hr_empleados,id_empleado',
+        ],
+        [
+            'id_codpago' => 'int',
+            'id_trabajador' => 'int',
+            'fecha_excep' => 'datetime',
+            'tiempoini' => 'datetime',
+            'tiempofin' => 'datetime'
         ]
     );
 
@@ -449,49 +506,6 @@ Route::middleware('needToken')->group(function () {
             'IsSelect' => 'int'
         ]
     );
-
-    SimpleRoutes(
-        'excepciones',
-        'biometrics',
-        '',
-        'exceptions',
-        'biometrics.exceptions',
-        'Excepciones',
-        'id',
-        'una excepcion',
-        [
-            'fecha_excep' => 'required | string | regex:/^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}$/',
-            'tiempoini' => 'required | string | regex:/^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}$/',
-            'tiempofin' => 'required | string | regex:/^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}$/',
-            'observacion' => 'required | string',
-            'id_codpago' => 'required | integer | min:0 | exists:hr_codigos_pagos,id_codigo_pago',
-            'id_trabajador' => 'required | integer | min:0 | exists:hr_empleados,id_empleado',
-        ],
-        [
-            'id_codpago' => 'int',
-            'id_trabajador' => 'int',
-            'fecha_excep' => 'datetime',
-            'tiempoini' => 'datetime',
-            'tiempofin' => 'datetime'
-        ]
-    );
-});
-
-Route::middleware('needToken')->controller(systemController::class)->group(function () {
-    Route::prefix('perfil')->group(function () {
-
-        Route::get('', 'getviewAll')->name('raiz');
-
-        Route::get('{id}', 'editprofilef')->where('id', '[0-9]+')->name('rol.edit');
-
-        Route::get('create', 'editrolf')->name('rol.submit');
-
-        Route::post('', 'createrol')->name('create.rolss');
-
-        Route::put('{id}', 'updatedprofilef')->where('id', '[0-9]+')->name('updatedprofilef.post');
-
-        Route::delete('{id}', 'deleteR')->where('id', '[0-9]+')->name('deleteR.del');
-    });
 });
 
 Route::middleware('needToken')->controller(RegistersController::class)->group(function () {

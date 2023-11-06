@@ -4,11 +4,10 @@ namespace App\Http\Controllers\Pages;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
+use Illuminate\Support\Carbon;
 
-class EmployeesController extends Controller
+class EmployeeController extends Controller
 {
-    private $error = '';
-
     /**
      * Create a new controller instance.
      *

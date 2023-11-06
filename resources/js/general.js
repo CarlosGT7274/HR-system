@@ -1,113 +1,110 @@
-
 import ApexCharts from "apexcharts";
 
-const Gdata = document.getElementById("jsonG").value
-const dataG = JSON.parse(Gdata)
+const generalData = JSON.parse(document.getElementById("jsonG").value);
 
-// console.log(Object.values(dataG['data']))
-// console.log(dataG)
-var options = {
-  series: [{
-    name: 'Hombres',
-    data: Object.values(dataG['data']['hombres']['edades'])
-  },
-  {
-    name: 'Mujeres',
-    data: Object.values(dataG['data']['mujeres']['edades'])
-  }
-  ],
-  chart: {
-  type: 'bar',
-  stacked: true
-},
-plotOptions: {
-  bar: {
-      horizontal: false,
-      stacked: true,
-  },
-},
-yaxis: {
-  labels: {
-    formatter: function (val) {
-        return Math.round(val);
-    },
-},
-},
-xaxis: {
-  // type: 'datetime',
-  categories: Object.keys(dataG['data']['hombres']['edades']),
-  labels: {
-    rotate: -90
-  }
-}
-};
-
-  
-
-  var chart = new ApexCharts(document.querySelector("#general"), options);
-  chart.render();
-
-
-  console.log('hijos', dataG['data']['hombres']['con_hijos'])
-
-  console.log('sin hijos', dataG['data']['hombres']['total'] - dataG['data']['hombres']['con_hijos'])
-
-  var options = {
-    series: [{
-    name: 'mujeres',
-    data: [dataG['data']['mujeres']['con_hijos'], dataG['data']['mujeres']['total'] - dataG['data']['mujeres']['con_hijos']]
-  }, {
-    name: 'hombres',
-    data: [dataG['data']['hombres']['con_hijos'], dataG['data']['hombres']['total'] - dataG['data']['hombres']['con_hijos']]
-  }],
+new ApexCharts(document.querySelector("#general"), {
+    series: [
+        {
+            name: "Hombres",
+            data: Object.values(generalData["data"]["hombres"]["edades"]),
+        },
+        {
+            name: "Mujeres",
+            data: Object.values(generalData["data"]["mujeres"]["edades"]),
+        },
+    ],
     chart: {
-    type: 'bar',
-    stacked: true,
-  },
-  plotOptions: {
-    bar: {
-      horizontal: true,
-      dataLabels: {
-        total: {
-          enabled: true,
-          offsetX: 0,
-          style: {
-            fontSize: '13px',
-            fontWeight: 900
-          }
-        }
-      }
+        type: "bar",
+        stacked: true,
     },
-  },
-  stroke: {
-    width: 1,
-    colors: ['#fff']
-  },
-  xaxis: {
-    categories: ['si', 'no'],
-    
-  },
-  yaxis: {
-    title: {
-      text: undefined
+    plotOptions: {
+        bar: {
+            horizontal: false,
+            stacked: true,
+        },
     },
-  },
-  tooltip: {
-    y: {
-      formatter: function (val) {
-        return val + "K"
-      }
-    }
-  },
-  fill: {
-    opacity: 1
-  },
-  legend: {
-    position: 'top',
-    horizontalAlign: 'left',
-    offsetX: 40
-  }
-  };
+    yaxis: {
+        labels: {
+            formatter: function (val) {
+                return Math.round(val);
+            },
+        },
+    },
+    xaxis: {
+        categories: Object.keys(generalData["data"]["hombres"]["edades"]),
+    },
+    dataLabels: {
+        style: {
+            colors: ["#000"],
+        },
+    },
+}).render();
 
-  var chart = new ApexCharts(document.querySelector("#childs"), options);
-  chart.render();
+new ApexCharts(document.querySelector("#childs"), {
+    series: [
+        {
+            name: "Mujeres",
+            data: [
+                generalData["data"]["mujeres"]["con_hijos"],
+                generalData["data"]["mujeres"]["total"] -
+                    generalData["data"]["mujeres"]["con_hijos"],
+            ],
+        },
+        {
+            name: "Hombres",
+            data: [
+                generalData["data"]["hombres"]["con_hijos"],
+                generalData["data"]["hombres"]["total"] -
+                    generalData["data"]["hombres"]["con_hijos"],
+            ],
+        },
+    ],
+    chart: {
+        type: "bar",
+        stacked: true,
+    },
+    plotOptions: {
+        bar: {
+            horizontal: true,
+            stacked: true,
+            dataLabels: {
+                total: {
+                    enabled: true,
+                    style: {
+                        fontWeight: 900,
+                    },
+                },
+            },
+        },
+    },
+    xaxis: {
+        categories: ["Con", "Sin"],
+    },
+    dataLabels: {
+        style: {
+            colors: ["#000"],
+        },
+    },
+}).render();
+
+new ApexCharts(document.querySelector("#capacitaciones"), {
+    series: [
+        generalData.data.capacitaciones,
+        100 - generalData.data.capacitaciones,
+    ],
+    chart: {
+        type: "pie",
+    },
+    labels: ["Capacitados ", "No Capacitados"],
+    legend: {
+        position: "bottom",
+    },
+    dataLabels: {
+        style: {
+            colors: ["#000"],
+        },
+        dropShadow: {
+            enabled: false,
+        },
+    },
+}).render();
