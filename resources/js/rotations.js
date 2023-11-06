@@ -146,7 +146,7 @@ new ApexCharts(document.querySelector("#rotationsUnit"), {
     },
 }).render();
 
-function DisplayDonut(id, series) {
+function DisplayDonut(id) {
     new ApexCharts(document.querySelector(`#${id}`), {
         series: [data.data[id], 100 - data.data[id]],
         labels: ["Si", "No"],

@@ -12,7 +12,7 @@
                 <div class="grid grid-cols-4 gap-x-12 px-4 gap-y-5">
                     @foreach ($data as $rol)
                         <a class="border-b-2 border-ldark hover:border-primary w-full text-center font-semibold select-none h-12 hover:text-primary flex items-center justify-center"
-                            href="{{ route('rol.edit', ['id' => $rol['id_rol']]) }}">
+                            href="{{ route('rol.one', ['id' => $rol['id_rol']]) }}">
                             <p>
                                 {{ $rol['nombre'] }}
                             </p>
@@ -20,9 +20,9 @@
                     @endforeach
                     {{-- TODO: Cambiar Ruta --}}
                     <a class="border-b-2 border-ldark hover:border-primary w-full text-center font-semibold select-none h-12 hover:text-primary flex items-center justify-center"
-                        href="{{ route('rol.submit') }}">
+                        href="{{ route('rol.form') }}">
                         <i class="fa-solid fa-plus"></i>
-                      </a>
+                    </a>
                 </div>
             </div>
 

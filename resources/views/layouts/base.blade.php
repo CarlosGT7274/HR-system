@@ -17,7 +17,10 @@
     <div class="flex flex-col sm:flex-row">
         @include('components.sidebar')
 
-        @yield('content')
+
+        <main class="p-6 w-full">
+            @yield('content')
+        </main>
     </div>
 
     @yield('footer')

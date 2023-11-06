@@ -3,7 +3,7 @@
 @section('content')
     <div class="flex flex-col w-screen min-h-screen p-4 bg-gray-100">
         <h1 class="text-3xl font-bold mb-4">Editar Permisos del Rol</h1>
-        <form action="{{ route('deleteR.del', ['id' => $data['id_rol']]) }}" method="POST">
+        <form action="{{ route('rol.delete', ['id' => $data['id_rol']]) }}" method="POST">
             @method('DELETE')
             @csrf
             <button type="submit" class="bg-danger rounded-md py-2 px-4 text-white">Eliminar</button>
@@ -11,7 +11,7 @@
         @if ($delete)
             <span class="text-danger">{{ $delete }}</span>
         @endif
-        <form action="{{ route('updatedprofilef.post', ['id' => $data['id_rol']]) }}" method="POST">
+        <form action="{{ route('rol.update', ['id' => $data['id_rol']]) }}" method="POST">
             @method('PUT')
             @csrf
             <header class="flex flex-row">
@@ -191,17 +191,16 @@
                         checkboxesEnFila.forEach(function(cb) {
                             const name = cb.name.split('[')[2]
                             if (name === "off]") {
-                                cb.checked = true;  
+                                cb.checked = true;
                             } else {
-                                cb.checked =  false;
+                                cb.checked = false;
                             }
                         });
-                    }
-                    else {
+                    } else {
                         checkboxesEnFila.forEach(function(cb) {
                             const name = cb.name.split('[')[2]
                             if (name === "off]") {
-                                cb.checked = false;  
+                                cb.checked = false;
                             }
                         });
                     }
@@ -225,7 +224,7 @@
 
                     if (this.checked) {
                         this.checked = true;
-                    } 
+                    }
 
                 });
             }

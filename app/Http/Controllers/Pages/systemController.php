@@ -13,37 +13,35 @@ class systemController extends Controller
      * @return void
      */
 
-    private $titlepage = '';
+    private $pageTitle = '';
 
-    public function getviewAll()
+    public function getAll()
     {
         $data = [
-            'pageTitle' => $this->titlepage,
+            'pageTitle' => $this->pageTitle,
             'data' => $this->apiRequest('rols', 'GET', [])['data'],
         ];
 
-        return view('system.roles.admincrud', $data);
+        return view('system.roles.all', $data);
     }
 
-    public function editprofilef($id, $failed = '')
+    public function getOne($id, $failed = '')
     {
         $data = [
-            'pageTitle' => $this->titlepage,
+            'pageTitle' => $this->pageTitle,
             'data' => $this->apiRequest('rols' . '/' . $id, 'GET', [])['data'],
             'permisosG' => $this->apiRequest('privileges', 'GET', [])['data'],
             'delete' => $failed,
         ];
 
-        return view('system.roles.editP', $data);
+        return view('system.roles.one', $data);
     }
 
-    public function updatedprofilef(Request $request, $id)
+    public function update(Request $request, $id)
     {
         // $request->validate([
         //     'nombre' => 'sometimes | required | string'
         // ]);
-
-        // dd($request->all());
 
         $result = [
             'nombre' => $request['Nrol'],
@@ -59,10 +57,10 @@ class systemController extends Controller
             } elseif (in_array(-1, $permiso)) {
                 $permiso_value = -1;
             } else {
-                unset($permiso['id_permiso']); 
+                unset($permiso['id_permiso']);
                 // dd($permiso);
                 $numeric_values = [];
-               
+
                 if (isset($permiso['todos'])) {
                     $permiso['todos'] = 15;
                     $numeric_values[] = $permiso['todos'];
@@ -71,38 +69,37 @@ class systemController extends Controller
                         $permiso['off'] = -1;
                         $numeric_values[] = $permiso['off'];
                     }
-                
+
                     if (isset($permiso['on'])) {
                         $permiso['on'] = 0;
                         $numeric_values[] = $permiso['on'];
                     }
-                
+
                     if (isset($permiso['r'])) {
                         $permiso['r'] = 1;
                         $numeric_values[] = $permiso['r'];
                     }
-                
+
                     if (isset($permiso['c'])) {
                         $permiso['c'] = 2;
                         $numeric_values[] = $permiso['c'];
                     }
-                
+
                     if (isset($permiso['u'])) {
                         $permiso['u'] = 4;
                         $numeric_values[] = $permiso['u'];
                     }
-                
+
                     if (isset($permiso['d'])) {
                         $permiso['d'] = 8;
                         $numeric_values[] = $permiso['d'];
                     }
                 }
-                
-                
+
+
                 if (!empty($numeric_values)) {
                     $permiso_value = array_sum($numeric_values);
                 }
-                
             }
 
             $result['permisos'][] = [
@@ -111,29 +108,24 @@ class systemController extends Controller
             ];
         }
 
-        // dd($result);
+        $this->apiRequest('rols' . '/' . $id, 'PUT', $result);
 
-        $this->apiRequest('rols' . '/' . $request['idrol'], 'PUT', $result);
-
-        return redirect()->route('rol.edit', ['id' => $id]);
+        return redirect()->route('rol.one', ['id' => $id]);
     }
 
-    public function editrolf()
+    public function form()
     {
         $data = [
-            'pageTitle' => $this->titlepage,
+            'pageTitle' => $this->pageTitle,
             'data' => $this->apiRequest('rols', 'GET', [])['data'],
             'permisosG' => $this->apiRequest('privileges', 'GET', [])['data'],
         ];
-        // dd($data);
 
-        return view('system.roles.roledit', $data);
+        return view('system.roles.form', $data);
     }
 
-    public function createrol(Request $request)
+    public function create(Request $request)
     {
-        // dd($request->all());
-
         $result = [
             'nombre' => $request['Nrol'],
             'permisos' => [],
@@ -148,10 +140,10 @@ class systemController extends Controller
             } elseif (in_array(-1, $permiso)) {
                 $permiso_value = -1;
             } else {
-                unset($permiso['id_permiso']); 
+                unset($permiso['id_permiso']);
                 // dd($permiso);
                 $numeric_values = [];
-               
+
                 if (isset($permiso['todos'])) {
                     $permiso['todos'] = 15;
                     $numeric_values[] = $permiso['todos'];
@@ -160,34 +152,34 @@ class systemController extends Controller
                         $permiso['off'] = -1;
                         $numeric_values[] = $permiso['off'];
                     }
-                
+
                     if (isset($permiso['on'])) {
                         $permiso['on'] = 0;
                         $numeric_values[] = $permiso['on'];
                     }
-                
+
                     if (isset($permiso['r'])) {
                         $permiso['r'] = 1;
                         $numeric_values[] = $permiso['r'];
                     }
-                
+
                     if (isset($permiso['c'])) {
                         $permiso['c'] = 2;
                         $numeric_values[] = $permiso['c'];
                     }
-                
+
                     if (isset($permiso['u'])) {
                         $permiso['u'] = 4;
                         $numeric_values[] = $permiso['u'];
                     }
-                
+
                     if (isset($permiso['d'])) {
                         $permiso['d'] = 8;
                         $numeric_values[] = $permiso['d'];
                     }
                 }
-                
-                
+
+
                 if (!empty($numeric_values)) {
                     $permiso_value = array_sum($numeric_values);
                 }
@@ -199,33 +191,19 @@ class systemController extends Controller
             ];
         }
 
-        $create = $this->apiRequest('rols' . '/', 'POST', $result);
+        $this->apiRequest('rols' . '/', 'POST', $result);
 
-        // dd($create);
-
-        return view('system.roles.admincrud', [
-            'pageTitle' => $this->titlepage,
-            'data' => $this->apiRequest('rols', 'GET', [])['data'],
-            'permisosG' => $this->apiRequest('privileges', 'GET', [])['data'],
-            'create' => $create,
-            'delete' => '',
-        ]);
+        return redirect()->route('rol.all');
     }
 
-    public function deleteR($id)
+    public function delete($id)
     {
         $delete = $this->apiRequest('rols' . '/' . $id, 'DELETE', []);
 
         if ($delete['error'] == true) {
             return $this->editprofilef($id, $delete['mensaje']);
         } else {
-            return redirect()->route('raiz');
+            return redirect()->route('rol.all');
         }
     }
-
-
-    
-
 }
-
-?>

@@ -15,7 +15,6 @@ new ApexCharts(document.querySelector("#general"), {
     ],
     chart: {
         type: "bar",
-        height: "100%",
         stacked: true,
     },
     plotOptions: {
@@ -62,7 +61,6 @@ new ApexCharts(document.querySelector("#childs"), {
     ],
     chart: {
         type: "bar",
-        height: "100%",
         stacked: true,
     },
     plotOptions: {
