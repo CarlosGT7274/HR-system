@@ -520,5 +520,7 @@ Route::middleware('needToken')->controller(ReportesController::class)->group(fun
 
         Route::get('Asistencias','homeAsistencias')->name('');
 
+        Route::post('GenerarPDF','generarPDF')->name('pdf.general');
+
     // });
 });
