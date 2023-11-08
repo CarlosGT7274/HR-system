@@ -446,7 +446,6 @@ class EmpresaController extends Controller
         $data = [];
         $data['fechas'] = $this->getDates($request);
         $data['empleados'] = [];
-
         $employees = $this->reportParams($request, $id_company);
 
         $fechaFin = new DateTime(date('Y-m-d H:i:s', strtotime($request->fin . " 23:59:59")));
@@ -454,7 +453,7 @@ class EmpresaController extends Controller
 
         foreach ($employees as $employee) {
             $registers = $this->getRegisters($employee, $fechaInicio, $fechaFin);
-
+            
             $usuarioinfo = sys_usuarios::firstWhere('id_usuario', $employee->id_usuario);
 
             $data['empleados'][] = [

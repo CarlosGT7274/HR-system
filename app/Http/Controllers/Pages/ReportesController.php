@@ -32,22 +32,81 @@ class ReportesController extends Controller
     {
     }
 
-    public function homeAsistencias()
+    public function homeAsistencias(Request $request)
     {
+        // dd($request);
+        if ($request->method() === 'POST') {
+            //do notingh
+            $request->validate([
+                'inicio' => 'required',
+                'fin' => 'required'
+            ]);
+        }
+        // dd($request->all());
         // echo Carbon::now()->subMonth()->format('Y-m-d');
+        if ($request->has('inicio') && $request->has('fin')) {
+            if (empty($request->input('inicio')) && empty($request->input('fin'))) {
+                $fin = Carbon::now()->format('Y-m-d');
+                $inicio = Carbon::now()->subWeek()->format('Y-m-d');
+                // dd('c');    
+            } else {
+                $fin = $request->input('fin');
+                $inicio = $request->input('inicio');
+                // dd('a');
+            }
+        } else {
+            // dd('b');
+            $fin = Carbon::now()->format('Y-m-d');
+            $inicio = Carbon::now()->subWeek()->format('Y-m-d');
+        }
 
         $data = [
-            'inicio' => Carbon::now()->subWeek()->format('Y-m-d'),
-            'fin' => Carbon::now()->format('Y-m-d'),
+            'inicio' => $inicio,
+            'fin' => $fin,
             'pageTitle' => $this->pageTitle,
             'data' => $this->apiRequest('companies/' . session('company') . '/reportAttendance', 'GET', [
-                'inicio' => Carbon::now()->subWeek()->format('Y-m-d'),
-                'fin' => Carbon::now()->format('Y-m-d')
+                'inicio' => $inicio,
+                'fin' => $fin
             ])['data'],
         ];
 
         return view("Reportes.all", $data);
     }
+
+    public function aboutIncidencias(Request $request)
+    {
+        if ($request->has('inicio') && $request->has('fin')) {
+            if (empty($request->input('inicio')) && empty($request->input('fin'))) {
+                $fin = Carbon::now()->format('Y-m-d');
+                $inicio = Carbon::now()->subWeek()->format('Y-m-d');
+                // dd('c');    
+            } else {
+                $fin = $request->input('fin');
+                $inicio = $request->input('inicio');
+                // dd('a');
+            }
+        } else {
+            // dd('b');
+            $fin = Carbon::now()->format('Y-m-d');
+            $inicio = Carbon::now()->subWeek()->format('Y-m-d');
+        }
+
+        $data = [
+            'inicio' => $inicio,
+            'fin' => $fin,
+            'pageTitle' => $this->pageTitle,
+            'data' => $this->apiRequest('companies/' . session('company') . '/reportIncidencies', 'GET', [
+                'inicio' => $inicio,
+                'fin' => $fin
+            ])['data'],
+        ];
+        return view('Reportes.incidencias', $data);
+    }
+
+    // public function fechaReporte(){
+
+    // }
+
 
     // public function generarPDF()
     // {
@@ -73,10 +132,10 @@ class ReportesController extends Controller
     public function generarPDF(Request $request)
     {
         $viewName = $request->input('viewName');
-    $inicio = $request->input('inicio');
-    $fin = $request->input('fin');
-    $endpointApi = $request->input('endpointApi');
-    
+        $inicio = $request->input('inicio');
+        $fin = $request->input('fin');
+        $endpointApi = $request->input('endpointApi');
+
         if ($inicio === null) {
             $inicio = Carbon::now()->subWeek()->format('Y-m-d');
         }
@@ -96,9 +155,8 @@ class ReportesController extends Controller
 
         $pdf = PDF::loadView($viewName, $data)->setPaper('a4', 'landscape');
 
-        return $pdf->download('Reporteasistencias.pdf');
+        return $pdf->download('Reporte.pdf');
     }
 
 
 }
-?>

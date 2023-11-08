@@ -518,7 +518,10 @@ Route::middleware('needToken')->controller(RegistersController::class)->group(fu
 Route::middleware('needToken')->controller(ReportesController::class)->group(function () {
     // Route::prefix('Reportes')->group(function () {
 
-        Route::get('Asistencias','homeAsistencias')->name('');
+        Route::get('Asistencias','homeAsistencias')->name('repoattendance');
+        Route::post('Asistencias','homeAsistencias')->name('repoattendance.post');
+
+        Route::get('incidencias','aboutIncidencias')->name('reporteincidencias');
 
         Route::post('GenerarPDF','generarPDF')->name('pdf.general');
 

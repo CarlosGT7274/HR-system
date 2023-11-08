@@ -20,7 +20,7 @@
         @include('components.sidebar')
 
 
-        <main class="p-6 w-full">
+        <main class="p-6 w-4/5">
             @yield('content')
         </main>
     </div>
