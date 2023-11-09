@@ -3,7 +3,6 @@
 namespace App\Http\Controllers\Pages;
 
 use App\Http\Controllers\Controller;
-use App\Models\HR\Company\General\hr_capacitaciones;
 use Illuminate\Http\Request;
 
 class CompanyController extends Controller
@@ -15,73 +14,6 @@ class CompanyController extends Controller
      */
     public function __construct(private $uri_prefix, private $extraId, private $uri_suffix, private $pageTitle, private $baseUrl, private $id_name, private $father_url = '')
     {
-    }
-
-    public function UpdateRequest(Request $request, $changes)
-    {
-        $data = [];
-
-        foreach ($request->request as $llave => $valor) {
-            if (is_array($valor)) {
-                foreach ($valor as $key => $value) {
-                    $data[$llave][$key] = $value;
-
-                    foreach ($value as $sub_key => $sub_value) {
-                        if (array_key_exists($sub_key, $changes)) {
-                            if ($changes[$sub_key] == 'int') {
-                                $data[$llave][$key][$sub_key] = (int) $sub_value;
-                            } else if ($changes[$sub_key] == 'datetime') {
-                                $data[$llave][$key][$sub_key] = str_replace('T', ' ', $sub_value);
-                            } else {
-                                $data[$llave][$key][$changes[$sub_key]] = $sub_value;
-                                unset($data[$llave][$key][$sub_key]);
-                            }
-                        }
-                    }
-                }
-            } else {
-                if (array_key_exists($llave, $changes)) {
-                    if ($changes[$llave] == 'int') {
-                        $data[$llave] = (int) $valor;
-                    } else if ($changes[$llave] == 'datetime') {
-                        $data[$llave] = str_replace('T', ' ', $valor);
-                    } else {
-                        $data[$changes[$llave]] = $valor;
-                    }
-                    unset($changes[$llave]);
-                } else {
-                    $data[$llave] = $valor;
-                }
-            }
-        }
-
-        if (!empty($changes)) {
-            foreach ($data as $llave => $valor) {
-
-                if (is_array($valor)) {
-                    foreach ($valor as $key => $value) {
-                        foreach ($value as $sub_key => $sub_value) {
-                            if (array_key_exists($sub_key, $changes)) {
-                                if ($changes[$sub_key] == 'int') {
-                                    $data[$llave][$key][$sub_key] = (int) $sub_value;
-                                } else if ($changes[$sub_key] == 'datetime') {
-                                    $data[$llave][$key][$sub_key] = str_replace('T', ' ', $sub_value);
-                                }
-                            }
-                        }
-                    }
-                } else {
-                    if (array_key_exists($llave, $changes)) {
-                        if ($changes[$llave] == 'int') {
-                            $data[$llave] = (int) $valor;
-                        } else if ($changes[$llave] == 'datetime') {
-                            $data[$llave] = str_replace('T', ' ', $valor);
-                        }
-                    }
-                }
-            }
-        }
-        return $data;
     }
 
     public function getEndpoint($father_id = '')
@@ -123,8 +55,6 @@ class CompanyController extends Controller
 
     public function getOne($id, $failed = false, $father_id = '')
     {
-        // dd($this->getEndpoint($father_id));
-
         $data = [
             'pageTitle' => $this->pageTitle,
             'data' => $this->apiRequest($this->getEndpoint($father_id) . '/' . $id, 'GET', [])['data'],
@@ -201,7 +131,6 @@ class CompanyController extends Controller
 
     public function update($id, Request $request, $validationRules, $changes = [], $father_id = '')
     {
-        // dd($request->all());
         $request->validate($validationRules);
 
         $data = $this->UpdateRequest($request, $changes);

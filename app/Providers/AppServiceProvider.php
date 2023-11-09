@@ -47,6 +47,17 @@ class AppServiceProvider extends ServiceProvider
         ];
 
         $this->app->instance('estados_mx', $estados);
+
+        $estados_civiles = [
+            "Soltero/a",
+            "Casado/a",
+            "Divorciado/a",
+            "Separado/a en proceso judicial",
+            "Viudo/a",
+            "Concubinato",
+        ];
+
+        $this->app->instance('estados_civiles', $estados_civiles);
     }
 
     /**

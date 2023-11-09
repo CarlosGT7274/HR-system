@@ -18,16 +18,11 @@
                     readonly="" />
             </div>
             @if ($errors->has('incluye_hora_de_comida'))
-                {{-- {{ dd($errors) }} --}}
                 <span class="text-danger">{{ $errors->first('incluye_hora_de_comida') }}</span>
             @endif
         </div>
 
         <input hidden value="1" name="estado">
-
-        {{-- @if ($errors->has('descripción'))
-            {{ dd($errors) }}
-        @endif --}}
 
         @for ($i = 0; $i < 7; $i++)
             <div class="detalles-wrapper">

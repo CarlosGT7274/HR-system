@@ -421,17 +421,19 @@ Route::middleware('needToken')->group(function () {
 
     Route::prefix('empleados')->controller(EmployeeController::class)->group(function () {
 
-        Route::get('', 'getAll')->name('employees.all');
+        Route::get('', 'getAll')->name('employees.general.all');
 
-        Route::get('{id}', 'getOne')->where('id', '[0-9]+')->name('employees.one');
+        Route::get('search', 'search')->name('employees.general.search');
 
-        Route::get('create', 'form')->name('employees.form');
+        Route::get('{id}', 'getOne')->where('id', '[0-9]+')->name('employees.general.one');
 
-        Route::post('create', 'create')->name('employees.create');
+        Route::get('create', 'form')->name('employees.general.form');
 
-        Route::put('{id}', 'update')->where('id', '[0-9]+')->name('employees.update');
+        Route::post('create', 'create')->name('employees.general.create');
 
-        Route::delete('{id}', 'delete')->where('id', '[0-9]+')->name('employees.delete');
+        Route::put('{id}', 'update_HR')->where('id', '[0-9]+')->name('employees.general.update.HR');
+
+        Route::delete('{id}', 'delete')->where('id', '[0-9]+')->name('employees.general.delete');
     });
 });
 

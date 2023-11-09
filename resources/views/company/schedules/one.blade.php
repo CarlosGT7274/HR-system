@@ -73,7 +73,7 @@
                     <h3 class="mt-3">Tipo</h3>
                     <div
                         class="mb-1 border-b-2 border-b-ldark flex flex-row gap-2 items-center justify-around hover:border-b-primary p-2">
-                        @if ($data['conComida'] == 0)
+                        @if ($data['detalles'][$i]['tipo'] == 0)
                             <x-radio name="detalles[{{ $i }}][tipo]" id="L{{ $i }}" value="1"
                                 label="Laboral" checked="" readonly="yes" />
                             <x-radio name="detalles[{{ $i }}][tipo]" id="D{{ $i }}" value="0"
