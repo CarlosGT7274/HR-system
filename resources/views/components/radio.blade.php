@@ -19,7 +19,7 @@
 
 <div class="flex flex-row justify-center items-center gap-2">
 
-    <input @if ($readonly == 'yes') readonly @endif @if ($checked == 'yes') checked @endif
+    <input @if ($readonly == 'yes') readonly @endif @if ($checked == 'yes' || old(strpos($name, '[') !== false ? str_replace(['[', ']'], ['.', ''], $name) : $name) === $value) checked @endif
         type="radio" id="{{ $id }}" name="{{ $name }}" value="{{ $value }}" hidden>
 
     <label

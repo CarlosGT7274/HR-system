@@ -1,26 +1,25 @@
 <div>
-    <div class="mb-1 border-b-2 border-b-ldark flex flex-row gap-2 items-center justify-around hover:border-b-primary">
+    <div class="my-1 border-b-2 border-ldark flex flex-row gap-2 items-center justify-around hover:border-primary px-1">
 
         @if ($icon != '')
             <i class="fa-solid fa-lg {{ $icon }}" style="color: var(--color-dlight)"></i>
         @endif
 
-        @if ($type == 'number')
-            <input class="w-full h-10" name="{{ $name }}" type="{{ $type }}" min="{{ $min }}"
-                step="{{ $step }}" max="{{ $max }}" placeholder="{{ $placeholder }}"
-                value="{{ old($name) }}">
-        @elseif ($type == 'date' || $type == 'time' || $type == 'datetime-local')
-            @if ($type == 'date')
-                <input class="w-full h-10" name="{{ $name }}" type="{{ $type }}"
-                    value="{{ old($name) }}">
-            @else
-                <input class="w-full h-10" name="{{ $name }}" type="{{ $type }}" step="1"
-                    value="{{ old($name) }}">
-            @endif
-        @elseif ($type == 'password')
-            <input class="w-full h-10" id="{{ $id }}" name="{{ $name }}" type="{{ $type }}"
-                placeholder="{{ $placeholder }}" value="{{ old($name) }}">
+        <input class="w-full h-10" name="{{ $name }}" 
+            type="{{ $type }}" value="{{ old(strpos($name, '[') !== false ? str_replace(['[', ']'], ['.', ''], $name) : $name) }}"
 
+            @if ($type == 'number') min="{{ $min }}"
+                step="{{ $step }}" max="{{ $max }}" placeholder="{{ $placeholder }}"  
+            @elseif ($type == 'time' || $type == 'datetime-local')
+                step="1"
+            @elseif ($type == 'email') 
+                id="{{ $id }}" autocomplete="{{ $autocomplete }}" placeholder="{{ $placeholder }}" 
+            @else 
+                id="{{ $id }}" placeholder="{{ $placeholder }}" 
+            @endif
+        >
+
+        @if ($type == 'password')
             <button type="button" id="{{ $id . 'preview' }}">
                 <i class="fa-solid fa-lg fa-eye" style="color: var(--color-dlight)"></i>
             </button>
@@ -33,13 +32,6 @@
                     }
                 });
             </script>
-        @elseif ($type == 'email')
-            <input class="w-full h-10" id="{{ $id }}" autocomplete="{{ $autocomplete }}"
-                name="{{ $name }}" type="{{ $type }}" placeholder="{{ $placeholder }}"
-                value="{{ old($name) }}">
-        @else
-            <input class="w-full h-10" id="{{ $id }}" name="{{ $name }}" type="{{ $type }}"
-                placeholder="{{ $placeholder }}" value="{{ old($name) }}">
         @endif
 
     </div>

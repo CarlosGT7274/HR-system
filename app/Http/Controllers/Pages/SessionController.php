@@ -77,9 +77,9 @@ class SessionController extends Controller
 
         if ($response['code'] == 200) {
             $data = [
-                'pageTitle' => 'Emial Enviado',
+                'pageTitle' => 'Email Enviado',
                 'message' => '¡Email enviado correctamente!',
-                'submessage' => 'Se ha enviado un emial a su correo con indicaciones para realizar el cambio de contraseña'
+                'submessage' => 'Se ha enviado un email a su correo con indicaciones para realizar el cambio de contraseña'
             ];
 
             return view('forms.successMessage', $data);

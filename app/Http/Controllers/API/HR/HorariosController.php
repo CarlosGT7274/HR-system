@@ -128,7 +128,7 @@ class HorariosController extends Controller
      * @param Request
      * @return boolean
      */
-    public function update($id, Request $request)
+    public function update($id_company, $id, Request $request)
     {
         $request->validate([
             'descripcion' => 'sometimes | required | string',
@@ -187,7 +187,7 @@ class HorariosController extends Controller
      * @param int $id
      * @return array|string
      */
-    public function delete($id)
+    public function delete($id_company, $id)
     {
         $horario = hr_horarios::find($id);
 

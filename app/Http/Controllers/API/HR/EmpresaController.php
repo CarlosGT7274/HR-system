@@ -3,6 +3,9 @@
 namespace App\Http\Controllers\API\HR;
 
 use App\Models\ATT\att_terminal;
+use App\Models\HR\Company\Employment\hr_departamentos;
+use App\Models\HR\Company\Employment\hr_puestos;
+use App\Models\HR\Company\Employment\hr_tipos_empleados;
 use App\Models\HR\Company\Employment\hr_unidades;
 
 use App\Http\Controllers\Controller;
@@ -370,6 +373,15 @@ class EmpresaController extends Controller
             }
 
             $data = $query->get();
+        }
+
+        if (!empty($data)) {
+            foreach ($data as $employee) {
+                $employee['id_unidad'] = hr_unidades::find($employee['id_unidad'])['nombre'];
+                $employee['id_departamento'] = hr_departamentos::find($employee['id_departamento'])['nombre'];
+                $employee['id_puesto'] = hr_puestos::find($employee['id_puesto'])['nombre'];
+                $employee['id_tipo_empleado'] = hr_tipos_empleados::find($employee['id_tipo_empleado'])['nombre'];
+            }
         }
 
         return response()->json([
