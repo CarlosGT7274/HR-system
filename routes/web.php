@@ -446,6 +446,7 @@ Route::middleware('needToken')->group(function () {
         'id',
         'una excepcion',
         [
+            'id' => 'required | integer | min:0',
             'fecha_excep' => 'required | string | regex:/^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}$/',
             'tiempoini' => 'required | string | regex:/^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}$/',
             'tiempofin' => 'required | string | regex:/^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}$/',
@@ -454,12 +455,15 @@ Route::middleware('needToken')->group(function () {
             'id_trabajador' => 'required | integer | min:0 | exists:hr_empleados,id_empleado',
         ],
         [
+            'id' => 'int',
             'id_codpago' => 'int',
             'id_trabajador' => 'int',
             'fecha_excep' => 'datetime',
             'tiempoini' => 'datetime',
             'tiempofin' => 'datetime'
-        ]
+            
+        ],
+        true
     );
 
     SimpleRoutes(
@@ -472,28 +476,51 @@ Route::middleware('needToken')->group(function () {
         'terminal_id',
         'una Terminal',
         [
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
             'terminal_id' => 'required | integer | min:0',
-            'teminal_no' => 'required | integer | min:0',
+            'Número' => 'required | integer | min:0',
             'estado' => 'required | integer | min:0',
-            'nombre' => 'required | string',
-            'ubicacion' => 'required | string',
-            'tipoconexion' => 'required | integer | min:0',
-            'terminal_conectpwd' => 'required | string',
-            'terminal_domainname' => 'required | string',
-            'terminal_tcpip' => 'required | string',
-            'terminal_port' => 'required | integer | min:0',
-            'terminal_serial' => 'required | string',
-            'terminal_baudrate' => 'required | integer | min:0',
-            'terminal_type' => 'required | string',
-            'terminal_users' => 'required | integer | min:0',
-            'terminal_fingerprints' => 'required | integer | min:0',
-            'terminal_punches' => 'required | integer | min:0',
-            'terminal_faces' => 'required | integer | min:0',
-            'terminal_zem' => 'required | string',
-            'terminal_kind' => 'required | integer | min:0',
+            'Nombre' => 'required | string',
+            'Ubicacion' => 'required | string',
+            'tipo_de_conexion' => 'required | integer | min:0',
+            'Contraseña' => 'required | string',
+            'Nombre_del_Dominio' => 'required | string',
+            'Dirección_TCPIP' => 'required | string',
+            'Puerto' => 'required | integer | min:0',
+            'Número_Serial' => 'required | string',
+            'Tasa_de_Baudios' => 'required | integer | min:0',
+            'Tipo' => 'required | string',
+            'Usuarios' => 'required | integer | min:0',
+            'Huella_Digital' => 'required | integer | min:0',
+            'Punches' => 'required | integer | min:0',
+            'Faces' => 'required | integer | min:0',
+            'Zem' => 'required | string',
+            'kind' => 'required | integer | min:0',
             'IsSelect' => 'required | integer | min:0',
-            'terminal_timechk' => 'required | integer | min:0',
-            'terminal_lastchk' => 'required | date | date_format:Y-m-d H:i:s',
+            'time_checked' => 'required | integer | min:0',
+            'last_checked' => 'required | date | date_format:Y-m-d H:i:s',
         ],
         [
             'estado' => 'terminal_status',
@@ -503,7 +530,29 @@ Route::middleware('needToken')->group(function () {
             'terminal_id' => 'int',
             'teminal_no' => 'int',
             'termnal_conecttype' => 'int',
-            'IsSelect' => 'int'
+            'IsSelect' => 'int',
+            // 'terminal_id' => 'terminal_id',
+            'Número' => 'teminal_no',
+            // 'estado' => 'estado',
+            'Nombre' => 'nombre',
+            'Ubicacion' => 'ubicacion',
+            'tipo_de_conexion' => 'tipoconexion',
+            'Contraseña' => 'terminal_conectpwd',
+            'Nombre_del_Dominio' => 'terminal_domainname',
+            'Dirección_TCPIP' => 'terminal_tcpip',
+            'Puerto' => 'terminal_port',
+            'Número_Serial' => 'terminal_serial',
+            'Tasa_de_Baudios' => 'terminal_baudrate',
+            'Tipo' => 'terminal_type',
+            'Usuarios' => 'terminal_users',
+            'Huella_Digital' => 'terminal_fingerprints',
+            'Punches' => 'terminal_punches',
+            'Faces' => 'terminal_faces',
+            'Zem' => 'terminal_zem',
+            'kind' => 'terminal_kind',
+            'IsSelect' => 'IsSelect',
+            'time_checked' => 'terminal_timechk',
+            'last_checked' => 'terminal_lastchk'
         ]
     );
 });
@@ -522,6 +571,7 @@ Route::middleware('needToken')->controller(ReportesController::class)->group(fun
         Route::post('Asistencias','homeAsistencias')->name('repoattendance.post');
 
         Route::get('incidencias','aboutIncidencias')->name('reporteincidencias');
+        Route::post('incidencias','aboutIncidencias')->name('reporteincidencias.post');
 
         Route::post('GenerarPDF','generarPDF')->name('pdf.general');
 

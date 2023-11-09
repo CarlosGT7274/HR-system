@@ -5,122 +5,121 @@
 
         <div>
             <label for="poblacion">terminal id:</label>
-            <x-input id="tipo" icon="" autocomplete="" type="number" max="" min="0" name="terminal_id" step="" 
-                placeholder="terminal_id" defaultValue="" />
+            <x-input id="tipo" icon="" type="number" step="" max="" min="0" name="terminal_id"
+                placeholder="terminal_id" />
         </div>
-                {{-- <input type="hidden" name="terminal_id" > --}}
 
         <div>
             <label for="poblacion">Número:</label>
-            <x-input id="poblacion" icon="" autocomplete="" type="number" step='' min='0' max='' name="teminal_no"
-                placeholder="teminal_no" defaultValue="" />
+            <x-input id="poblacion" icon="" type="number" step="" step='' min='0' max='' name="Número"
+                placeholder="numero del terminal" />
         </div>
         <div>
             <label for="tipo">Estado:</label>
-            <x-input id="tipo" icon="" autocomplete="" type="number" max="1" min="0"
-                name="estado" step="" placeholder="Estado" defaultValue="" />
+            <x-input id="tipo" icon="" type="number" step="" max="1" min="0" name="estado"
+            placeholder="Estado" />
         </div>
 
         <div>
             <label for="poblacion">Nombre:</label>
-            <x-input id="poblacion" icon="" autocomplete="" type="text" name="nombre"
-                placeholder="Nombre" defaultValue="" />
+            <x-input id="poblacion" icon="" type="text" name="Nombre"
+                placeholder="Nombre" />
         </div>
 
         <div>
             <label for="region">Ubicación:</label>
-            <x-input id="region" icon="" autocomplete="" type="text" step="" name="ubicacion"
-                placeholder="Ubicacion" defaultValue="" />
+            <x-input id="region" icon="" type="text"name="Ubicacion"
+                placeholder="Ubicacion" />
         </div>
 
         <div>
             <label for="region">Tipo de conexión:</label>
-            <x-input id="region" icon="" autocomplete="" type="number" step='' min='0' max='' name="tipoconexion"
-                placeholder="Tipo de conexión" defaultValue="" />
+            <x-input id="region" icon="" type="number" step="" step='' min='0' max='' name="tipo_de_conexion"
+                placeholder="Tipo de conexión" />
         </div>
 
         <div>
             <label for="pass">Contraseña:</label>
-            <x-input id="pass" icon="" autocomplete="" type="password" step="" name="terminal_conectpwd"
-                placeholder="terminal_conectpwd" defaultValue="123" />
+            <x-input id="pass" icon="" type="password"name="Contraseña"
+                placeholder="Contraseña" />
         </div>
         <div>
             <label for="region">Nombre del Dominio:</label>
-            <x-input id="region" icon="" autocomplete="" type="text" step="" name="terminal_domainname"
-                placeholder="terminal_domainname" defaultValue="" />
+            <x-input id="region" icon="" type="text" name="Nombre_del_Dominio"
+                placeholder="Nombre del Dominio" />
         </div>
         <div>
             <label for="region">Dirección TCP/IP:</label>
-            <x-input id="region" icon="" autocomplete="" type="text" step="" name="terminal_tcpip"
-                placeholder="terminal_tcpip" defaultValue="" />
+            <x-input id="region" icon="" type="text" name="Dirección_TCPIP"
+                placeholder="Dirección TCP/IP" />
         </div>
         <div>
             <label for="region">Puerto:</label>
-            <x-input id="region" icon="" autocomplete="" type="text" step="" name="terminal_port"
-                placeholder="terminal_port" defaultValue="" />
+            <x-input id="region" icon="" type="text" name="Puerto"
+                placeholder="Puerto" />
         </div>
         <div>
             <label for="region">Número Serial:</label>
-            <x-input id="region" icon="" autocomplete="" type="text" step="" name="terminal_serial"
-                placeholder="terminal_serial" defaultValue="" />
+            <x-input id="region" icon="" type="text" name="Número_Serial"
+                placeholder="Número Serial" />
         </div>
         <div>
             <label for="region">Tasa de Baudios:</label>
-            <x-input id="region" icon="" autocomplete="" type="text" step="" name="terminal_baudrate"
-                placeholder="terminal_baudrate" defaultValue="" />
-        </div>
+            <x-input id="region" icon="" type="text" name="Tasa_de_Baudios"
+                placeholder="Tasa de Baudios de la terminal" />
+        </div> 
         <div>
             <label for="region">Tipo:</label>
-            <x-input id="region" icon="" autocomplete="" type="text" step="" name="terminal_type"
-                placeholder="terminal_type" defaultValue="" />
+            <x-input id="region" icon="" type="text" name="Tipo"
+                placeholder="Tipo" />
         </div>
         <div>
             <label for="region">Usuarios:</label>
-            <x-input id="region" icon="" autocomplete="" type="text" step="" name="terminal_users"
-                placeholder="terminal_users" defaultValue="" />
+            <x-input id="region" icon="" type="text" name="Usuarios"
+                placeholder="Usuarios" />
         </div>
 
         <div>
             <label for="region">Huella Digital:</label>
-            <x-input id="region" icon="" autocomplete="" type="text" step="" name="terminal_fingerprints"
-                placeholder="terminal_fingerprints" defaultValue="" />
+            <x-input id="region" icon="" type="text" name="Huella_Digital"
+                placeholder="Huella Digital" />
         </div>
 
         <div>
             <label for="region">Punches:</label>
-            <x-input id="region" icon="" autocomplete="" type="text" step="" name="terminal_punches"
-                placeholder="terminal_punches" defaultValue="" />
+            <x-input id="region" icon="" type="text" name="Punches"
+                placeholder="Punches" />
         </div>
         <div>
             <label for="region">faces:</label>
-            <x-input id="region" icon="" autocomplete="" type="text" step="" name="terminal_faces"
-                placeholder="terminal_faces" defaultValue="" />
+            <x-input id="region" icon="" type="text" name="Faces"
+                placeholder="terminal_faces" />
         </div>
         <div>
             <label for="region">zem:</label>
-            <x-input id="region" icon="" autocomplete="" type="text" step="" name="terminal_zem"
-                placeholder="terminal_zem" defaultValue="" />
+            <x-input id="region" icon="" type="text" name="Zem"
+                placeholder="zem" />
         </div>
         <div>
             <label for="region">kind:</label>
-            <x-input id="region" icon="" autocomplete="" type="text" step="" name="terminal_kind"
-                placeholder="terminal_kind" defaultValue="" />
+            <x-input id="region" icon="" type="text" name="kind"
+                placeholder="terminal_kind" />
         </div>
         <div>
             <label for="region">IsSelect:</label>
-            <x-input id="region" icon="" autocomplete="" type="text" step="" name="IsSelect"
-                placeholder="IsSelect" defaultValue="" />
+            <x-input id="region" icon="" type="text" name="IsSelect"
+                placeholder="Esta seleccionado?" />
         </div>
         <div>
             <label for="region">time checked:</label>
-            <x-input id="region" icon="" autocomplete="" type="text" step="" name="terminal_timechk"
-                placeholder="terminal_timechk" defaultValue="" />
+            <x-input id="region" icon="" type="text" name="time_checked"
+                placeholder="time checked" />
         </div>
 
         <div>
             <label for="region">last checked:</label>
-            <x-input id="region" icon="" autocomplete="" type="text" step="" name="terminal_lastchk"
-                placeholder="terminal_lastchk" defaultValue="" />
+            <x-input id="region" icon="" type="text" name="last_checked"
+                placeholder="last checked" />
         </div>
 
     </section>

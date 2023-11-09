@@ -21,7 +21,6 @@
                     @method('DELETE')
                     <button type="submit">
                         <i class="fa-solid fa-lg fa-trash-can hover:text-danger"></i>
-                    <i class="fa-solid fa-lg fa-trash-can hover:text-danger"></i>
                 </button>
             </form>
         </header>

@@ -547,7 +547,8 @@ class EmpresaController extends Controller
                 'apellidoP' => $usuarioinfo->apellidoP,
                 'apellidoM' => $usuarioinfo->apellidoM,
                 'asistencias' => [],
-                'faltas' => []
+                'incidencias' => [],
+                'incidenciasInfo'=> [],
             ];
 
             $empleado_i = count($data['empleados']) - 1;
@@ -581,9 +582,10 @@ class EmpresaController extends Controller
                     $incidencia = hr_incidencias::where('id_empleado', $employee->id_empleado)->firstWhere('fechaIn', $date);
 
                     if (!empty($incidencia)) {
-                        $data['empleados'][$empleado_i]['faltas'][$date] = $incidencia->clave;
+                        $data['empleados'][$empleado_i]['incidencias'][$date] = $incidencia->clave;
+                        $data['empleados'][$empleado_i]['incidenciasInfo'][$date] = $incidencia;
                     } else {
-                        $data['empleados'][$empleado_i]['faltas'][$date] = $comparar->tipo == 0 ? 'D' : '';
+                        $data['empleados'][$empleado_i]['incidencias'][$date] = $comparar->tipo == 0 ? 'D' : '';
                     }
                 }
             }

@@ -37,10 +37,12 @@
             height: 60px;
             background: #36304a !important;
             color: white;
+            text-align: center;
         }
 
         table tbody tr {
             height: 50px;
+            text-align: center;
         }
 
         table tbody tr:last-child {
@@ -97,7 +99,7 @@
                     <th style="padding-left: 8px">ID</th>
                     <th>Nombre</th>
                     @foreach ($bloque as $fecha)
-                        <th>{{ $fecha }}</th>
+                        <th style="text-align: center">{{ $fecha }}</th>
                     @endforeach
                 </tr>
             </thead>
@@ -107,7 +109,7 @@
                         <td style="padding-left: 8px">{{ $empleado['id_empleado'] }}</td>
                         <td>{{ $empleado['nombre'] . ' ' . $empleado['apellidoP'] . ' ' . $empleado['apellidoM'] }}</td>
                         @foreach ($bloque as $fecha)
-                            <td>
+                            <td style="text-align: center">
                                 @if (array_key_exists($fecha, $empleado['asistencias']))
                                     {{ $empleado['asistencias'][$fecha]['tipo_in'] }}
                                 @elseif (in_array($fecha, $empleado['faltas']))

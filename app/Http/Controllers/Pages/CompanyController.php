@@ -135,6 +135,12 @@ class CompanyController extends Controller
             'father_url' => $this->father_url
         ];
 
+        if($this->pageTitle == 'Excepciones') {
+            $data['empleados'] = $this->apiRequest('companies/' . session('company') . '/employees', 'GET', [])['data'];
+            
+            $data['codigos'] = $this->apiRequest('companies/' . session('company') . '/payCodes', 'GET', [])['data'];
+        }
+
         return view($this->baseUrl . '.one', $data);
     }
 
@@ -157,13 +163,12 @@ class CompanyController extends Controller
 
     public function form($title, $employeesForForm, $father_id = '')
     {
-        // dd($employeesForForm);
-
         $data = [
             'pageTitle' => $this->pageTitle,
             'title' => $title,
             'base_route' => $this->baseUrl,
-            'empleados' => $employeesForForm ? $this->apiRequest($this->uri_prefix . '/' . session('company') . '/employees', 'GET', [])['data'] : [],
+            'empleados' => $employeesForForm ? $this->apiRequest('companies/' . session('company') . '/employees', 'GET', [])['data'] : [],
+            'codigos' => $employeesForForm ? $this->apiRequest('companies/' . session('company') . '/payCodes', 'GET', [])['data'] : [],
             'father_id' => $father_id,
             'father_url' => $this->father_url
         ];
@@ -173,8 +178,8 @@ class CompanyController extends Controller
 
     public function create(Request $request, $validationRules, $changes = [], $father_id = '')
     {
+        // dd($request->all());
         $request->validate($validationRules);
-        // dd($request);
 
         $data = $this->UpdateRequest($request, $changes);
 
