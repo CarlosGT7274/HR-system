@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Pages;
 
 use App\Http\Controllers\Controller;
+use Illuminate\Validation\Rule;
 use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
 
@@ -11,6 +12,24 @@ class EmployeeController extends Controller
     private $base_route = "employees.general";
     private $page_title = "Empleados";
     private $id_name = "empleado";
+
+    private $SYS_validationRules = [
+        'correo' => 'required | string | email',
+        'contraseña' => 'required | string',
+        'nombre' => 'required | string',
+        'apellido_paterno' => 'required | string',
+        'apellido_materno' => 'required | string',
+        'rol' => 'required | integer | min:1 | exists:sys_roles,id_rol',
+        'empresa' => 'integer | min:1 | exists:hr_empresas,id_empresa | exclude_if:rol,1'
+    ];
+    private $SYS_changes = [
+        'correo' => 'email',
+        'contraseña' => 'password',
+        'apellido_paterno' => 'apellidoP',
+        'apellido_materno' => 'apellidoM',
+        'rol' => 'id_rol',
+        'empresa' => 'id_empresa'
+    ];
 
     private $HR_validationRules = [
         'id_usuario' => 'required | integer | min:1 | exists:sys_usuarios,id_usuario',
@@ -29,34 +48,40 @@ class EmployeeController extends Controller
         'ciudad' => 'required | string | max:40',
         'estado' => 'required | integer | between:1,32',
         'código_postal' => 'required | string | size:5',
-        'nombreEmergencia' => 'required | string | max:80',
-        'dirEmergencia' => 'required | string | max:150',
-        'telEmergencia' => 'required | string | regex:/^\d{10}$/',
+        'nombre_de_contacto_de_emergencia' => 'required | string | max:80',
+        'dirección_del_contacto_de_emergencia' => 'required | string | max:150',
+        'teléfono_del_contacto_de_emergencia' => 'required | string | regex:/^\d{10}$/',
         'imss' => 'required | string | size:11',
         'tipo_de_sangre' => 'required | string | max:3',
         'enfermedades' => 'nullable | sometimes | string | max:300',
         'fonacot' => 'nullable | sometimes | string | max:15',
-        'unidadMedica' => 'required | integer | min:1',
-        'altaFiscal' => 'required | date | date_format:Y-m-d',
-        'contratoInicio' => 'required | date | date_format:Y-m-d',
-        'contratoFin' => 'required | date | date_format:Y-m-d',
+        'unidad_médica' => 'required | integer | min:1',
+        'fecha_de_alta' => 'required | date | date_format:Y-m-d',
+        'fecha_de_alta_fiscal' => 'required | date | date_format:Y-m-d',
+        'fecha_de_inicio_de_contrato' => 'required | date | date_format:Y-m-d',
+        'fecha_de_fin_del_contrato' => 'required | date | date_format:Y-m-d',
         'sueldo' => 'required | decimal:0,6 | min:0',
-        'formaPago' => 'required | string | size:1',
-        'pensAlimenticia' => 'required | integer | between:0,1',
+        'forma_de_pago' => 'required | string | size:1',
+        'incluye_pensión_alimenticia' => 'required | integer | between:0,1',
         'clave_de_nómina' => 'nullable | sometimes | string | max:10',
         'banco_de_nómina' => 'nullable | sometimes | integer | min:0',
         'localidad_de_nómina' => 'nullable | sometimes | string | max:20',
         'referencia_de_nómina' => 'nullable | sometimes | string | max:16',
         'cuenta_de_nómina' => 'nullable | sometimes | string | max:16',
-        'id_unidad' => 'required | integer | min:1 | exists:hr_unidades,id_unidad',
-        'id_departamento' => 'required | integer | min:1 | exists:hr_departamentos,id_departamento',
-        'id_puesto' => 'required | integer | min:1 | exists:hr_puestos,id_puesto',
-        'id_tipo_empleado' => 'required | integer | min:1 | exists:hr_tipos_empleados,id_tipo_empleado',
-        'id_horario' => 'required | integer | min:1 | exists:hr_horarios,id_horario',
+        'unidad' => 'required | integer | min:1 | exists:hr_unidades,id_unidad',
+        'departamento' => 'required | integer | min:1 | exists:hr_departamentos,id_departamento',
+        'puesto' => 'required | integer | min:1 | exists:hr_puestos,id_puesto',
+        'tipo_de_empleado' => 'required | integer | min:1 | exists:hr_tipos_empleados,id_tipo_empleado',
+        'horario' => 'required | integer | min:1 | exists:hr_horarios,id_horario',
         'id_empresa' => 'required | integer | min:1 | exists:hr_empresas,id_empresa',
         'id_terminal_user' => 'required | integer | min:1 | exists:att_empleado,emp_id',
     ];
     private $HR_changes = [
+        'unidad_médica' => 'unidadMedica',
+        'nombre_de_contacto_de_emergencia' => 'nombreEmergencia',
+        'dirección_del_contacto_de_emergencia' => 'dirEmergencia',
+        'teléfono_del_contacto_de_emergencia' => 'telEmergencia',
+
         'lugar_natal' => 'lugarNatal',
         'estado_civil' => 'estadoCivil',
         'teléfono' => 'telefono',
@@ -129,6 +154,7 @@ class EmployeeController extends Controller
 
     public function getOne($id)
     {
+        $roles = $this->apiRequest('rols', 'GET', [])['data'];
         $companyInfo = [];
         $companyInfo['unidades'] = $this->apiRequest('companies/' . session('company') . '/units', 'GET', [])['data'];
         $companyInfo['departamentos'] = $this->apiRequest('companies/' . session('company') . '/departments', 'GET', [])['data'];
@@ -136,14 +162,20 @@ class EmployeeController extends Controller
         $companyInfo['tipos_empleados'] = $this->apiRequest('companies/' . session('company') . '/employeeTypes', 'GET', [])['data'];
         $companyInfo['horarios'] = $this->apiRequest('companies/' . session('company') . '/schedules', 'GET', [])['data'];
 
-        $employees = $this->apiRequest('employees/' . $id, 'GET', [])['data'];
+        $employee = $this->apiRequest('employees/' . $id, 'GET', [])['data'];
+        $user = $this->apiRequest('users/' . $employee['id_usuario'], 'GET', [])['data'];
+        $terminal_user = $this->apiRequest('biometrics/employees/' . $employee['id_terminal_user'], 'GET', [])['data'];
 
+        // dd($employee);
         $data = [
             'pageTitle' => $this->page_title,
             'base_route' => $this->base_route,
             'id_name' => $this->id_name,
-            'employee' => $employees,
+            'user' => $user,
+            'roles' => $roles,
+            'employee' => $employee,
             'companyInfo' => $companyInfo,
+            'terminal_user' => $terminal_user,
             'father_url' => '',
             'father_id' => ''
         ];
@@ -151,8 +183,26 @@ class EmployeeController extends Controller
         return view($this->base_route . '.one', $data);
     }
 
+    public function update_SYS($id, Request $request)
+    {
+        $request->validate([
+            'correo' => 'required | string | email',
+            'nombre' => 'required | string',
+            'apellido_paterno' => 'required | string',
+            'apellido_materno' => 'required | string',
+            'rol' => 'required | integer | min:1 | exists:sys_roles,id_rol',
+        ]);
+
+        $data = $this->UpdateRequest($request, $this->SYS_changes);
+
+        $this->apiRequest('users/' . $id, 'PUT', $data);
+
+        return redirect()->route($this->base_route . '.one', ['id' => $id]);
+    }
+
     public function update_HR($id, Request $request)
     {
+        // dd($request->all());
         $request->validate($this->HR_validationRules);
 
         $data = $this->UpdateRequest($request, $this->HR_changes);

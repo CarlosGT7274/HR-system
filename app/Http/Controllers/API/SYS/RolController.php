@@ -27,10 +27,20 @@ class RolController extends Controller
      */
     public function readAll()
     {
+        $user_rol = auth()->user()->id_rol;
+
+        $roles = [];
+
+        if ($user_rol <= 2) {
+            $roles = sys_roles::where('id_rol', '>=', $user_rol)->get();
+        } else {
+            $roles = sys_roles::where('id_rol', $user_rol)->get();
+        }
+
         return response()->json([
             'error' => false,
             'mensaje' => '',
-            'data' => sys_roles::all()
+            'data' => $roles
         ], 200);
     }
 
