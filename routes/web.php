@@ -39,8 +39,8 @@ use Illuminate\Support\Facades\Route;
 function SimpleRoutes($prefix, $uri_prefix, $extraId, $uri_suffix, $url_name, $title, $id_name, $form_title, $validation_rules, $changes = [], $employeesForForm = false)
 {
     Route::prefix($prefix)->group(function () use ($uri_prefix, $extraId, $uri_suffix, $url_name, $title, $id_name, $form_title, $validation_rules, $changes, $employeesForForm, $prefix) {
-        
-        $controller = new CompanyController( $prefix ,$uri_prefix, $extraId, $uri_suffix, $title, $url_name, $id_name);
+
+        $controller = new CompanyController($prefix, $uri_prefix, $extraId, $uri_suffix, $title, $url_name, $id_name);
 
         Route::get('', function () use ($controller) {
             return $controller->getAll();
@@ -129,7 +129,9 @@ function ChildRoutes($father_route, $endpoint, $uri_prefix, $extraId, $uri_suffi
 
 Route::middleware('needToken')->controller(HomeController::class)->group(function () {
     Route::get('/', 'home')->name('home');
+
     Route::get('/dashboard', 'dashboard')->name('dashboard.show');
+
     Route::post('/dashboard', 'graph')->name('attendance.graph');
 });
 
@@ -141,6 +143,7 @@ Route::controller(SessionController::class)->group(function () {
     Route::get('resetPassword', 'getEmail')->name('resetPassword.form');
 
     Route::post('resetPassword', 'sedToken')->name('resetPassword.submit');
+
     Route::get('changePassword', 'changePassword')->name('changePassword.form');
 
     Route::post('changePassword', 'updatePassword')->name('changePassword.submit');
@@ -467,7 +470,7 @@ Route::middleware('needToken')->group(function () {
             'fecha_excep' => 'datetime',
             'tiempoini' => 'datetime',
             'tiempofin' => 'datetime'
-            
+
         ],
         true
     );
@@ -549,25 +552,25 @@ Route::middleware('needToken')->controller(RegistersController::class)->group(fu
 Route::middleware('needToken')->controller(ReportesController::class)->group(function () {
     // Route::prefix('Reportes')->group(function () {
 
-        Route::get('Asistencias','homeAsistencias')->name('repoattendance');
-        Route::post('Asistencias','homeAsistencias')->name('repoattendance.post');
+    Route::get('Asistencias', 'homeAsistencias')->name('repoattendance');
+    Route::post('Asistencias', 'homeAsistencias')->name('repoattendance.post');
 
-        Route::get('incidencias','aboutIncidencias')->name('reporteincidencias');
-        Route::post('incidencias','aboutIncidencias')->name('reporteincidencias.post');
+    Route::get('incidencias', 'aboutIncidencias')->name('reporteincidencias');
+    Route::post('incidencias', 'aboutIncidencias')->name('reporteincidencias.post');
 
-        Route::get('vacaciones','aboutvacaciones')->name('reportevacaiones');
-        Route::post('vacaciones','aboutvacaciones')->name('reportevacaiones.post');
+    Route::get('vacaciones', 'aboutvacaciones')->name('reportevacaiones');
+    Route::post('vacaciones', 'aboutvacaciones')->name('reportevacaiones.post');
 
-        Route::get('Reasignaciones','reporteRotaciones')->name('reportereasignaicones');
-        Route::post('Reasignaciones','reporteRotaciones')->name('reportereasignaicones.post');
+    Route::get('Reasignaciones', 'reporteRotaciones')->name('reportereasignaicones');
+    Route::post('Reasignaciones', 'reporteRotaciones')->name('reportereasignaicones.post');
 
-        Route::get('terminales','reporteTerminales')->name('reporteterminales');
-        // Route::post('terminales','reporteTerminales')->name('');
+    Route::get('terminales', 'reporteTerminales')->name('reporteterminales');
+    // Route::post('terminales','reporteTerminales')->name('');
 
-        Route::get('retrasos','reportedelays')->name('retrasos');
-        Route::post('retrasos','reportedelays')->name('retrasos.post');
+    Route::get('retrasos', 'reportedelays')->name('retrasos');
+    Route::post('retrasos', 'reportedelays')->name('retrasos.post');
 
-        Route::post('GenerarPDF','generarPDF')->name('pdf.general');
+    Route::post('GenerarPDF', 'generarPDF')->name('pdf.general');
 
     // });
 });
