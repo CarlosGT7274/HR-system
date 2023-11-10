@@ -48,7 +48,7 @@ class Controller extends BaseController
 
                     foreach ($value as $sub_key => $sub_value) {
                         if (array_key_exists($sub_key, $changes)) {
-                            if ($changes[$sub_key] == 'int') {
+                            if ($changes[$sub_key] == 'int' && $sub_value) {
                                 $data[$llave][$key][$sub_key] = (int) $sub_value;
                             } else if ($changes[$sub_key] == 'datetime') {
                                 $data[$llave][$key][$sub_key] = str_replace('T', ' ', $sub_value);
@@ -61,7 +61,7 @@ class Controller extends BaseController
                 }
             } else {
                 if (array_key_exists($llave, $changes)) {
-                    if ($changes[$llave] == 'int') {
+                    if ($changes[$llave] == 'int' && $valor) {
                         $data[$llave] = (int) $valor;
                     } else if ($changes[$llave] == 'datetime') {
                         $data[$llave] = str_replace('T', ' ', $valor);
@@ -82,7 +82,7 @@ class Controller extends BaseController
                     foreach ($valor as $key => $value) {
                         foreach ($value as $sub_key => $sub_value) {
                             if (array_key_exists($sub_key, $changes)) {
-                                if ($changes[$sub_key] == 'int') {
+                                if ($changes[$sub_key] == 'int' && $sub_value) {
                                     $data[$llave][$key][$sub_key] = (int) $sub_value;
                                 } else if ($changes[$sub_key] == 'datetime') {
                                     $data[$llave][$key][$sub_key] = str_replace('T', ' ', $sub_value);
@@ -92,7 +92,7 @@ class Controller extends BaseController
                     }
                 } else {
                     if (array_key_exists($llave, $changes)) {
-                        if ($changes[$llave] == 'int') {
+                        if ($changes[$llave] == 'int' && $valor) {
                             $data[$llave] = (int) $valor;
                         } else if ($changes[$llave] == 'datetime') {
                             $data[$llave] = str_replace('T', ' ', $valor);

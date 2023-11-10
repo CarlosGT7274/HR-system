@@ -431,7 +431,11 @@ Route::middleware('needToken')->group(function () {
 
         Route::post('create', 'create')->name('employees.general.create');
 
-        Route::put('{id}', 'update_HR')->where('id', '[0-9]+')->name('employees.general.update.HR');
+        Route::put('u-hr/{id}', 'update_HR')->where('id', '[0-9]+')->name('employees.general.update.HR');
+
+        Route::put('u-sys/{id}', 'update_SYS')->where('id', '[0-9]+')->name('employees.general.update.SYS');
+
+        Route::put('u-att/{id}', 'update_ATT')->where('id', '[0-9]+')->name('employees.general.update.ATT');
 
         Route::delete('{id}', 'delete')->where('id', '[0-9]+')->name('employees.general.delete');
     });

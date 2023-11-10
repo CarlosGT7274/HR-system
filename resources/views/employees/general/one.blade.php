@@ -7,7 +7,9 @@
                 <i class="fa-solid fa-arrow-left fa-xl"></i>
             </a>
 
-            @yield('title')
+            <h1 class="flex-1 text-left text-2xl font-semibold">
+                {{ $user['nombre'] . ' ' . $user['apellidoP'] . ' ' . $user['apellidoM'] }}
+            </h1>
 
             <form method="POST" action="{{ route($base_route . '.delete', ['id' => $employee['id_' . $id_name]]) }}">
                 @csrf
@@ -19,8 +21,8 @@
         </header>
 
 
-        {{-- <form class="mt-6 border-b-2 border-b-ldark pb-5" method="POST"
-            action="{{ route($base_route . '.update', ['id' => $data['id_' . $id_name]]) }}">
+        <form class="mt-6 border-b-2 border-b-ldark pb-5" method="POST"
+            action="{{ route($base_route . '.update.SYS', ['id' => $user['id_usuario']]) }}">
             @csrf
             @method('PUT')
 
@@ -41,30 +43,49 @@
                 </div>
             </header>
 
-            <section>
+            <section class="sm:grid sm:grid-cols-2 xl:grid-cols-3 md:gap-8 xl:gap-x-20">
                 <div class="flex flex-row items-center gap-2 p-2">
-                    <label class="w-32" for="des">Nombre:</label>
+                    <label class="w-32" for="nombre">Nombre:</label>
                     <input type="text" class="border-b-2 border-ldark cursor-default p-1 text-ldark flex-1"
-                        name="descripción" readonly value="{{ $data['nombre'] }}" id="des">
-                    <input type="text" class="border-b-2 border-ldark cursor-default p-1 text-ldark flex-1"
-                        name="descripción" readonly value="{{ $data['apellidoP'] }}" id="des">
-                    <input type="text" class="border-b-2 border-ldark cursor-default p-1 text-ldark flex-1"
-                        name="descripción" readonly value="{{ $data['apellidoM'] }}" id="des">
+                        name="nombre" readonly value="{{ $user['nombre'] }}" id="nombre">
+                </div>
+                <div class="flex flex-row items-center gap-2 p-2">
+                    <label class="w-32" for="apellidoP">Apellido Paterno:</label>
+                    <input id="apellidoP" type="text"
+                        class="border-b-2 border-ldark cursor-default p-1 text-ldark flex-1" name="apellido_paterno"
+                        readonly value="{{ $user['apellidoP'] }}">
                 </div>
 
                 <div class="flex flex-row items-center gap-2 p-2">
-                    <label class="w-32" for="des">Descripción:</label>
+                    <label class="w-32" for="apellidoM">Apellido Materno:</label>
+                    <input id="apellidoM" type="text"
+                        class="border-b-2 border-ldark cursor-default p-1 text-ldark flex-1" name="apellido_materno"
+                        readonly value="{{ $user['apellidoM'] }}">
                 </div>
 
                 <div class="flex flex-row items-center gap-2 p-2">
-                    <label class="w-32" for="des">Descripción:</label>
+                    <label class="w-32" for="nombre">Correo:</label>
+                    <input type="text" class="border-b-2 border-ldark cursor-default p-1 text-ldark flex-1"
+                        name="correo" readonly value="{{ $user['email'] }}">
                 </div>
+
+                <div class="flex flex-row items-center gap-2 p-2">
+                    <label class="w-32" for="id_rol">Rol:</label>
+                    <select disabled class="h-10 border-b-2 border-ldark flex-1" id="id_rol" name="rol">
+                        <option disabled>-- Seleccione una opción --</option>
+                        @foreach ($roles as $rol)
+                            <option value="{{ $rol['id_rol'] }}" @if ($user['id_rol'] == $rol['id_rol']) selected @endif>
+                                {{ $rol['nombre'] }} </option>
+                        @endforeach
+                    </select>
+                </div>
+
             </section>
 
-        </form> --}}
+        </form>
 
         <form class="mt-6 border-b-2 border-b-ldark pb-5" method="POST"
-            action="{{ route('employees.general.update.HR', ['id' => $employee['id_empleado']]) }}">
+            action="{{ route($base_route . '.update.HR', ['id' => $employee['id_empleado']]) }}">
             @csrf
             @method('PUT')
 
@@ -113,7 +134,8 @@
 
                     <div class="flex flex-row items-center gap-2 p-2">
                         <label class="w-32" for="estado_civil">Estado Civil</label>
-                        <select disabled class="h-10 border-b-2 border-ldark flex-1" id="estado_civil" name="estado_civil">
+                        <select disabled class="h-10 border-b-2 border-ldark flex-1" id="estado_civil"
+                            name="estado_civil">
                             <option disabled>-- Seleccione una opción --</option>
                             @foreach (app('estados_civiles') as $key => $estado)
                                 @if ($employee['estadoCivil'] == $key)
@@ -236,26 +258,28 @@
                     <div class="flex flex-row items-center gap-2 p-2">
                         <label class="w-32" for="nombreEmergencia">Contacto de Emergencia:</label>
                         <input type="text" class="border-b-2 border-ldark cursor-default p-1 text-ldark flex-1"
-                            name="nombreEmergencia" readonly value="{{ $employee['nombreEmergencia'] }}"
+                            name="nombre_de_contacto_de_emergencia" readonly value="{{ $employee['nombreEmergencia'] }}"
                             id="nombreEmergencia">
                     </div>
 
                     <div class="flex flex-row items-center gap-2 p-2">
                         <label class="w-32" for="telEmergencia">Telefono:</label>
                         <input type="tel" class="border-b-2 border-ldark cursor-default p-1 text-ldark flex-1"
-                            name="telEmergencia" readonly value="{{ $employee['telEmergencia'] }}" id="telEmergencia">
+                            name="teléfono_del_contacto_de_emergencia" readonly value="{{ $employee['telEmergencia'] }}"
+                            id="telEmergencia">
                     </div>
 
                     <div class="flex flex-row items-center gap-2 p-2">
                         <label class="w-32" for="unidadMedica">Unidad Medica:</label>
                         <input type="text" class="border-b-2 border-ldark cursor-default p-1 text-ldark flex-1"
-                            name="unidadMedica" readonly value="{{ $employee['unidadMedica'] }}" id="unidadMedica">
+                            name="unidad_médica" readonly value="{{ $employee['unidadMedica'] }}" id="unidadMedica">
                     </div>
 
                     <div class="col-span-2 xl:col-span-3 flex flex-row items-center gap-2 p-2">
                         <label class="w-32" for="dirEmergencia">Dirección Emergencia:</label>
                         <input type="text" class="border-b-2 border-ldark cursor-default p-1 text-ldark flex-1"
-                            name="dirEmergencia" readonly value="{{ $employee['dirEmergencia'] }}" id="dirEmergencia">
+                            name="dirección_del_contacto_de_emergencia" readonly value="{{ $employee['dirEmergencia'] }}"
+                            id="dirEmergencia">
                     </div>
 
                     <div class="col-span-2 xl:col-span-3 p-2">
@@ -276,13 +300,10 @@
                             name="departamento">
                             <option disabled>-- Seleccione una opción --</option>
                             @foreach ($companyInfo['departamentos'] as $departamento)
-                                @if ($employee['id_departamento'] == $departamento['id_departamento'])
-                                    <option value="{{ $departamento['id_departamento'] }}" selected>
-                                        {{ $departamento['nombre'] }} </option>
-                                @else
-                                    <option value="{{ $departamento['id_departamento'] }}"> {{ $departamento['nombre'] }}
-                                    </option>
-                                @endif
+                                <option value="{{ $departamento['id_departamento'] }}"
+                                    @if ($employee['id_departamento'] == $departamento['id_departamento']) selected @endif>
+                                    {{ $departamento['nombre'] }}
+                                </option>
                             @endforeach
                         </select>
                     </div>
@@ -292,12 +313,10 @@
                         <select disabled class="h-10 border-b-2 border-ldark flex-1" id="id_puesto" name="puesto">
                             <option disabled>-- Seleccione una opción --</option>
                             @foreach ($companyInfo['puestos'] as $puesto)
-                                @if ($employee['id_puesto'] == $puesto['id_puesto'])
-                                    <option value="{{ $puesto['id_puesto'] }}" selected> {{ $puesto['nombre'] }}
-                                    </option>
-                                @else
-                                    <option value="{{ $puesto['id_puesto'] }}"> {{ $puesto['nombre'] }} </option>
-                                @endif
+                                <option value="{{ $puesto['id_puesto'] }}"
+                                    @if ($employee['id_puesto'] == $puesto['id_puesto']) selected @endif>
+                                    {{ $puesto['nombre'] }}
+                                </option>
                             @endforeach
                         </select>
                     </div>
@@ -309,12 +328,10 @@
                         <select disabled class="h-10 border-b-2 border-ldark flex-1" id="id_unidad" name="unidad">
                             <option disabled>-- Seleccione una opción --</option>
                             @foreach ($companyInfo['unidades'] as $unidad)
-                                @if ($employee['id_unidad'] == $unidad['id_unidad'])
-                                    <option value="{{ $unidad['id_unidad'] }}" selected> {{ $unidad['nombre'] }}
-                                    </option>
-                                @else
-                                    <option value="{{ $unidad['id_unidad'] }}"> {{ $unidad['nombre'] }} </option>
-                                @endif
+                                <option value="{{ $unidad['id_unidad'] }}"
+                                    @if ($employee['id_unidad'] == $unidad['id_unidad']) selected @endif>
+                                    {{ $unidad['nombre'] }}
+                                </option>
                             @endforeach
                         </select>
                     </div>
@@ -325,13 +342,10 @@
                             name="tipo_de_empleado">
                             <option disabled>-- Seleccione una opción --</option>
                             @foreach ($companyInfo['tipos_empleados'] as $tipo_empleado)
-                                @if ($employee['id_tipo_empleado'] == $tipo_empleado['id_tipo_empleado'])
-                                    <option value="{{ $tipo_empleado['id_tipo_empleado'] }}" selected>
-                                        {{ $tipo_empleado['nombre'] }} </option>
-                                @else
-                                    <option value="{{ $tipo_empleado['id_tipo_empleado'] }}">
-                                        {{ $tipo_empleado['nombre'] }} </option>
-                                @endif
+                                <option value="{{ $tipo_empleado['id_tipo_empleado'] }}"
+                                    @if ($employee['id_tipo_empleado'] == $tipo_empleado['id_tipo_empleado']) selected @endif>
+                                    {{ $tipo_empleado['nombre'] }}
+                                </option>
                             @endforeach
                         </select>
                     </div>
@@ -342,12 +356,10 @@
                         <select disabled class="h-10 border-b-2 border-ldark flex-1" id="id_horario" name="horario">
                             <option disabled>-- Seleccione una opción --</option>
                             @foreach ($companyInfo['horarios'] as $horario)
-                                @if ($employee['id_horario'] == $horario['id_horario'])
-                                    <option value="{{ $horario['id_horario'] }}" selected> {{ $horario['descripcion'] }}
-                                    </option>
-                                @else
-                                    <option value="{{ $horario['id_horario'] }}"> {{ $horario['descripcion'] }} </option>
-                                @endif
+                                <option value="{{ $horario['id_horario'] }}"
+                                    @if ($employee['id_horario'] == $horario['id_horario']) selected @endif>
+                                    {{ $horario['descripcion'] }}
+                                </option>
                             @endforeach
                         </select>
                     </div>
@@ -437,8 +449,8 @@
 
         </form>
 
-        {{-- <form class="mt-6 border-b-2 border-b-ldark pb-5" method="POST"
-            action="{{ route($base_route . '.update', ['id' => $data['id_' . $id_name]]) }}">
+        <form class="mt-6 border-b-2 border-b-ldark pb-5" method="POST"
+            action="{{ route($base_route . '.update.ATT', ['id' => $terminal_user['emp_id']]) }}">
             @csrf
             @method('PUT')
 
@@ -457,11 +469,19 @@
                         <i class="fa-solid fa-xmark fa-lg"></i>
                     </button>
                 </div>
+
             </header>
-
-            <section></section>
-
-        </form> --}}
+            <section class="sm:grid sm:grid-cols-2 xl:grid-cols-3 md:gap-8 xl:gap-x-20">
+                @foreach ($terminal_user as $key => $algo)
+                    <div class="flex flex-row items-center gap-2 p-2">
+                        <label class="w-32" for="{{ $key }}">{{ $key }}:</label>
+                        <input type="text" class="border-b-2 border-ldark cursor-default p-1 text-ldark flex-1"
+                            name="{{ $key }}" readonly value="{{ $terminal_user[$key] }}"
+                            id="{{ $key }}">
+                    </div>
+                @endforeach
+            </section>
+        </form>
 
         <section>
 
