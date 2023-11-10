@@ -7,10 +7,10 @@
         </a>
     </header>
 
-    <nav class="mt-6 text-light select-none">
-        <ul>
+    <nav class="mt-6 text-light select-none flex-1 flex flex-col">
+        <ul class="flex flex-col flex-1 justify-between">
             {{-- {{ dd(session('permissions')) }} --}}
-            <div class="h-[35rem] overflow-y-auto">
+            <div class="h-[37rem] overflow-y-auto">
                 @foreach (session('permissions') as $permission)
                     @if ($permission['nombre'] != 'Dashboard')
                         {{-- Dasboard --}}
@@ -54,9 +54,9 @@
                 @endforeach
             </div>
 
-            <li>
+            <li class="sticky bottom-0">
                 <div
-                    class="w-full flex flex-row justify-between items-center px-6 lg:pt-9 lg:pb-6 pt-5 pb-24 absolute bottom-0">
+                    class="w-full flex flex-row justify-between items-center px-6 pb-8">
                     <a class="flex flex-col bg-dark cursor-pointer ">
                         <p class="text-sm text-light">
                             {{ session('user')['nombre'] . ' ' . session('user')['apellidoP'] . ' ' . session('user')['apellidoM'] }}

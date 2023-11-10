@@ -1,4 +1,4 @@
-<header class="flex justify-between lg:hidden p-4 bg-dark select-none border-2 border-green-500 w-full">
+<header class="flex justify-between lg:hidden p-4 bg-dark select-none w-full">
     <a class="flex justify-between items-center space-x-3">
         @include('svg.logo')
         <p class="text-2xl text-light">On the minute</p>
