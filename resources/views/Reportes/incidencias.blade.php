@@ -89,7 +89,7 @@
         </table>
     </section>
 
-    @include('Reportes.incidenciasview')
+    {{-- @include('Reportes.incidenciasview') --}}
 @endsection
 
 @section('js-scripts')

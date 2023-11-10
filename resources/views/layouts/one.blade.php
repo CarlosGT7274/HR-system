@@ -9,20 +9,21 @@
             </a>
 
             @yield('title')
-
-                <form method="POST"
-                @if (substr($id_name, -2) == 'id') 
-                    action="{{ $father_id ? route($base_route . '.delete', ['id' => $data[$id_name], 'father_id' => $father_id]) : route($base_route . '.delete', ['id' => $data[$id_name]]) }}"
-                @else
-                    action="{{ $father_id ? route($base_route . '.delete', ['id' => $data['id_' . $id_name], 'father_id' => $father_id]) : route($base_route . '.delete', ['id' => $data['id_' . $id_name]]) }}"
-                @endif
-                >
-                    @csrf
-                    @method('DELETE')
-                    <button type="submit">
-                        <i class="fa-solid fa-lg fa-trash-can hover:text-danger"></i>
-                </button>
+            @if ($permiso >= 8)    
+            <form method="POST"
+            @if (substr($id_name, -2) == 'id') 
+                action="{{ $father_id ? route($base_route . '.delete', ['id' => $data[$id_name], 'father_id' => $father_id]) : route($base_route . '.delete', ['id' => $data[$id_name]]) }}"
+            @else
+                action="{{ $father_id ? route($base_route . '.delete', ['id' => $data['id_' . $id_name], 'father_id' => $father_id]) : route($base_route . '.delete', ['id' => $data['id_' . $id_name]]) }}"
+            @endif
+            >
+                @csrf
+                @method('DELETE')
+                <button type="submit">
+                    <i class="fa-solid fa-lg fa-trash-can hover:text-danger"></i>
+            </button>
             </form>
+            @endif
         </header>
 
 
@@ -38,6 +39,7 @@
 
             <header class="mb-4 flex flex-row gap-5 items-center">
                 <h2 class="text-xl font-semibold">Atributos</h2>
+                @if ($permiso >= 4 && ($permiso - 8 >= 4 || $permiso < 8))
                 <div>
                     <button name="activarBtn" type="button">
                         <i class="fa-solid fa-lg fa-pencil"></i>
@@ -51,6 +53,7 @@
                         <i class="fa-solid fa-xmark fa-lg"></i>
                     </button>
                 </div>
+                @endif
             </header>
 
             @yield('inputs')

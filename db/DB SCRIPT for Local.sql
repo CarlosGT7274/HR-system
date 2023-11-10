@@ -918,7 +918,7 @@ CREATE TABLE IF NOT EXISTS `db_hr_control_system`.`hr_politicas_pagos` (
   `pagaFeriados` BIT(1) NOT NULL DEFAULT b'0',
   `pagaExtras` BIT(1) NOT NULL DEFAULT b'0',
   `id_codigo_pago` INT UNSIGNED NOT NULL,
-  PRIMARY KEY (`id_poitica_pago`),
+  PRIMARY KEY (`id_politica_pago`),
   INDEX `fk_hr_politicas_pago_hr_codigos_pagos1_idx` (`id_codigo_pago` ASC),
   CONSTRAINT `fk_hr_politicas_pago_hr_codigos_pagos1`
     FOREIGN KEY (`id_codigo_pago`)

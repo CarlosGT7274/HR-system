@@ -6,7 +6,11 @@
         @endif
 
         <input class="w-full h-10" name="{{ $name }}" 
-            type="{{ $type }}" value="{{ old(strpos($name, '[') !== false ? str_replace(['[', ']'], ['.', ''], $name) : $name) }}"
+            type="{{ $type }}" @if ($type == 'password' && $name == 'contraseña_de_la_terminal')
+                value="123"
+            @else
+                value="{{ old(strpos($name, '[') !== false ? str_replace(['[', ']'], ['.', ''], $name) : $name) }}"
+            @endif 
 
             @if ($type == 'number') min="{{ $min }}"
                 step="{{ $step }}" max="{{ $max }}" placeholder="{{ $placeholder }}"  

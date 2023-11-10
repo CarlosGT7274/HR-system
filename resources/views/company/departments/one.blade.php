@@ -10,13 +10,15 @@
 
                 <h1 class="text-2xl font-semibold flex-1">{{ $data['nombre'] }}</h1>
 
-                <form method="POST" action="{{ route($base_route . '.delete', ['id' => $data['id_' . $id_name]]) }}">
-                    @csrf
-                    @method('DELETE')
-                    <button type="submit">
-                        <i class="fa-solid fa-lg fa-trash-can hover:text-danger"></i>
-                    </button>
-                </form>
+                @if ($permiso >= 8)
+                    <form method="POST" action="{{ route($base_route . '.delete', ['id' => $data['id_' . $id_name]]) }}">
+                        @csrf
+                        @method('DELETE')
+                        <button type="submit">
+                            <i class="fa-solid fa-lg fa-trash-can hover:text-danger"></i>
+                        </button>
+                    </form>
+                @endif
             </header>
 
             <section class="mt-6 border-b-2 border-b-ldark pb-3">
@@ -34,20 +36,23 @@
                             value="{{ $data['nombre'] }}" id="in_{{ $data['id_' . $id_name] }}">
                     </div>
 
-                    <div>
-                        <button type="button" onclick="habilitarEdicion({{ $data['id_' . $id_name] }})">
-                            <i class="fa-solid fa-lg fa-pencil"></i>
-                        </button>
+                    @if ($permiso >= 4 &&
+                    ($permiso - 8 >= 4 || $permiso < 8))
+                        <div>
+                            <button type="button" onclick="habilitarEdicion({{ $data['id_' . $id_name] }})">
+                                <i class="fa-solid fa-lg fa-pencil"></i>
+                            </button>
 
-                        <button class="me-4 hover:text-success" type="submit" style="display: none;">
-                            <i class="fa-solid fa-lg fa-floppy-disk"></i>
-                        </button>
+                            <button class="me-4 hover:text-success" type="submit" style="display: none;">
+                                <i class="fa-solid fa-lg fa-floppy-disk"></i>
+                            </button>
 
-                        <button class="hover:text-danger" type="button" style="display: none;"
-                            id="cancelar_{{ $data['id_' . $id_name] }}">
-                            <i class="fa-solid fa-lg fa-xmark"></i>
-                        </button>
-                    </div>
+                            <button class="hover:text-danger" type="button" style="display: none;"
+                                id="cancelar_{{ $data['id_' . $id_name] }}">
+                                <i class="fa-solid fa-lg fa-xmark"></i>
+                            </button>
+                        </div>
+                    @endif
                 </form>
             </section>
 

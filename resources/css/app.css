@@ -3,13 +3,15 @@
 @tailwind utilities;
 
 :root {
-    --color-dark: #0d0d0d;
+    --color-dark: #1f1f1f;
     --color-dlight: #353535;
     --color-ldark: #8c8c8b;
     --color-light: #f0f0f2;
     --color-primary: #0F4B80;
     --color-secondary: #1A80C8;
     --color-tertiary: #248096;
+    --color-danger: #c41414;
+    --color-success: #3ab62c;
 }
 
 input:focus{
@@ -72,6 +74,17 @@ select:focus-visible{
     font-weight: 600;
 }
 
-/* .tabla{
-    width: 4000px !important;
-} */
+::-webkit-scrollbar {
+    width: 10px;
+    height: 10px;
+}
+
+::-webkit-scrollbar-thumb {
+    background-color: var(--color-ldark);
+    border-radius: 5px;
+    max-width: 20px;
+}
+
+::-webkit-scrollbar-track {
+    background-color: var(--color-dark);
+}

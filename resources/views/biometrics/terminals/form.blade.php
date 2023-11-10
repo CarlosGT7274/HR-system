@@ -28,19 +28,19 @@
 
         <div>
             <label for="region">Ubicación:</label>
-            <x-input id="region" icon="" type="text"name="Ubicacion"
+            <x-input id="region" icon="" type="text" name="Ubicación"
                 placeholder="Ubicacion" />
         </div>
 
         <div>
             <label for="region">Tipo de conexión:</label>
-            <x-input id="region" icon="" type="number" step="" step='' min='0' max='' name="tipo_de_conexion"
+            <x-input id="region" icon="" type="number" step="" step='' min='0' max='' name="tipo_de_conexión"
                 placeholder="Tipo de conexión" />
         </div>
 
         <div>
             <label for="pass">Contraseña:</label>
-            <x-input id="pass" icon="" type="password"name="Contraseña"
+        <x-input id="pass" icon="" type="password" name="contraseña_de_la_terminal"
                 placeholder="Contraseña" />
         </div>
         <div>
@@ -50,7 +50,7 @@
         </div>
         <div>
             <label for="region">Dirección TCP/IP:</label>
-            <x-input id="region" icon="" type="text" name="Dirección_TCPIP"
+            <x-input id="region" icon="" type="text" name="Dirección_tcp_ip"
                 placeholder="Dirección TCP/IP" />
         </div>
         <div>

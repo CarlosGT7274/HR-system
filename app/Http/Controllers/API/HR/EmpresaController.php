@@ -642,15 +642,6 @@ class EmpresaController extends Controller
             $employees = hr_empleados::where('id_empresa', $id_company)->get();
         }
 
-
-        $fechaFin = new DateTime(date('Y-m-d H:i:s', strtotime($request->fin . " 23:59:59")));
-        $fechaInicio = new DateTime(date('Y-m-d H:i:s', strtotime($request->inicio . " 00:00:00")));
-
-        $registers = att_registros::where('emp_id', $employees->id_terminal_user)->whereBetween('punch_time', [$fechaInicio, $fechaFin])
-            ->orderBy('punch_time', 'asc')->get();
-
-        $empleados = hr_empleados::where('id_empresa', $id_company)->get();
-
         foreach ($employees as $employee) {
             $movimientosvaccount = 0;
             $sysusers = sys_usuarios::find($employee->id_usuario);
@@ -797,15 +788,14 @@ class EmpresaController extends Controller
 
                 foreach ($registers as $key => $register) {
                     $registerDate = date('Y-m-d', strtotime($register['punch_time']));
-
                     if ($registerDate == $date) {
-
+                        
                         $usuarioinfo = sys_usuarios::firstWhere('id_usuario', $employee->id_usuario);
-
+                        
                         $numeroDiaSemana = date('N', strtotime($date));
-
+                        
                         $detalle = hr_detalles_horarios::where('id_horario', $employee->id_horario)->firstWhere('dia', $numeroDiaSemana);
-
+                        
                         if ($detalle['tipo'] == 1) {
                             $time = new DateTime(date('H:i:s', strtotime($register['punch_time'])));
                             $timeIn = new DateTime(date('H:i:s', strtotime($detalle['inicio'])));
@@ -827,11 +817,17 @@ class EmpresaController extends Controller
                     }
                 }
             }
-
-            if (count($data['empleados'][$keyEmployee]['retrasos']) == 0) {
-                unset($data['empleados'][$keyEmployee]);
-            }
         }
+
+        $temp_array = [];
+
+        foreach ($data['empleados'] as $employee) {
+            if (count($employee['retrasos']) > 0) {
+                $temp_array[] = $employee;
+            }
+        };
+
+        $data['empleados'] = $temp_array;
 
         return response()->json([
             'error' => false,

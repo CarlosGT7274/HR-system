@@ -103,32 +103,129 @@ class ReportesController extends Controller
         return view('Reportes.incidencias', $data);
     }
 
-    // public function fechaReporte(){
+    public function aboutVacaciones(Request $request){
 
-    // }
+        if ($request->has('inicio') && $request->has('fin')) {
+            if (empty($request->input('inicio')) && empty($request->input('fin'))) {
+                $fin = Carbon::now()->format('Y-m-d');
+                $inicio = Carbon::now()->subWeek()->format('Y-m-d');
+                // dd('c');    
+            } else {
+                $fin = $request->input('fin');
+                $inicio = $request->input('inicio');
+                // dd('a');
+            }
+        } else {
+            // dd('b');
+            $fin = Carbon::now()->format('Y-m-d');
+            $inicio = Carbon::now()->subWeek()->format('Y-m-d');
+        }
 
+        $data = [
+            'inicio' => $inicio,
+            'fin' => $fin,
+            'pageTitle' => $this->pageTitle,
+            'data' => $this->apiRequest('companies/' . session('company') . '/reportVacations', 'GET', [
+                'inicio' => $inicio,
+                'fin' => $fin
+            ])['data'],
+        ];
 
-    // public function generarPDF()
-    // {
-    //     // dd(Carbon::now()->subWeek()->format('Y-m-d'));
+        return view('Reportes.vacaciones', $data);
+    }
 
-    //     $data = [
-    //         'titulo' => 'Ejemplo de PDF en Laravel',
-    //         'pageTitle' => $this->pageTitle,
-    //         'data'=> $this->apiRequest(  'companies/' . session('company') . '/reportAttendance', 'GET', [
-    //             'inicio' => Carbon::now()->subWeek()->format('Y-m-d'),
-    //             'fin' => Carbon::now()->format('Y-m-d')
-    //         ])['data'],
-    //     ];
+    public function reporteRotaciones(Request $request){  
+        if ($request->has('inicio') && $request->has('fin')) {
+            if (empty($request->input('inicio')) && empty($request->input('fin'))) {
+                $fin = Carbon::now()->format('Y-m-d');
+                $inicio = Carbon::now()->subWeek()->format('Y-m-d');
+                // dd('c');    
+            } else {
+                $fin = $request->input('fin');
+                $inicio = $request->input('inicio');
+                // dd('a');
+            }
+        } else {
+            // dd('b');
+            $fin = Carbon::now()->format('Y-m-d');
+            $inicio = Carbon::now()->subWeek()->format('Y-m-d');
+        }
 
+        $data = [
+            'inicio' => $inicio,
+            'fin' => $fin,
+            'pageTitle' => $this->pageTitle,
+            'data' => $this->apiRequest('companies/' . session('company') . '/reportResignations', 'GET', [
+                'inicio' => $inicio,
+                'fin' => $fin
+            ])['data'],
+        ];
 
-    //     $pdf = PDF::loadView('Reportes.asistenciaview', $data)->setPaper('a4', 'landscape');
+        return view('Reportes.Rotaciones', $data);
 
+      }
 
-    //     return  $pdf->download('Reporteasistencias.pdf');
+      public function reporteTerminales(Request $request){  
+        if ($request->has('inicio') && $request->has('fin')) {
+            if (empty($request->input('inicio')) && empty($request->input('fin'))) {
+                $fin = Carbon::now()->format('Y-m-d');
+                $inicio = Carbon::now()->subWeek()->format('Y-m-d');
+                // dd('c');    
+            } else {
+                $fin = $request->input('fin');
+                $inicio = $request->input('inicio');
+                // dd('a');
+            }
+        } else {
+            // dd('b');
+            $fin = Carbon::now()->format('Y-m-d');
+            $inicio = Carbon::now()->subWeek()->format('Y-m-d');
+        }
 
+        $data = [
+            'inicio' => $inicio,
+            'fin' => $fin,
+            'pageTitle' => $this->pageTitle,
+            'data' => $this->apiRequest('companies/' . session('company') . '/reportTerminals', 'GET', [
+                'inicio' => $inicio,
+                'fin' => $fin
+            ])['data'],
+        ];
 
-    // }
+        return view('Reportes.reportTerminales', $data);
+
+      }
+
+    public function reportedelays(Request $request){
+        if ($request->has('inicio') && $request->has('fin')) {
+            if (empty($request->input('inicio')) && empty($request->input('fin'))) {
+                $fin = Carbon::now()->format('Y-m-d');
+                $inicio = Carbon::now()->subWeek()->format('Y-m-d');
+                // dd('c');    
+            } else {
+                $fin = $request->input('fin');
+                $inicio = $request->input('inicio');
+                // dd('a');
+            }
+        } else {
+            // dd('b');
+            $fin = Carbon::now()->format('Y-m-d');
+            $inicio = Carbon::now()->subWeek()->format('Y-m-d');
+        }
+
+        $data = [
+            'inicio' => $inicio,
+            'fin' => $fin,
+            'pageTitle' => $this->pageTitle,
+            'data' => $this->apiRequest('companies/' . session('company') . '/reportDelays', 'GET', [
+                'inicio' => $inicio,
+                'fin' => $fin
+            ])['data'],
+        ];
+
+        return view('Reportes.reporteRetrasos', $data);
+    }
+
     public function generarPDF(Request $request)
     {
         $viewName = $request->input('viewName');

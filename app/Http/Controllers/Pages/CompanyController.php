@@ -12,8 +12,25 @@ class CompanyController extends Controller
      *
      * @return void
      */
-    public function __construct(private $uri_prefix, private $extraId, private $uri_suffix, private $pageTitle, private $baseUrl, private $id_name, private $father_url = '')
+    public function __construct( private $prefix, private $uri_prefix, private $extraId, private $uri_suffix, private $pageTitle, private $baseUrl, private $id_name, private $father_url = '')
     {
+    }
+
+    function getPermissions($array) {
+        foreach ($array as $item) {
+            if ($item['endpoint'] === $this->prefix) {
+                return $item['valor'];
+            }
+    
+            if (isset($item['sub_permissions'])) {
+                $value = $this->getPermissions($item['sub_permissions']);
+                if ($value !== null) {
+                    return $value;
+                }
+            }
+        }
+    
+        return null;
     }
 
     public function getEndpoint($father_id = '')
@@ -39,15 +56,25 @@ class CompanyController extends Controller
         }
         return $endpoint;
     }
+    
+    private $value = null;
 
     public function getAll()
     {
+
+        if ($this->value === null) {
+            $this->value = $this->getPermissions(session('permissions'));
+        }
+
+        // dd($value);
+    //    dd( session('permissions'));
         $data = [
             'pageTitle' => $this->pageTitle,
             'data' => $this->apiRequest($this->getEndpoint(), 'GET', [])['data'],
             'nombre' => '',
             'base_route' => $this->baseUrl,
             'id_name' => $this->id_name,
+            'permiso'=> $this->value
         ];
 
         return view($this->baseUrl . '.all', $data);
@@ -55,6 +82,11 @@ class CompanyController extends Controller
 
     public function getOne($id, $failed = false, $father_id = '')
     {
+        if ($this->value === null) {
+            $this->value = $this->getPermissions(session('permissions'));
+        }
+        // $value = $this->getPermissions(session('permissions'));
+        // dd($value);
         $data = [
             'pageTitle' => $this->pageTitle,
             'data' => $this->apiRequest($this->getEndpoint($father_id) . '/' . $id, 'GET', [])['data'],
@@ -62,7 +94,8 @@ class CompanyController extends Controller
             'base_route' => $this->baseUrl,
             'id_name' => $this->id_name,
             'father_id' => $father_id,
-            'father_url' => $this->father_url
+            'father_url' => $this->father_url,
+            'permiso'=> $this->value
         ];
 
         if($this->pageTitle == 'Excepciones') {
@@ -121,7 +154,7 @@ class CompanyController extends Controller
     public function delete($id, $father_id = '')
     {
         $response = $this->apiRequest($this->getEndpoint($father_id) . '/' . $id, 'DELETE', []);
-
+        dd($response);
         if ($response['error']) {
             return $this->getOne($id, true, $father_id);
         } else {
@@ -132,9 +165,10 @@ class CompanyController extends Controller
     public function update($id, Request $request, $validationRules, $changes = [], $father_id = '')
     {
         $request->validate($validationRules);
+        // dd($request->all());
 
         $data = $this->UpdateRequest($request, $changes);
-
+        // dd($data);
         $this->apiRequest($this->getEndpoint($father_id) . '/' . $id, 'PUT', $data);
 
         return $father_id ? redirect()->route($this->baseUrl . '.one', ['id' => $id, 'father_id' => $father_id]) : redirect()->route($this->baseUrl . '.one', ['id' => $id]);

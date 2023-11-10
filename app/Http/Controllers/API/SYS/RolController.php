@@ -87,7 +87,7 @@ class RolController extends Controller
             $permiso = sys_roles_permisos::create([
                 'id_rol' => $rol->id_rol,
                 'id_permiso' => $permiso['id_permiso'],
-                'valor' => $permiso['permiso'],
+                'permiso' => $permiso['permiso'],
             ]);
 
             array_push($permisos, $permiso);

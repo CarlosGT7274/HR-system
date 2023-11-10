@@ -14,13 +14,14 @@
 </head>
 
 <body>
+
     @include('components.navbar')
 
     <div class="flex flex-col sm:flex-row">
         @include('components.sidebar')
 
 
-        <main class="p-6 w-4/5">
+        <main class="p-6 w-full lg:w-[79%]">
             @yield('content')
         </main>
     </div>

@@ -48,7 +48,7 @@
     </div>
 
     <section class="w-full overflow-x-scroll">
-        <table id="miTabla" class="table latabla ">
+        <table id="miTabla" class="table latabla">
             <thead>
                 <tr class="bg-dark text-white">
                     <th class="px-4 py-2 sticky left-0 bg-dark z-10">ID</th>

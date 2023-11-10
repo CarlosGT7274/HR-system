@@ -38,9 +38,9 @@ use Illuminate\Support\Facades\Route;
  */
 function SimpleRoutes($prefix, $uri_prefix, $extraId, $uri_suffix, $url_name, $title, $id_name, $form_title, $validation_rules, $changes = [], $employeesForForm = false)
 {
-    Route::prefix($prefix)->group(function () use ($uri_prefix, $extraId, $uri_suffix, $url_name, $title, $id_name, $form_title, $validation_rules, $changes, $employeesForForm) {
-
-        $controller = new CompanyController($uri_prefix, $extraId, $uri_suffix, $title, $url_name, $id_name);
+    Route::prefix($prefix)->group(function () use ($uri_prefix, $extraId, $uri_suffix, $url_name, $title, $id_name, $form_title, $validation_rules, $changes, $employeesForForm, $prefix) {
+        
+        $controller = new CompanyController( $prefix ,$uri_prefix, $extraId, $uri_suffix, $title, $url_name, $id_name);
 
         Route::get('', function () use ($controller) {
             return $controller->getAll();
@@ -90,8 +90,8 @@ function SimpleRoutes($prefix, $uri_prefix, $extraId, $uri_suffix, $url_name, $t
  */
 function ChildRoutes($father_route, $endpoint, $uri_prefix, $extraId, $uri_suffix, $url_name, $title, $id_name, $form_title, $validation_rules, $changes = [], $employeesForForm = false)
 {
-    Route::prefix($father_route)->group(function () use ($endpoint, $uri_prefix, $extraId, $uri_suffix, $url_name, $title, $id_name, $form_title, $validation_rules, $changes, $employeesForForm) {
-        $controller = new CompanyController($uri_prefix, $extraId, $uri_suffix, $title, $url_name, $id_name, 'company.pay-codes');
+    Route::prefix($father_route)->group(function () use ($father_route, $endpoint, $uri_prefix, $extraId, $uri_suffix, $url_name, $title, $id_name, $form_title, $validation_rules, $changes, $employeesForForm) {
+        $controller = new CompanyController($endpoint, $uri_prefix, $extraId, $uri_suffix, $title, $url_name, $id_name, $father_route);
 
         Route::get('{father_id}/' . $endpoint . '/{id}', function ($father_id, $id) use ($controller) {
             return $controller->getOne($id, false,  $father_id);
@@ -478,38 +478,15 @@ Route::middleware('needToken')->group(function () {
         'terminal_id',
         'una Terminal',
         [
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
             'terminal_id' => 'required | integer | min:0',
             'Número' => 'required | integer | min:0',
             'estado' => 'required | integer | min:0',
             'Nombre' => 'required | string',
-            'Ubicacion' => 'required | string',
-            'tipo_de_conexion' => 'required | integer | min:0',
-            'Contraseña' => 'required | string',
+            'Ubicación' => 'required | string',
+            'tipo_de_conexión' => 'required | integer | min:0',
+            'contraseña_de_la_terminal' => 'required | string',
             'Nombre_del_Dominio' => 'required | string',
-            'Dirección_TCPIP' => 'required | string',
+            'Dirección_tcp_ip' => 'required | string',
             'Puerto' => 'required | integer | min:0',
             'Número_Serial' => 'required | string',
             'Tasa_de_Baudios' => 'required | integer | min:0',
@@ -527,7 +504,7 @@ Route::middleware('needToken')->group(function () {
         [
             'estado' => 'terminal_status',
             'nombre' => 'terminal_name',
-            'ubicacion' => 'terminal_location',
+            'ubicación' => 'terminal_location',
             'tipoconexion' => 'termnal_conecttype',
             'terminal_id' => 'int',
             'teminal_no' => 'int',
@@ -537,11 +514,11 @@ Route::middleware('needToken')->group(function () {
             'Número' => 'teminal_no',
             // 'estado' => 'estado',
             'Nombre' => 'nombre',
-            'Ubicacion' => 'ubicacion',
-            'tipo_de_conexion' => 'tipoconexion',
-            'Contraseña' => 'terminal_conectpwd',
+            'Ubicación' => 'ubicación',
+            'tipo_de_conexión' => 'tipoconexion',
+            'contraseña_de_la_terminal' => 'terminal_conectpwd',
             'Nombre_del_Dominio' => 'terminal_domainname',
-            'Dirección_TCPIP' => 'terminal_tcpip',
+            'Dirección_tcp_ip' => 'terminal_tcpip',
             'Puerto' => 'terminal_port',
             'Número_Serial' => 'terminal_serial',
             'Tasa_de_Baudios' => 'terminal_baudrate',
@@ -552,7 +529,6 @@ Route::middleware('needToken')->group(function () {
             'Faces' => 'terminal_faces',
             'Zem' => 'terminal_zem',
             'kind' => 'terminal_kind',
-            'IsSelect' => 'IsSelect',
             'time_checked' => 'terminal_timechk',
             'last_checked' => 'terminal_lastchk'
         ]
@@ -574,6 +550,18 @@ Route::middleware('needToken')->controller(ReportesController::class)->group(fun
 
         Route::get('incidencias','aboutIncidencias')->name('reporteincidencias');
         Route::post('incidencias','aboutIncidencias')->name('reporteincidencias.post');
+
+        Route::get('vacaciones','aboutvacaciones')->name('reportevacaiones');
+        Route::post('vacaciones','aboutvacaciones')->name('reportevacaiones.post');
+
+        Route::get('Reasignaciones','reporteRotaciones')->name('reportereasignaicones');
+        Route::post('Reasignaciones','reporteRotaciones')->name('reportereasignaicones.post');
+
+        Route::get('terminales','reporteTerminales')->name('reporteterminales');
+        // Route::post('terminales','reporteTerminales')->name('');
+
+        Route::get('retrasos','reportedelays')->name('retrasos');
+        Route::post('retrasos','reportedelays')->name('retrasos.post');
 
         Route::post('GenerarPDF','generarPDF')->name('pdf.general');
 
