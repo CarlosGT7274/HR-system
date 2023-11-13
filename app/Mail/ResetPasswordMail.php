@@ -21,7 +21,7 @@ class ResetPasswordMail extends Mailable
      */
     public function __construct(private $token, private $pageTitle)
     {
-        $this->url = env('APP_URL') . '/changePass';
+        $this->url = env('APP_URL') . '/changePassword';
     }
 
     /**

@@ -9,6 +9,7 @@ use App\Http\Controllers\Pages\SessionController;
 use App\Http\Controllers\Pages\systemController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
+use Illuminate\Validation\Rule;
 
 /**
 |--------------------------------------------------------------------------
@@ -39,8 +40,8 @@ use Illuminate\Support\Facades\Route;
 function SimpleRoutes($prefix, $uri_prefix, $extraId, $uri_suffix, $url_name, $title, $id_name, $form_title, $validation_rules, $changes = [], $employeesForForm = false)
 {
     Route::prefix($prefix)->group(function () use ($uri_prefix, $extraId, $uri_suffix, $url_name, $title, $id_name, $form_title, $validation_rules, $changes, $employeesForForm, $prefix) {
-        
-        $controller = new CompanyController( $prefix ,$uri_prefix, $extraId, $uri_suffix, $title, $url_name, $id_name);
+
+        $controller = new CompanyController($prefix, $uri_prefix, $extraId, $uri_suffix, $title, $url_name, $id_name);
 
         Route::get('', function () use ($controller) {
             return $controller->getAll();
@@ -94,7 +95,7 @@ function ChildRoutes($father_route, $endpoint, $uri_prefix, $extraId, $uri_suffi
         $controller = new CompanyController($endpoint, $uri_prefix, $extraId, $uri_suffix, $title, $url_name, $id_name, $father_route);
 
         Route::get('{father_id}/' . $endpoint . '/{id}', function ($father_id, $id) use ($controller) {
-            return $controller->getOne($id, false,  $father_id);
+            return $controller->getOne($id, false, $father_id);
         })->where('id', '[0-9]+')->name($url_name . '.one');
 
         Route::get('{father_id}/' . $endpoint . '/create', function ($father_id) use ($controller, $form_title, $employeesForForm) {
@@ -140,7 +141,7 @@ Route::controller(SessionController::class)->group(function () {
 
     Route::get('resetPassword', 'getEmail')->name('resetPassword.form');
 
-    Route::post('resetPassword', 'sedToken')->name('resetPassword.submit');
+    Route::post('resetPassword', 'sendToken')->name('resetPassword.submit');
     Route::get('changePassword', 'changePassword')->name('changePassword.form');
 
     Route::post('changePassword', 'updatePassword')->name('changePassword.submit');
@@ -467,7 +468,7 @@ Route::middleware('needToken')->group(function () {
             'fecha_excep' => 'datetime',
             'tiempoini' => 'datetime',
             'tiempofin' => 'datetime'
-            
+
         ],
         true
     );
@@ -549,25 +550,56 @@ Route::middleware('needToken')->controller(RegistersController::class)->group(fu
 Route::middleware('needToken')->controller(ReportesController::class)->group(function () {
     // Route::prefix('Reportes')->group(function () {
 
-        Route::get('Asistencias','homeAsistencias')->name('repoattendance');
-        Route::post('Asistencias','homeAsistencias')->name('repoattendance.post');
+    Route::get('Asistencias', 'homeAsistencias')->name('repoattendance');
+    Route::post('Asistencias', 'homeAsistencias')->name('repoattendance.post');
 
-        Route::get('incidencias','aboutIncidencias')->name('reporteincidencias');
-        Route::post('incidencias','aboutIncidencias')->name('reporteincidencias.post');
+    Route::get('incidencias', 'aboutIncidencias')->name('reporteincidencias');
+    Route::post('incidencias', 'aboutIncidencias')->name('reporteincidencias.post');
 
-        Route::get('vacaciones','aboutvacaciones')->name('reportevacaiones');
-        Route::post('vacaciones','aboutvacaciones')->name('reportevacaiones.post');
+    Route::get('vacaciones', 'aboutvacaciones')->name('reportevacaiones');
+    Route::post('vacaciones', 'aboutvacaciones')->name('reportevacaiones.post');
 
-        Route::get('Reasignaciones','reporteRotaciones')->name('reportereasignaicones');
-        Route::post('Reasignaciones','reporteRotaciones')->name('reportereasignaicones.post');
+    Route::get('Reasignaciones', 'reporteRotaciones')->name('reportereasignaicones');
+    Route::post('Reasignaciones', 'reporteRotaciones')->name('reportereasignaicones.post');
 
-        Route::get('terminales','reporteTerminales')->name('reporteterminales');
-        // Route::post('terminales','reporteTerminales')->name('');
+    Route::get('terminales', 'reporteTerminales')->name('reporteterminales');
+    // Route::post('terminales','reporteTerminales')->name('');
 
-        Route::get('retrasos','reportedelays')->name('retrasos');
-        Route::post('retrasos','reportedelays')->name('retrasos.post');
+    Route::get('retrasos', 'reportedelays')->name('retrasos');
+    Route::post('retrasos', 'reportedelays')->name('retrasos.post');
 
-        Route::post('GenerarPDF','generarPDF')->name('pdf.general');
+    Route::post('GenerarPDF', 'generarPDF')->name('pdf.general');
 
     // });
 });
+
+SimpleRoutes(
+    'usuarios',
+    'users',
+    '',
+    '',
+    'system.users',
+    'Usuarios',
+    'usuario',
+    'un Usuario',
+    [
+        'correo' => 'required | string | email',
+        'contraseña' => 'sometimes | string',
+        'nombre' => 'required | string',
+        'apellido_paterno' => 'required | string',
+        'apellido_materno' => 'required | string',
+        'rol' => 'required | integer | min:1 | exists:sys_roles,id_rol',
+        'empresa' => 'integer | min:1 | excludeIf:rol,1 | exists:hr_empresas,id_empresa'
+    ],
+    [
+        'correo' => 'email',
+        'contraseña' => 'password',
+        'apellido_paterno' => 'apellidoP',
+        'apellido_materno' => 'apellidoM',
+        'rol' => 'id_rol',
+        'empresa' => 'id_empresa',
+        'id_rol' => 'int',
+        'id_empresa' => 'int',
+        'activo' => 'int'
+    ]
+);

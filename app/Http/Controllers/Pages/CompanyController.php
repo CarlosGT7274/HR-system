@@ -104,6 +104,12 @@ class CompanyController extends Controller
             $data['codigos'] = $this->apiRequest('companies/' . session('company') . '/payCodes', 'GET', [])['data'];
         }
 
+        if($this->pageTitle == 'Usuarios') {
+            $data['roles'] = $this->apiRequest('rols/', 'GET', [])['data'];   
+            $data['companies'] = $this->apiRequest('companies', 'GET', [])['data'];   
+
+        }
+
         return view($this->baseUrl . '.one', $data);
     }
 
@@ -136,6 +142,11 @@ class CompanyController extends Controller
             'father_url' => $this->father_url
         ];
 
+        if($this->pageTitle == 'Usuarios') {
+            $data['roles'] = $this->apiRequest('rols/', 'GET', [])['data'];
+            $data['companies'] = $this->apiRequest('companies', 'GET', [])['data'];     
+        }
+
         return view($this->baseUrl . '.form', $data);
     }
 
@@ -154,7 +165,7 @@ class CompanyController extends Controller
     public function delete($id, $father_id = '')
     {
         $response = $this->apiRequest($this->getEndpoint($father_id) . '/' . $id, 'DELETE', []);
-        dd($response);
+        // dd($response);
         if ($response['error']) {
             return $this->getOne($id, true, $father_id);
         } else {
