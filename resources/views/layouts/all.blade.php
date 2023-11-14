@@ -14,13 +14,11 @@
 
         <section class="mt-8 grid grid-cols-2 md:grid-cols-3 xl:grid-cols-4 gap-10">
             @yield('component')
-            @if ($permiso >= 2 &&
-            $permiso - 4 > 0 &&
-            $permiso - 8 > 0)
-            <a class="border-b-2 border-ldark hover:border-success w-full text-center font-semibold cursor-pointer select-none h-16 hover:text-success flex items-center justify-center"
-                href="{{ route($base_route . '.form') }}">
-                <i class="fa-solid fa-plus fa-xl"></i>
-            </a>
+            @if ($permiso >= 2 && ($permiso - 4 >= 2 || $permiso < 4) && (($permiso - 8 != 4 && $permiso - 8 != 5) || $permiso < 8))
+                <a class="border-b-2 border-ldark hover:border-success w-full text-center font-semibold cursor-pointer select-none h-16 hover:text-success flex items-center justify-center"
+                    href="{{ route($base_route . '.form') }}">
+                    <i class="fa-solid fa-plus fa-xl"></i>
+                </a>
             @endif
         </section>
     </article>

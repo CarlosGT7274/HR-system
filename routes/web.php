@@ -89,9 +89,9 @@ function SimpleRoutes($prefix, $uri_prefix, $extraId, $uri_suffix, $url_name, $t
  * @param array $changes Changes should perform to the request for the API 
  * @return void
  */
-function ChildRoutes($father_route, $endpoint, $uri_prefix, $extraId, $uri_suffix, $url_name, $title, $id_name, $form_title, $validation_rules, $changes = [], $employeesForForm = false)
+function ChildRoutes($father_prefix, $father_route, $endpoint, $uri_prefix, $extraId, $uri_suffix, $url_name, $title, $id_name, $form_title, $validation_rules, $changes = [], $employeesForForm = false)
 {
-    Route::prefix($father_route)->group(function () use ($father_route, $endpoint, $uri_prefix, $extraId, $uri_suffix, $url_name, $title, $id_name, $form_title, $validation_rules, $changes, $employeesForForm) {
+    Route::prefix($father_prefix)->group(function () use ($father_route, $endpoint, $uri_prefix, $extraId, $uri_suffix, $url_name, $title, $id_name, $form_title, $validation_rules, $changes, $employeesForForm) {
         $controller = new CompanyController($endpoint, $uri_prefix, $extraId, $uri_suffix, $title, $url_name, $id_name, $father_route);
 
         Route::get('{father_id}/' . $endpoint . '/{id}', function ($father_id, $id) use ($controller) {
@@ -130,7 +130,9 @@ function ChildRoutes($father_route, $endpoint, $uri_prefix, $extraId, $uri_suffi
 
 Route::middleware('needToken')->controller(HomeController::class)->group(function () {
     Route::get('/', 'home')->name('home');
+
     Route::get('/dashboard', 'dashboard')->name('dashboard.show');
+
     Route::post('/dashboard', 'graph')->name('attendance.graph');
 });
 
@@ -142,6 +144,7 @@ Route::controller(SessionController::class)->group(function () {
     Route::get('resetPassword', 'getEmail')->name('resetPassword.form');
 
     Route::post('resetPassword', 'sendToken')->name('resetPassword.submit');
+
     Route::get('changePassword', 'changePassword')->name('changePassword.form');
 
     Route::post('changePassword', 'updatePassword')->name('changePassword.submit');
@@ -150,6 +153,38 @@ Route::controller(SessionController::class)->group(function () {
 });
 
 Route::middleware('needToken')->group(function () {
+
+    SimpleRoutes(
+        'usuarios',
+        'users',
+        '',
+        '',
+        'system.users',
+        'Usuarios',
+        'usuario',
+        'un Usuario',
+        [
+            'correo' => 'required | string | email',
+            'contraseña' => 'sometimes | string',
+            'nombre' => 'required | string',
+            'apellido_paterno' => 'required | string',
+            'apellido_materno' => 'required | string',
+            'rol' => 'required | integer | min:1 | exists:sys_roles,id_rol',
+            'empresa' => 'integer | min:1 | excludeIf:rol,1 | exists:hr_empresas,id_empresa'
+        ],
+        [
+            'correo' => 'email',
+            'contraseña' => 'password',
+            'apellido_paterno' => 'apellidoP',
+            'apellido_materno' => 'apellidoM',
+            'rol' => 'id_rol',
+            'empresa' => 'id_empresa',
+            'id_rol' => 'int',
+            'id_empresa' => 'int',
+            'activo' => 'int'
+        ]
+    );
+
     SimpleRoutes(
         'departamentos',
         'companies',
@@ -268,6 +303,7 @@ Route::middleware('needToken')->group(function () {
 
     ChildRoutes(
         'codigos-de-pago',
+        'company.pay-codes',
         'politicas-de-pago',
         'companies',
         'payCode',
@@ -440,8 +476,58 @@ Route::middleware('needToken')->group(function () {
 
         Route::delete('{id}', 'delete')->where('id', '[0-9]+')->name('employees.general.delete');
     });
+
+    ChildRoutes(
+        'empleados',
+        'employees.general',
+        'familiares',
+        'employees',
+        'emp',
+        'relatives',
+        'employees.relatives',
+        'Familiares',
+        'familiar',
+        'un Familiar',
+        [
+            'nombre' => 'required | string | max:40',
+            'apellido_paterno' => 'required | string | max:20',
+            'apellido_materno' => 'required | string | max:20',
+            'parentesco' => 'required | integer | min:0 ',
+            'teléfono' => 'required | string | size:10',
+            'teléfono_de_respaldo' => 'nullable | sometimes | string | size:10',
+        ],
+        [
+            'apellido_paterno' => 'apellidoP',
+            'apellido_materno' => 'apellidoM',
+            'parentesco' => 'int',
+            'teléfono' => 'telefono',
+            'teléfono_de_respaldo' => 'telefono2',
+        ]
+    );
+
+    ChildRoutes(
+        'empleados',
+        'employees.general',
+        'documentos',
+        'employees',
+        'emp',
+        'documents',
+        'employees.documents',
+        'Documentos',
+        'documento',
+        'un Documento',
+        [
+            'nombre' => 'required | string',
+            'tipo' => 'required | integer | min:1',
+            'info' => 'required | string'
+        ],
+        []
+    );
 });
 
+//* ---------------------------------------------------------------------------------
+//* ----------------------------  Rutas para terminales  ----------------------------
+//* ---------------------------------------------------------------------------------
 Route::middleware('needToken')->group(function () {
     SimpleRoutes(
         'excepciones',
@@ -451,7 +537,7 @@ Route::middleware('needToken')->group(function () {
         'biometrics.exceptions',
         'Excepciones',
         'id',
-        'una excepcion',
+        'una Excepción',
         [
             'id' => 'required | integer | min:0',
             'fecha_excep' => 'required | string | regex:/^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}$/',
@@ -538,68 +624,43 @@ Route::middleware('needToken')->group(function () {
             'last_checked' => 'terminal_lastchk'
         ]
     );
-});
 
-Route::middleware('needToken')->controller(RegistersController::class)->group(function () {
-    Route::prefix('registros')->group(function () {
+    Route::controller(RegistersController::class)->group(function () {
+        Route::prefix('registros')->group(function () {
 
-        Route::get('', 'getAllContent')->name('raiz');
+            Route::get('', 'getAllContent')->name('raiz');
+        });
     });
 });
+//* ---------------------------------------------------------------------------------
 
+//? ---------------------------------------------------------------------------------
+//? -----------------------------  Rutas para reportes  -----------------------------
+//? ---------------------------------------------------------------------------------
 Route::middleware('needToken')->controller(ReportesController::class)->group(function () {
-    // Route::prefix('Reportes')->group(function () {
 
     Route::get('Asistencias', 'homeAsistencias')->name('repoattendance');
+
     Route::post('Asistencias', 'homeAsistencias')->name('repoattendance.post');
 
     Route::get('incidencias', 'aboutIncidencias')->name('reporteincidencias');
+
     Route::post('incidencias', 'aboutIncidencias')->name('reporteincidencias.post');
 
     Route::get('vacaciones', 'aboutvacaciones')->name('reportevacaiones');
+
     Route::post('vacaciones', 'aboutvacaciones')->name('reportevacaiones.post');
 
     Route::get('Reasignaciones', 'reporteRotaciones')->name('reportereasignaicones');
+
     Route::post('Reasignaciones', 'reporteRotaciones')->name('reportereasignaicones.post');
 
     Route::get('terminales', 'reporteTerminales')->name('reporteterminales');
-    // Route::post('terminales','reporteTerminales')->name('');
 
     Route::get('retrasos', 'reportedelays')->name('retrasos');
+
     Route::post('retrasos', 'reportedelays')->name('retrasos.post');
 
     Route::post('GenerarPDF', 'generarPDF')->name('pdf.general');
-
-    // });
 });
-
-SimpleRoutes(
-    'usuarios',
-    'users',
-    '',
-    '',
-    'system.users',
-    'Usuarios',
-    'usuario',
-    'un Usuario',
-    [
-        'correo' => 'required | string | email',
-        'contraseña' => 'sometimes | string',
-        'nombre' => 'required | string',
-        'apellido_paterno' => 'required | string',
-        'apellido_materno' => 'required | string',
-        'rol' => 'required | integer | min:1 | exists:sys_roles,id_rol',
-        'empresa' => 'integer | min:1 | excludeIf:rol,1 | exists:hr_empresas,id_empresa'
-    ],
-    [
-        'correo' => 'email',
-        'contraseña' => 'password',
-        'apellido_paterno' => 'apellidoP',
-        'apellido_materno' => 'apellidoM',
-        'rol' => 'id_rol',
-        'empresa' => 'id_empresa',
-        'id_rol' => 'int',
-        'id_empresa' => 'int',
-        'activo' => 'int'
-    ]
-);
+//? ---------------------------------------------------------------------------------

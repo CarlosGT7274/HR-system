@@ -45,7 +45,7 @@
                                         <i class="fa-regular fa-square fa-2xs"></i>
                                         <i class="fa-regular fa-square fa-2xs"></i>
                                     </object>
-    
+
                                     <p class="text-base"> {{ $permission['nombre'] }}</p>
                                 </a>
                             </li>
@@ -55,8 +55,7 @@
             </div>
 
             <li class="sticky bottom-0">
-                <div
-                    class="w-full flex flex-row justify-between items-center px-6 pb-8">
+                <div class="w-full flex flex-row justify-between items-center p-6">
                     <a class="flex flex-col bg-dark cursor-pointer ">
                         <p class="text-sm text-light">
                             {{ session('user')['nombre'] . ' ' . session('user')['apellidoP'] . ' ' . session('user')['apellidoM'] }}

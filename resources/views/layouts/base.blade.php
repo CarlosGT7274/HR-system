@@ -19,7 +19,7 @@
         @include('components.sidebar')
 
 
-        <main class="p-6 w-full lg:w-[79%]">
+        <main class="p-6 w-full lg:w-[79%] xl:w-11/12">
             @yield('content')
         </main>
     </div>
@@ -27,8 +27,6 @@
     @yield('footer')
 
     @vite('resources/js/app.js')
-
-    
 
     <script>
         const navbar = document.getElementById("navbar-container");

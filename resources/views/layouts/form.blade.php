@@ -14,6 +14,7 @@
         <form class="mt-8 flex flex-col items-center" method="POST"
             action="{{ $father_id ? route($base_route . '.submit', ['father_id' => $father_id]) : route($base_route . '.submit') }}">
             @csrf
+
             @yield('inputs')
 
             <button type="submit"

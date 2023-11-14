@@ -12,6 +12,7 @@ class EmployeeController extends Controller
     private $base_route = "employees.general";
     private $page_title = "Empleados";
     private $id_name = "empleado";
+    private $permisos = null;
 
     private $SYS_validationRules = [
         'correo' => 'required | string | email',
@@ -29,6 +30,26 @@ class EmployeeController extends Controller
         'apellido_materno' => 'apellidoM',
         'rol' => 'id_rol',
         'empresa' => 'id_empresa'
+    ];
+
+    private $ATT_validationRules = [
+        'emp_pin' => 'required | integer | min:0',
+        'emp_code' => 'required | string',
+        'emp_role' => 'required | string',
+        'emp_firstname' => 'required | string',
+        'emp_lastname' => 'required | string',
+        'emp_username' => 'required | string',
+        'emp_pwd' => 'required | string',
+        'emp_privilege' => 'required | string',
+        'emp_group' => 'required | string',
+        'emp_active' => 'required | integer | min:0',
+        'emp_cardNumber' => 'required | string',
+        'IsSelect' => 'required | integer | min:0',
+    ];
+    private $ATT_changes = [
+        'emp_pin' => 'int',
+        'emp_active' => 'int',
+        'IsSelect' => 'int',
     ];
 
     private $HR_validationRules = [
@@ -138,23 +159,30 @@ class EmployeeController extends Controller
 
     public function getAll()
     {
-        $employees = $this->apiRequest('companies/' . session('company') . '/employees', 'GET', [])['data'];
+        if ($this->permisos === null) {
+            $this->permisos = session('permissions')[2]['sub_permissions'][205];
+        }
 
+        $employees = $this->apiRequest('companies/' . session('company') . '/employees', 'GET', [])['data'];
 
         $data = [
             'pageTitle' => $this->page_title,
             'base_route' => $this->base_route,
             'id_name' => $this->id_name,
             'data' => $employees,
-            'nombre' => ''
+            'nombre' => '',
+            'permiso' => $this->permisos['valor']
         ];
-        // return $data;
+
         return view($this->base_route . '.all', $data);
     }
 
     public function getOne($id)
     {
-        $roles = $this->apiRequest('rols', 'GET', [])['data'];
+        if ($this->permisos === null) {
+            $this->permisos = session('permissions')[2]['sub_permissions'][205];
+        }
+
         $companyInfo = [];
         $companyInfo['unidades'] = $this->apiRequest('companies/' . session('company') . '/units', 'GET', [])['data'];
         $companyInfo['departamentos'] = $this->apiRequest('companies/' . session('company') . '/departments', 'GET', [])['data'];
@@ -163,28 +191,37 @@ class EmployeeController extends Controller
         $companyInfo['horarios'] = $this->apiRequest('companies/' . session('company') . '/schedules', 'GET', [])['data'];
 
         $employee = $this->apiRequest('employees/' . $id, 'GET', [])['data'];
-        $user = $this->apiRequest('users/' . $employee['id_usuario'], 'GET', [])['data'];
-        $terminal_user = $this->apiRequest('biometrics/employees/' . $employee['id_terminal_user'], 'GET', [])['data'];
 
-        // dd($employee);
         $data = [
             'pageTitle' => $this->page_title,
             'base_route' => $this->base_route,
             'id_name' => $this->id_name,
-            'user' => $user,
-            'roles' => $roles,
+            'user' => $this->apiRequest('users/' . $employee['id_usuario'], 'GET', [])['data'],
+            'roles' => $this->apiRequest('rols', 'GET', [])['data'],
             'employee' => $employee,
             'companyInfo' => $companyInfo,
-            'terminal_user' => $terminal_user,
+            'terminal_user' => $this->apiRequest('biometrics/employees/' . $employee['id_terminal_user'], 'GET', [])['data'],
             'father_url' => '',
-            'father_id' => ''
+            'father_id' => '',
+            'relatives' => $this->apiRequest('employees/' . $id . '/relatives', 'GET', [])['data'],
+            'images' => $this->apiRequest('employees/' . $id . '/images', 'GET', [])['data'],
+            'documents' => $this->apiRequest('employees/' . $id . '/documents', 'GET', [])['data'],
+            'permisos' => $this->permisos
         ];
 
         return view($this->base_route . '.one', $data);
     }
 
+    public function create()
+    {
+    }
+
     public function update_SYS($id, Request $request)
     {
+        if ($this->permisos === null) {
+            $this->permisos = session('permissions')[2]['sub_permissions'][205];
+        }
+
         $request->validate([
             'correo' => 'required | string | email',
             'nombre' => 'required | string',
@@ -202,7 +239,10 @@ class EmployeeController extends Controller
 
     public function update_HR($id, Request $request)
     {
-        // dd($request->all());
+        if ($this->permisos === null) {
+            $this->permisos = session('permissions')[2]['sub_permissions'][205];
+        }
+
         $request->validate($this->HR_validationRules);
 
         $data = $this->UpdateRequest($request, $this->HR_changes);
@@ -210,5 +250,24 @@ class EmployeeController extends Controller
         $this->apiRequest('employees/' . $id, 'PUT', $data);
 
         return redirect()->route($this->base_route . '.one', ['id' => $id]);
+    }
+
+    public function update_ATT($id, Request $request)
+    {
+        if ($this->permisos === null) {
+            $this->permisos = session('permissions')[2]['sub_permissions'][205];
+        }
+
+        $request->validate($this->ATT_validationRules);
+
+        $data = $this->UpdateRequest($request, $this->ATT_changes);
+
+        $this->apiRequest('biometrics/employees/' . $id, 'PUT', $data);
+
+        return redirect()->route($this->base_route . '.one', ['id' => $id]);
+    }
+
+    public function delete($id)
+    {
     }
 }
