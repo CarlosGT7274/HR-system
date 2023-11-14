@@ -15,8 +15,9 @@ export default defineConfig({
                 getResource("js", "general"),
                 getResource("js", "rotations"),
                 getResource("js", "scheduleInputs"),
-                getResource("js", "datatables"),
                 getResource("js", "inputs"),
+                getResource("js", "rols"),
+                getResource("js", "edit_rol"),
 
                 getResource("css", "app"),
 

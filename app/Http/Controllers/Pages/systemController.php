@@ -20,6 +20,7 @@ class systemController extends Controller
         $data = [
             'pageTitle' => $this->pageTitle,
             'data' => $this->apiRequest('rols', 'GET', [])['data'],
+            'permiso' => session('permissions')[5]['sub_permissions'][501]['valor']
         ];
 
         return view('system.roles.all', $data);
@@ -32,6 +33,7 @@ class systemController extends Controller
             'data' => $this->apiRequest('rols' . '/' . $id, 'GET', [])['data'],
             'permisosG' => $this->apiRequest('privileges', 'GET', [])['data'],
             'delete' => $failed,
+            'permiso' => session('permissions')[5]['sub_permissions'][501]['valor']
         ];
 
         return view('system.roles.one', $data);
@@ -119,6 +121,7 @@ class systemController extends Controller
             'pageTitle' => $this->pageTitle,
             'data' => $this->apiRequest('rols', 'GET', [])['data'],
             'permisosG' => $this->apiRequest('privileges', 'GET', [])['data'],
+            'permiso' => session('permissions')[5]['sub_permissions'][501]['valor']
         ];
 
         return view('system.roles.form', $data);
@@ -191,7 +194,7 @@ class systemController extends Controller
             ];
         }
 
-        $this->apiRequest('rols' . '/', 'POST', $result);
+        $this->apiRequest('rols', 'POST', $result);
 
         return redirect()->route('rol.all');
     }
@@ -201,7 +204,7 @@ class systemController extends Controller
         $delete = $this->apiRequest('rols' . '/' . $id, 'DELETE', []);
 
         if ($delete['error'] == true) {
-            return $this->editprofilef($id, $delete['mensaje']);
+            return $this->getOne($id, $delete['mensaje']);
         } else {
             return redirect()->route('rol.all');
         }

@@ -9,8 +9,7 @@
 
     <nav class="mt-6 text-light select-none flex-1 flex flex-col">
         <ul class="flex flex-col flex-1 justify-between">
-            {{-- {{ dd(session('permissions')) }} --}}
-            <div class="h-[37rem] overflow-y-auto">
+            <div class="h-[50rem] overflow-y-auto">
                 @foreach (session('permissions') as $permission)
                     @if ($permission['nombre'] != 'Dashboard')
                         {{-- Dasboard --}}
@@ -36,7 +35,7 @@
                         </li>
                     @else
                         @if ($permission['valor'] >= 0)
-                            <li>
+                            <li class="sticky top-0 bg-dark z-10">
                                 <a href="{{ route('dashboard.show') }}"
                                     class="flex items-center gap-6 hover:text-ldark border-ldark border-b-2 pb-5 ps-4 cursor-pointer">
                                     <object class="grid grid-cols-2 gap-1 h-6 items-center">

@@ -2,7 +2,7 @@
 
 @section('content')
     <div class="w-full bg-ldark pt-28 h-[100vh]">
-        <div class="mx-auto flex flex-col p-5 rounded-xl bg-light/80 md:w-96 w-72 shadow-2xl shadow-dark">
+        <div class="mx-auto flex flex-col p-5 rounded-xl bg-light md:w-96 w-72 shadow-2xl shadow-dark">
             <form class="flex flex-col gap-4" method="post" action="{{ route('resetPassword.submit') }}">
                 @csrf
                 <h2 class="md:text-3xl text-2xl text-center font-semibold text-dark">Cambiar Contraseña</h2>
