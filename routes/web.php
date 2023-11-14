@@ -88,9 +88,9 @@ function SimpleRoutes($prefix, $uri_prefix, $extraId, $uri_suffix, $url_name, $t
  * @param array $changes Changes should perform to the request for the API 
  * @return void
  */
-function ChildRoutes($father_route, $endpoint, $uri_prefix, $extraId, $uri_suffix, $url_name, $title, $id_name, $form_title, $validation_rules, $changes = [], $employeesForForm = false)
+function ChildRoutes($father_prefix, $father_route, $endpoint, $uri_prefix, $extraId, $uri_suffix, $url_name, $title, $id_name, $form_title, $validation_rules, $changes = [], $employeesForForm = false)
 {
-    Route::prefix($father_route)->group(function () use ($father_route, $endpoint, $uri_prefix, $extraId, $uri_suffix, $url_name, $title, $id_name, $form_title, $validation_rules, $changes, $employeesForForm) {
+    Route::prefix($father_prefix)->group(function () use ($father_route, $endpoint, $uri_prefix, $extraId, $uri_suffix, $url_name, $title, $id_name, $form_title, $validation_rules, $changes, $employeesForForm) {
         $controller = new CompanyController($endpoint, $uri_prefix, $extraId, $uri_suffix, $title, $url_name, $id_name, $father_route);
 
         Route::get('{father_id}/' . $endpoint . '/{id}', function ($father_id, $id) use ($controller) {
@@ -142,7 +142,7 @@ Route::controller(SessionController::class)->group(function () {
 
     Route::get('resetPassword', 'getEmail')->name('resetPassword.form');
 
-    Route::post('resetPassword', 'sedToken')->name('resetPassword.submit');
+    Route::post('resetPassword', 'sendToken')->name('resetPassword.submit');
 
     Route::get('changePassword', 'changePassword')->name('changePassword.form');
 
@@ -270,6 +270,7 @@ Route::middleware('needToken')->group(function () {
 
     ChildRoutes(
         'codigos-de-pago',
+        'company.pay-codes',
         'politicas-de-pago',
         'companies',
         'payCode',
@@ -442,6 +443,53 @@ Route::middleware('needToken')->group(function () {
 
         Route::delete('{id}', 'delete')->where('id', '[0-9]+')->name('employees.general.delete');
     });
+
+    ChildRoutes(
+        'empleados',
+        'employees.general',
+        'familiares',
+        'employees',
+        'emp',
+        'relatives',
+        'employees.relatives',
+        'Familiares',
+        'familiar',
+        'un Familiar',
+        [
+            'nombre' => 'required | string | max:40',
+            'apellido_paterno' => 'required | string | max:20',
+            'apellido_materno' => 'required | string | max:20',
+            'parentesco' => 'required | integer | min:0 ',
+            'teléfono' => 'required | string | size:10',
+            'teléfono_de_respaldo' => 'nullable | sometimes | string | size:10',
+        ],
+        [
+            'apellido_paterno' => 'apellidoP',
+            'apellido_materno' => 'apellidoM',
+            'parentesco' => 'int',
+            'teléfono' => 'telefono',
+            'teléfono_de_respaldo' => 'telefono2',
+        ]
+    );
+
+    ChildRoutes(
+        'empleados',
+        'employees.general',
+        'documentos',
+        'employees',
+        'emp',
+        'documents',
+        'employees.documents',
+        'Documentos',
+        'documento',
+        'un Documento',
+        [
+            'nombre' => 'required | string',
+            'tipo' => 'required | integer | min:1',
+            'info' => 'required | string'
+        ],
+        []
+    );
 });
 
 Route::middleware('needToken')->group(function () {

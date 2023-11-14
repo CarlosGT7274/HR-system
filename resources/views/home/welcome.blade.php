@@ -1,5 +1,5 @@
 @extends('layouts.base')
 
 @section('content')
-    <h1 class="flex flex-row items-center justify-center text-4xl h-[100vh]">Bienvenido de Nuevo!</h1>
+    <h1 class="flex flex-row items-center justify-center text-4xl h-full">Bienvenido de Nuevo!</h1>
 @endsection

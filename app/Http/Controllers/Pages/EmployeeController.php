@@ -183,7 +183,6 @@ class EmployeeController extends Controller
             $this->permisos = session('permissions')[2]['sub_permissions'][205];
         }
 
-        $roles = $this->apiRequest('rols', 'GET', [])['data'];
         $companyInfo = [];
         $companyInfo['unidades'] = $this->apiRequest('companies/' . session('company') . '/units', 'GET', [])['data'];
         $companyInfo['departamentos'] = $this->apiRequest('companies/' . session('company') . '/departments', 'GET', [])['data'];
@@ -192,20 +191,21 @@ class EmployeeController extends Controller
         $companyInfo['horarios'] = $this->apiRequest('companies/' . session('company') . '/schedules', 'GET', [])['data'];
 
         $employee = $this->apiRequest('employees/' . $id, 'GET', [])['data'];
-        $user = $this->apiRequest('users/' . $employee['id_usuario'], 'GET', [])['data'];
-        $terminal_user = $this->apiRequest('biometrics/employees/' . $employee['id_terminal_user'], 'GET', [])['data'];
 
         $data = [
             'pageTitle' => $this->page_title,
             'base_route' => $this->base_route,
             'id_name' => $this->id_name,
-            'user' => $user,
-            'roles' => $roles,
+            'user' => $this->apiRequest('users/' . $employee['id_usuario'], 'GET', [])['data'],
+            'roles' => $this->apiRequest('rols', 'GET', [])['data'],
             'employee' => $employee,
             'companyInfo' => $companyInfo,
-            'terminal_user' => $terminal_user,
+            'terminal_user' => $this->apiRequest('biometrics/employees/' . $employee['id_terminal_user'], 'GET', [])['data'],
             'father_url' => '',
             'father_id' => '',
+            'relatives' => $this->apiRequest('employees/' . $id . '/relatives', 'GET', [])['data'],
+            'images' => $this->apiRequest('employees/' . $id . '/images', 'GET', [])['data'],
+            'documents' => $this->apiRequest('employees/' . $id . '/documents', 'GET', [])['data'],
             'permisos' => $this->permisos
         ];
 

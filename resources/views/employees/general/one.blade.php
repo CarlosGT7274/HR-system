@@ -26,8 +26,38 @@
 
         @include('employees.general.one-forms.att-form')
 
-        <section>
+        <section class="mt-8 grid grid-cols-2 md:grid-cols-3 xl:grid-cols-4 gap-10">
+            @foreach ($relatives as $item)
+                <a class="border-b-2 border-ldark hover:border-primary w-full text-center font-semibold cursor-pointer select-none h-16 hover:text-primary flex flex-col items-center justify-center"
+                    href="{{ route('employees.relatives.one', ['id' => $item['id_familiar'], 'father_id' => $employee['id_empleado']]) }}">
+                    <p>
+                        {{ $item['nombre'] . ' ' . $item['apellidoP'] . ' ' . $item['apellidoM'] }}
+                    </p>
+                </a>
+            @endforeach
+            @if (3 >= 2 && (3 - 4 >= 2 || 3 < 4) && ((3 - 8 != 4 && 3 - 8 != 5) || 3 < 8))
+                <a class="border-b-2 border-ldark hover:border-success w-full text-center font-semibold cursor-pointer select-none h-16 hover:text-success flex items-center justify-center"
+                    href="{{ route('employees.relatives.form', ['father_id' => $employee['id_empleado']]) }}">
+                    <i class="fa-solid fa-plus fa-xl"></i>
+                </a>
+            @endif
+        </section>
 
+        <section class="mt-8 grid grid-cols-2 md:grid-cols-3 xl:grid-cols-4 gap-10">
+            @foreach ($documents as $item)
+                <a class="border-b-2 border-ldark hover:border-primary w-full text-center font-semibold cursor-pointer select-none h-16 hover:text-primary flex flex-col items-center justify-center"
+                    href="{{ route('employees.documents.one', ['id' => $item['id_familiar'], 'father_id' => $employee['id_empleado']]) }}">
+                    <p>
+                        {{ $item['nombre'] }}
+                    </p>
+                </a>
+            @endforeach
+            @if (3 >= 2 && (3 - 4 >= 2 || 3 < 4) && ((3 - 8 != 4 && 3 - 8 != 5) || 3 < 8))
+                <a class="border-b-2 border-ldark hover:border-success w-full text-center font-semibold cursor-pointer select-none h-16 hover:text-success flex items-center justify-center"
+                    href="{{ route('employees.documents.form', ['father_id' => $employee['id_empleado']]) }}">
+                    <i class="fa-solid fa-plus fa-xl"></i>
+                </a>
+            @endif
         </section>
 
     </article>

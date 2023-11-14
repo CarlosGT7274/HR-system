@@ -77,17 +77,17 @@ Route::prefix('v1')->group(function () {
 
     Route::prefix('privileges')->group(function () {
         $controller = new SimpleCRUDController(new sys_permisos);
-        
-        Route::get('', function () use ($controller){
+
+        Route::get('', function () use ($controller) {
             return $controller->readAll([]);
         });
 
-        Route::get('{id}', function ($id) use ($controller){
+        Route::get('{id}', function ($id) use ($controller) {
             return $controller->readOne($id, []);
         });
 
-        Route::post('', function (Request $request) use ($controller){
-            
+        Route::post('', function (Request $request) use ($controller) {
+
             $response = $controller->create(
                 $request,
                 [],
@@ -100,7 +100,7 @@ Route::prefix('v1')->group(function () {
                 ]
             );
 
-            foreach( sys_roles::all() as $rol){
+            foreach (sys_roles::all() as $rol) {
                 sys_roles_permisos::create([
                     'id_rol' => $rol['id_rol'],
                     'id_permiso' => $request['id_permiso'],
@@ -109,10 +109,9 @@ Route::prefix('v1')->group(function () {
             }
 
             return $response;
-            
         });
 
-        Route::put('{id}', function ($id, Request $request) use ($controller){
+        Route::put('{id}', function ($id, Request $request) use ($controller) {
             return $controller->update(
                 $id,
                 $request,
@@ -126,7 +125,7 @@ Route::prefix('v1')->group(function () {
             );
         });
 
-        Route::delete('{id}', function ($id) use ($controller){
+        Route::delete('{id}', function ($id) use ($controller) {
             return $controller->delete($id);
         });
     });
@@ -676,7 +675,7 @@ Route::prefix('v1')->group(function () {
                 });
             });
 
-            Route::prefix('image')->group(function () {
+            Route::prefix('images')->group(function () {
                 $controller = new SimpleCRUDController(new hr_imagenes);
 
                 Route::get('', function ($id_employee) use ($controller) {
@@ -729,9 +728,9 @@ Route::prefix('v1')->group(function () {
                             'nombre' => 'required | string | max:40',
                             'apellidoP' => 'required | string | max:20',
                             'apellidoM' => 'required | string | max:20',
-                            'parentesco' => 'required | integer | min:1',
+                            'parentesco' => 'required | integer | min:0',
                             'telefono' => 'required | string | size:10',
-                            'telefono2' => 'required | string | size:10',
+                            'telefono2' => 'nullable | sometimes | string | size:10',
                         ],
                         true
                     );

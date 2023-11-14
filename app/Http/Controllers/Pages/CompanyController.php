@@ -12,16 +12,17 @@ class CompanyController extends Controller
      *
      * @return void
      */
-    public function __construct( private $prefix, private $uri_prefix, private $extraId, private $uri_suffix, private $pageTitle, private $baseUrl, private $id_name, private $father_url = '')
+    public function __construct(private $prefix, private $uri_prefix, private $extraId, private $uri_suffix, private $pageTitle, private $baseUrl, private $id_name, private $father_url = '')
     {
     }
 
-    function getPermissions($array) {
+    function getPermissions($array)
+    {
         foreach ($array as $item) {
             if ($item['endpoint'] === $this->prefix) {
                 return $item['valor'];
             }
-    
+
             if (isset($item['sub_permissions'])) {
                 $value = $this->getPermissions($item['sub_permissions']);
                 if ($value !== null) {
@@ -29,7 +30,7 @@ class CompanyController extends Controller
                 }
             }
         }
-    
+
         return null;
     }
 
@@ -44,6 +45,9 @@ class CompanyController extends Controller
             case 'company':
                 $endpoint .= '/' . session('company');
                 break;
+            case 'emp':
+                $endpoint .= '/' . $father_id;
+                break;
 
             default:
                 # code...
@@ -56,7 +60,7 @@ class CompanyController extends Controller
         }
         return $endpoint;
     }
-    
+
     private $value = null;
 
     public function getAll()
@@ -66,15 +70,14 @@ class CompanyController extends Controller
             $this->value = $this->getPermissions(session('permissions'));
         }
 
-        // dd($value);
-    //    dd( session('permissions'));
+
         $data = [
             'pageTitle' => $this->pageTitle,
             'data' => $this->apiRequest($this->getEndpoint(), 'GET', [])['data'],
             'nombre' => '',
             'base_route' => $this->baseUrl,
             'id_name' => $this->id_name,
-            'permiso'=> $this->value
+            'permiso' => $this->value
         ];
 
         return view($this->baseUrl . '.all', $data);
@@ -86,7 +89,6 @@ class CompanyController extends Controller
             $this->value = $this->getPermissions(session('permissions'));
         }
         // $value = $this->getPermissions(session('permissions'));
-        // dd($value);
         $data = [
             'pageTitle' => $this->pageTitle,
             'data' => $this->apiRequest($this->getEndpoint($father_id) . '/' . $id, 'GET', [])['data'],
@@ -95,12 +97,12 @@ class CompanyController extends Controller
             'id_name' => $this->id_name,
             'father_id' => $father_id,
             'father_url' => $this->father_url,
-            'permiso'=> $this->value
+            'permiso' => $this->value
         ];
 
-        if($this->pageTitle == 'Excepciones') {
+        if ($this->pageTitle == 'Excepciones') {
             $data['empleados'] = $this->apiRequest('companies/' . session('company') . '/employees', 'GET', [])['data'];
-            
+
             $data['codigos'] = $this->apiRequest('companies/' . session('company') . '/payCodes', 'GET', [])['data'];
         }
 
@@ -141,7 +143,6 @@ class CompanyController extends Controller
 
     public function create(Request $request, $validationRules, $changes = [], $father_id = '')
     {
-        // dd($request->all());
         $request->validate($validationRules);
 
         $data = $this->UpdateRequest($request, $changes);
@@ -154,7 +155,7 @@ class CompanyController extends Controller
     public function delete($id, $father_id = '')
     {
         $response = $this->apiRequest($this->getEndpoint($father_id) . '/' . $id, 'DELETE', []);
-        dd($response);
+
         if ($response['error']) {
             return $this->getOne($id, true, $father_id);
         } else {
@@ -165,10 +166,9 @@ class CompanyController extends Controller
     public function update($id, Request $request, $validationRules, $changes = [], $father_id = '')
     {
         $request->validate($validationRules);
-        // dd($request->all());
 
         $data = $this->UpdateRequest($request, $changes);
-        // dd($data);
+
         $this->apiRequest($this->getEndpoint($father_id) . '/' . $id, 'PUT', $data);
 
         return $father_id ? redirect()->route($this->baseUrl . '.one', ['id' => $id, 'father_id' => $father_id]) : redirect()->route($this->baseUrl . '.one', ['id' => $id]);
