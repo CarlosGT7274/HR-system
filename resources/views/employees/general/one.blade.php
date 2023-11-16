@@ -20,44 +20,83 @@
             </form>
         </header>
 
-        @include('employees.general.one-forms.sys-form')
+        <div class="grid grid-cols-1 lg:grid-cols-[2fr_3fr] xl:grid-cols-[1fr_3fr] gap-x-8 p-2">
+            @if ($image)
+                <section id="profile-pic" class="relative">
+                    <img alt="Foto de perfil del empleado"
+                        class="h-80 lg:h-full object-cover rounded-lg w-full my-3 md:m-0 xl:h-80 sm:object-[50%_80%] lg:object-[50%_50%]"
+                        src="{{ 'data:image/png;' . $image['info'] }}">
 
-        @include('employees.general.one-forms.hr-form')
-
-        @include('employees.general.one-forms.att-form')
-
-        <section class="mt-8 grid grid-cols-2 md:grid-cols-3 xl:grid-cols-4 gap-10">
-            @foreach ($relatives as $item)
-                <a class="border-b-2 border-ldark hover:border-primary w-full text-center font-semibold cursor-pointer select-none h-16 hover:text-primary flex flex-col items-center justify-center"
-                    href="{{ route('employees.relatives.one', ['id' => $item['id_familiar'], 'father_id' => $employee['id_empleado']]) }}">
-                    <p>
-                        {{ $item['nombre'] . ' ' . $item['apellidoP'] . ' ' . $item['apellidoM'] }}
-                    </p>
-                </a>
-            @endforeach
-            @if (3 >= 2 && (3 - 4 >= 2 || 3 < 4) && ((3 - 8 != 4 && 3 - 8 != 5) || 3 < 8))
-                <a class="border-b-2 border-ldark hover:border-success w-full text-center font-semibold cursor-pointer select-none h-16 hover:text-success flex items-center justify-center"
-                    href="{{ route('employees.relatives.form', ['father_id' => $employee['id_empleado']]) }}">
-                    <i class="fa-solid fa-plus fa-xl"></i>
-                </a>
+                    <div id="buttons" class="absolute top-[-0.8rem] right-[-0.8rem]">
+                        <button id="edit-img" class="rounded-full border-dark border-2 h-8 w-8 bg-light">
+                            <i class="fa-solid fa-pencil"></i>
+                        </button>
+                    </div>
+                </section>
+                @include('employees.general.one-forms.img')
+            @else
+                @include('employees.general.one-forms.img-create')
             @endif
+
+            @include('employees.general.one-forms.sys')
+        </div>
+
+        @include('employees.general.one-forms.hr')
+
+        @include('employees.general.one-forms.att')
+
+        <section class="mt-6 border-b-2 border-b-ldark pb-5">
+            <header class="mb-4 flex flex-row gap-5 items-center">
+                <h2 class="text-xl font-semibold">Familiares</h2>
+            </header>
+            <section class="mt-4 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 xl:grid-cols-4 gap-10">
+                @foreach ($relatives as $item)
+                    <a class="border-b-2 border-ldark hover:border-primary w-full text-center font-semibold cursor-pointer select-none h-16 hover:text-primary flex flex-col items-center justify-center"
+                        href="{{ route('employees.relatives.one', ['id' => $item['id_familiar'], 'father_id' => $employee['id_empleado']]) }}">
+                        <p>
+                            {{ $item['nombre'] . ' ' . $item['apellidoP'] . ' ' . $item['apellidoM'] }}
+                        </p>
+                    </a>
+                @endforeach
+                @if (
+                    $permisos['sub_permissions'][2052]['valor'] >= 2 &&
+                        ($permisos['sub_permissions'][2052]['valor'] - 4 >= 2 || $permisos['sub_permissions'][2052]['valor'] < 4) &&
+                        (($permisos['sub_permissions'][2052]['valor'] - 8 != 4 &&
+                            $permisos['sub_permissions'][2052]['valor'] - 8 != 5) ||
+                            $permisos['sub_permissions'][2052]['valor'] < 8))
+                    <a class="border-b-2 border-ldark hover:border-success w-full text-center font-semibold cursor-pointer select-none h-16 hover:text-success flex items-center justify-center"
+                        href="{{ route('employees.relatives.form', ['father_id' => $employee['id_empleado']]) }}">
+                        <i class="fa-solid fa-plus fa-xl"></i>
+                    </a>
+                @endif
+            </section>
         </section>
 
-        <section class="mt-8 grid grid-cols-2 md:grid-cols-3 xl:grid-cols-4 gap-10">
-            @foreach ($documents as $item)
-                <a class="border-b-2 border-ldark hover:border-primary w-full text-center font-semibold cursor-pointer select-none h-16 hover:text-primary flex flex-col items-center justify-center"
-                    href="{{ route('employees.documents.one', ['id' => $item['id_familiar'], 'father_id' => $employee['id_empleado']]) }}">
-                    <p>
-                        {{ $item['nombre'] }}
-                    </p>
-                </a>
-            @endforeach
-            @if (3 >= 2 && (3 - 4 >= 2 || 3 < 4) && ((3 - 8 != 4 && 3 - 8 != 5) || 3 < 8))
-                <a class="border-b-2 border-ldark hover:border-success w-full text-center font-semibold cursor-pointer select-none h-16 hover:text-success flex items-center justify-center"
-                    href="{{ route('employees.documents.form', ['father_id' => $employee['id_empleado']]) }}">
-                    <i class="fa-solid fa-plus fa-xl"></i>
-                </a>
-            @endif
+        <section class="mt-6 border-b-2 border-b-ldark pb-5">
+            <header class="mb-4 flex flex-row gap-5 items-center">
+                <h2 class="text-xl font-semibold">Documentos</h2>
+            </header>
+            <section class="mt-4 grid grid-cols-2 md:grid-cols-3 xl:grid-cols-4 gap-10">
+                @foreach ($documents as $item)
+                    <a class="border-b-2 border-ldark hover:border-primary w-full text-center font-semibold cursor-pointer select-none h-16 hover:text-primary flex flex-col items-center justify-center"
+                        href="{{ route('employees.documents.one', ['id' => $item['id_familiar'], 'father_id' => $employee['id_empleado']]) }}">
+                        <p>
+                            {{ $item['nombre'] }}
+                        </p>
+                    </a>
+                @endforeach
+                @if (
+                    $permisos['sub_permissions'][2055]['valor'] >= 2 &&
+                        ($permisos['sub_permissions'][2055]['valor'] - 4 >= 2 || $permisos['sub_permissions'][2055]['valor'] < 4) &&
+                        (($permisos['sub_permissions'][2055]['valor'] - 8 != 4 &&
+                            $permisos['sub_permissions'][2055]['valor'] - 8 != 5) ||
+                            $permisos['sub_permissions'][2055]['valor'] < 8))
+                    <a class="border-b-2 border-ldark hover:border-success w-full text-center font-semibold cursor-pointer select-none h-16 hover:text-success flex items-center justify-center"
+                        href="{{ route('employees.documents.form', ['father_id' => $employee['id_empleado']]) }}">
+                        <i class="fa-solid fa-plus fa-xl"></i>
+                    </a>
+                @endif
+            </section>
         </section>
 
     </article>
@@ -65,5 +104,11 @@
 
 
 @section('js-scripts')
+    @if ($image)
+        @vite('resources/js/imageInputU.js')
+    @else
+        @vite('resources/js/imageInputC.js')
+    @endif
+    @vite('resources/js/dragAndDrop.js')
     @vite('resources/js/inputs.js')
 @endsection

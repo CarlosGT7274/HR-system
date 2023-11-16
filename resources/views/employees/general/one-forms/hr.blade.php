@@ -1,5 +1,5 @@
 <form class="mt-6 border-b-2 border-b-ldark pb-5" method="POST"
-    action="{{ route($base_route . '.update.HR', ['id' => $employee['id_empleado']]) }}">
+    action="{{ route($base_route . '.update.HR', ['id' => $employee['id_empleado'], 'id_employee' => $employee['id_empleado']]) }}">
     @csrf
     @method('PUT')
 
@@ -23,6 +23,7 @@
             </button>
         </div>
     </header>
+
     <section class="p-3 flex flex-col gap-2">
         <header class="py-2 text-lg border-b-2"> Informacion Personal </header>
         <section class="sm:grid sm:grid-cols-2 xl:grid-cols-3 md:gap-8 xl:gap-x-20">

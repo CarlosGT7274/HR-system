@@ -114,8 +114,6 @@ class HomeController extends Controller
                         $newKey = 'region';
                         break;
                 }
-
-
                 $apiParams[$newKey] = $param;
             }
         }

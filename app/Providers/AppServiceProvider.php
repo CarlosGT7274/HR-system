@@ -82,6 +82,32 @@ class AppServiceProvider extends ServiceProvider
             'Sobrina',
         ];
 
+        $file_types = [
+            '.txt' => 'text/plain',
+            '.rtf' => 'application/rtf',
+            '.doc' => 'application/msword',
+            '.docx' => 'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
+            '.pdf' => 'application/pdf',
+            '.csv' => 'text/csv',
+            '.xml' => 'application/xml',
+            '.json' => 'application/json',
+            '.zip' => 'application/zip',
+            '.rar' => 'application/x-rar-compressed',
+            '.7z' => 'application/x-7z-compressed',
+            '.mp3' => 'audio/mpeg',
+            '.wav' => 'audio/wav',
+            '.mp4' => 'video/mp4',
+            '.avi' => 'video/x-msvideo',
+            '.webm' => 'video/webm',
+            '.jpg' => 'image/jpeg',
+            '.jpeg' => 'image/jpeg',
+            '.png' => 'image/png',
+            '.gif' => 'image/gif',
+            '.bmp' => 'image/bmp',
+            '.svg' => 'image/svg+xml',
+            '.webp' => 'image/webp',
+        ];
+
         $this->app->instance('parentescos', $parentescos);
     }
 

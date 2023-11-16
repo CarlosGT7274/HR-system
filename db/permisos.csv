@@ -13,7 +13,7 @@ id_permiso,padre,nombre,endpoint,activo
 201,2,Unidades,unidades,1
 202,2,Departamentos,departamentos,1
 203,2,Puestos,puestos,1
-204,2,Conceptos,conceptos,1
+204,2,Horarios,horarios,1
 205,2,Empleados,empleados,1
 206,2,Aprovaciones,aprobacion,1
 207,2,Vacaciones,vacaciones,1
@@ -21,6 +21,7 @@ id_permiso,padre,nombre,endpoint,activo
 209,2,Tipos de Empleados,tipos-empleados,1
 210,2,Dias Feriados,dias-feriados,1
 211,2,Códigos de Pago,codigos-de-pago,1
+212,2,Politicas de Pago,politicas-de-pago,1
 301,3,Dispositivos,biometricos,1
 302,3,Sincronizar Datos,sincronizar,1
 303,3,Cargar Eventos USB,datosusb,1

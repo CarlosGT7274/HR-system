@@ -12,7 +12,7 @@
             @yield('form')
         </section>
 
-        <section class="mt-8 grid grid-cols-2 md:grid-cols-3 xl:grid-cols-4 gap-10">
+        <section class="mt-8 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-10">
             @yield('component')
             @if ($permiso >= 2 && ($permiso - 4 >= 2 || $permiso < 4) && (($permiso - 8 != 4 && $permiso - 8 != 5) || $permiso < 8))
                 <a class="border-b-2 border-ldark hover:border-success w-full text-center font-semibold cursor-pointer select-none h-16 hover:text-success flex items-center justify-center"

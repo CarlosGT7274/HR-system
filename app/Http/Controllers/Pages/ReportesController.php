@@ -34,30 +34,17 @@ class ReportesController extends Controller
 
     public function homeAsistencias(Request $request)
     {
-        // dd($request);
+        $fin = Carbon::now()->format('Y-m-d');
+        $inicio = Carbon::now()->subWeek()->format('Y-m-d');
+
         if ($request->method() === 'POST') {
-            //do notingh
             $request->validate([
-                'inicio' => 'required',
-                'fin' => 'required'
+                'inicio' => 'required | date | date_format:Y-m-d',
+                'fin' => 'required | date | date_format:Y-m-d'
             ]);
-        }
-        // dd($request->all());
-        // echo Carbon::now()->subMonth()->format('Y-m-d');
-        if ($request->has('inicio') && $request->has('fin')) {
-            if (empty($request->input('inicio')) && empty($request->input('fin'))) {
-                $fin = Carbon::now()->format('Y-m-d');
-                $inicio = Carbon::now()->subWeek()->format('Y-m-d');
-                // dd('c');    
-            } else {
-                $fin = $request->input('fin');
-                $inicio = $request->input('inicio');
-                // dd('a');
-            }
-        } else {
-            // dd('b');
-            $fin = Carbon::now()->format('Y-m-d');
-            $inicio = Carbon::now()->subWeek()->format('Y-m-d');
+
+            $fin = $request->input('fin');
+            $inicio = $request->input('inicio');
         }
 
         $data = [
@@ -103,7 +90,8 @@ class ReportesController extends Controller
         return view('Reportes.incidencias', $data);
     }
 
-    public function aboutVacaciones(Request $request){
+    public function aboutVacaciones(Request $request)
+    {
 
         if ($request->has('inicio') && $request->has('fin')) {
             if (empty($request->input('inicio')) && empty($request->input('fin'))) {
@@ -134,7 +122,8 @@ class ReportesController extends Controller
         return view('Reportes.vacaciones', $data);
     }
 
-    public function reporteRotaciones(Request $request){  
+    public function reporteRotaciones(Request $request)
+    {
         if ($request->has('inicio') && $request->has('fin')) {
             if (empty($request->input('inicio')) && empty($request->input('fin'))) {
                 $fin = Carbon::now()->format('Y-m-d');
@@ -162,10 +151,10 @@ class ReportesController extends Controller
         ];
 
         return view('Reportes.Rotaciones', $data);
+    }
 
-      }
-
-      public function reporteTerminales(Request $request){  
+    public function reporteTerminales(Request $request)
+    {
         if ($request->has('inicio') && $request->has('fin')) {
             if (empty($request->input('inicio')) && empty($request->input('fin'))) {
                 $fin = Carbon::now()->format('Y-m-d');
@@ -193,10 +182,10 @@ class ReportesController extends Controller
         ];
 
         return view('Reportes.reportTerminales', $data);
+    }
 
-      }
-
-    public function reportedelays(Request $request){
+    public function reportedelays(Request $request)
+    {
         if ($request->has('inicio') && $request->has('fin')) {
             if (empty($request->input('inicio')) && empty($request->input('fin'))) {
                 $fin = Carbon::now()->format('Y-m-d');
@@ -254,6 +243,4 @@ class ReportesController extends Controller
 
         return $pdf->download('Reporte.pdf');
     }
-
-
 }

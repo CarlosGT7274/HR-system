@@ -1,5 +1,5 @@
-<form class="mt-6 border-b-2 border-b-ldark pb-5" method="POST"
-    action="{{ route($base_route . '.update.SYS', ['id' => $user['id_usuario']]) }}">
+<form class="my-auto border-b-2 border-b-ldark pb-6" method="POST"
+    action="{{ route($base_route . '.update.SYS', ['id' => $user['id_usuario'], 'id_employee' => $employee['id_empleado']]) }}">
     @csrf
     @method('PUT')
 
@@ -20,7 +20,7 @@
         </div>
     </header>
 
-    <section class="sm:grid sm:grid-cols-2 xl:grid-cols-3 md:gap-8 xl:gap-x-20">
+    <section class="sm:grid sm:grid-cols-1 xl:grid-cols-2 md:gap-8 xl:gap-x-20">
         <div class="flex flex-row items-center gap-2 p-2">
             <label class="w-32" for="nombre">Nombre:</label>
             <input type="text" class="border-b-2 border-ldark cursor-default p-1 text-ldark flex-1" name="nombre"
@@ -39,9 +39,9 @@
         </div>
 
         <div class="flex flex-row items-center gap-2 p-2">
-            <label class="w-32" for="nombre">Correo:</label>
+            <label class="w-32" for="correo">Correo:</label>
             <input type="text" class="border-b-2 border-ldark cursor-default p-1 text-ldark flex-1" name="correo"
-                readonly value="{{ $user['email'] }}">
+                readonly value="{{ $user['email'] }}" id="correo">
         </div>
 
         <div class="flex flex-row items-center gap-2 p-2">

@@ -193,8 +193,6 @@ class SimpleCRUDController extends Controller
             $request["info"] = base64_decode($request["info"]);
         }
 
-        echo (base64_encode($request["info"]));
-
         return response()->json([
             'error' => $object->update($request->all()) ? false : true,
             'mensaje' => 'Cambios Realizados'

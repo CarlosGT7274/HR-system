@@ -301,12 +301,10 @@ Route::middleware('needToken')->group(function () {
         ]
     );
 
-    ChildRoutes(
-        'codigos-de-pago',
-        'company.pay-codes',
+    SimpleRoutes(
         'politicas-de-pago',
         'companies',
-        'payCode',
+        'company',
         'payPolitics',
         'company.pay-politics',
         'Políticas de Pago',
@@ -468,11 +466,15 @@ Route::middleware('needToken')->group(function () {
 
         Route::post('create', 'create')->name('employees.general.create');
 
-        Route::put('u-hr/{id}', 'update_HR')->where('id', '[0-9]+')->name('employees.general.update.HR');
+        Route::put('{id_employee}/hr/{id}', 'update_HR')->where('id_employee', '[0-9]+')->where('id', '[0-9]+')->name('employees.general.update.HR');
 
-        Route::put('u-sys/{id}', 'update_SYS')->where('id', '[0-9]+')->name('employees.general.update.SYS');
+        Route::put('{id_employee}/sys/{id}', 'update_SYS')->where('id_employee', '[0-9]+')->where('id', '[0-9]+')->name('employees.general.update.SYS');
 
-        Route::put('u-att/{id}', 'update_ATT')->where('id', '[0-9]+')->name('employees.general.update.ATT');
+        Route::put('{id_employee}/att/{id}', 'update_ATT')->where('id_employee', '[0-9]+')->where('id', '[0-9]+')->name('employees.general.update.ATT');
+
+        Route::post('{id_employee}/img', 'create_IMG')->where('id_employee', '[0-9]+')->name('employees.general.create.IMG');
+
+        Route::put('{id_employee}/img/{id}', 'update_IMG')->where('id_employee', '[0-9]+')->where('id', '[0-9]+')->name('employees.general.update.IMG');
 
         Route::delete('{id}', 'delete')->where('id', '[0-9]+')->name('employees.general.delete');
     });

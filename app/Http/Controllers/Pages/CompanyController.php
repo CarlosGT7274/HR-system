@@ -39,9 +39,6 @@ class CompanyController extends Controller
         $endpoint = $this->uri_prefix;
 
         switch ($this->extraId) {
-            case 'payCode':
-                $endpoint .= '/' . session('company') . '/payCodes' . '/' . $father_id;
-                break;
             case 'company':
                 $endpoint .= '/' . session('company');
                 break;

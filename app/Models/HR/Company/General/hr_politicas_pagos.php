@@ -31,7 +31,7 @@ class hr_politicas_pagos extends \App\Models\modeloBase
         'activo',
         'pagaFeriados',
         'pagaExtras',
-        'id_codigo_pago'
+        'id_empresa'
     ];
 
     /**
@@ -40,6 +40,6 @@ class hr_politicas_pagos extends \App\Models\modeloBase
      * @var string[]
      */
     protected $hidden = [
-        'id_codigo_pago'
+        'id_empresa'
     ];
 }

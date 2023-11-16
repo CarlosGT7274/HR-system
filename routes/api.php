@@ -532,47 +532,51 @@ Route::prefix('v1')->group(function () {
                 Route::delete('{id}', function ($id_company, $id) use ($controller) {
                     return $controller->delete($id);
                 });
+            });
 
-                Route::prefix('{id_payCod}/payPolitics')->group(function () {
-                    $controller = new SimpleCRUDController(new hr_politicas_pagos);
+            Route::prefix('payPolitics')->group(function () {
+                $controller = new SimpleCRUDController(new hr_politicas_pagos);
 
-                    Route::get('', function ($id_company, $id_payCod) use ($controller) {
-                        return $controller->readAll(['column' => 'id_codigo_pago', 'value' => $id_payCod]);
-                    });
+                Route::get('', function ($id_company) use ($controller) {
+                    return $controller->readAll(['column' => 'id_empresa', 'value' => $id_company]);
+                });
 
-                    Route::get('{id}', function ($id_company, $id_payCod, $id) use ($controller) {
-                        return $controller->readOne($id, ['column' => 'id_codigo_pago', 'value' => $id_payCod]);
-                    });
+                Route::get('{id}', function ($id_company, $id) use ($controller) {
+                    return $controller->readOne($id, ['column' => 'id_empresa', 'value' => $id_company]);
+                })->where('id', '[0-9]+');
 
-                    Route::post('', function ($id_company, $id_payCod, Request $request) use ($controller) {
-                        return $controller->create(
-                            $request,
-                            ['id_codigo_pago' => $id_payCod],
-                            [
-                                'nombre' => 'required | string',
-                                'activo' => 'required | integer | between:0,1',
-                                'pagaFeriados' => 'required | integer | between:0,1',
-                                'pagaExtras' => 'required | integer | between:0,1'
-                            ]
-                        );
-                    });
+                Route::get('{name}', function ($id_company, $name) use ($controller) {
+                    return $controller->searchByName($name, ['column' => 'id_empresa', 'value' => $id_company]);
+                });
 
-                    Route::put('{id}', function ($id_company, $id_payCod, $id, Request $request) use ($controller) {
-                        return $controller->update(
-                            $id,
-                            $request,
-                            [
-                                'nombre' => 'sometimes | required | string',
-                                'activo' => 'integer | between:0,1',
-                                'pagaFeriados' => 'integer | between:0,1',
-                                'pagaExtras' => 'integer | between:0,1'
-                            ]
-                        );
-                    });
+                Route::post('', function ($id_company, Request $request) use ($controller) {
+                    return $controller->create(
+                        $request,
+                        ['id_empresa' => $id_company],
+                        [
+                            'nombre' => 'required | string',
+                            'activo' => 'required | integer | between:0,1',
+                            'pagaFeriados' => 'required | integer | between:0,1',
+                            'pagaExtras' => 'required | integer | between:0,1'
+                        ]
+                    );
+                });
 
-                    Route::delete('{id}', function ($id_company, $id_payCod, $id) use ($controller) {
-                        return $controller->delete($id);
-                    });
+                Route::put('{id}', function ($id_company, $id, Request $request) use ($controller) {
+                    return $controller->update(
+                        $id,
+                        $request,
+                        [
+                            'nombre' => 'sometimes | required | string',
+                            'activo' => 'integer | between:0,1',
+                            'pagaFeriados' => 'integer | between:0,1',
+                            'pagaExtras' => 'integer | between:0,1'
+                        ]
+                    );
+                });
+
+                Route::delete('{id}', function ($id_company, $id) use ($controller) {
+                    return $controller->delete($id);
                 });
             });
 

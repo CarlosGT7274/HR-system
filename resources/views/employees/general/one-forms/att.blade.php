@@ -1,5 +1,5 @@
 <form class="mt-6 border-b-2 border-b-ldark pb-5" method="POST"
-    action="{{ route($base_route . '.update.ATT', ['id' => $terminal_user['emp_id']]) }}">
+    action="{{ route($base_route . '.update.ATT', ['id' => $terminal_user['emp_id'], 'id_employee' => $employee['id_empleado']]) }}">
     @csrf
     @method('PUT')
 
@@ -18,7 +18,6 @@
                 <i class="fa-solid fa-xmark fa-lg"></i>
             </button>
         </div>
-
     </header>
     <section class="sm:grid sm:grid-cols-2 xl:grid-cols-3 md:gap-8 xl:gap-x-20">
         @foreach ($terminal_user as $key => $algo)

@@ -3,9 +3,9 @@
 namespace App\Http\Controllers\Pages;
 
 use App\Http\Controllers\Controller;
-use Illuminate\Validation\Rule;
 use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
+use Illuminate\Support\Facades\File;
 
 class EmployeeController extends Controller
 {
@@ -29,7 +29,9 @@ class EmployeeController extends Controller
         'apellido_paterno' => 'apellidoP',
         'apellido_materno' => 'apellidoM',
         'rol' => 'id_rol',
-        'empresa' => 'id_empresa'
+        'empresa' => 'id_empresa',
+        'id_rol' => 'int',
+        'id_empresa' => 'int',
     ];
 
     private $ATT_validationRules = [
@@ -192,6 +194,8 @@ class EmployeeController extends Controller
 
         $employee = $this->apiRequest('employees/' . $id, 'GET', [])['data'];
 
+        $image = $this->apiRequest('employees/' . $id . '/images', 'GET', [])['data'];
+
         $data = [
             'pageTitle' => $this->page_title,
             'base_route' => $this->base_route,
@@ -204,9 +208,9 @@ class EmployeeController extends Controller
             'father_url' => '',
             'father_id' => '',
             'relatives' => $this->apiRequest('employees/' . $id . '/relatives', 'GET', [])['data'],
-            'images' => $this->apiRequest('employees/' . $id . '/images', 'GET', [])['data'],
+            'image' => $image ? $image[0] : '',
             'documents' => $this->apiRequest('employees/' . $id . '/documents', 'GET', [])['data'],
-            'permisos' => $this->permisos
+            'permisos' => $this->permisos,
         ];
 
         return view($this->base_route . '.one', $data);
@@ -216,7 +220,7 @@ class EmployeeController extends Controller
     {
     }
 
-    public function update_SYS($id, Request $request)
+    public function update_SYS($id_employee, $id, Request $request)
     {
         if ($this->permisos === null) {
             $this->permisos = session('permissions')[2]['sub_permissions'][205];
@@ -234,10 +238,10 @@ class EmployeeController extends Controller
 
         $this->apiRequest('users/' . $id, 'PUT', $data);
 
-        return redirect()->route($this->base_route . '.one', ['id' => $id]);
+        return redirect()->route($this->base_route . '.one', ['id' => $id_employee]);
     }
 
-    public function update_HR($id, Request $request)
+    public function update_HR($id_employee, $id, Request $request)
     {
         if ($this->permisos === null) {
             $this->permisos = session('permissions')[2]['sub_permissions'][205];
@@ -249,10 +253,10 @@ class EmployeeController extends Controller
 
         $this->apiRequest('employees/' . $id, 'PUT', $data);
 
-        return redirect()->route($this->base_route . '.one', ['id' => $id]);
+        return redirect()->route($this->base_route . '.one', ['id' => $id_employee]);
     }
 
-    public function update_ATT($id, Request $request)
+    public function update_ATT($id_employee, $id, Request $request)
     {
         if ($this->permisos === null) {
             $this->permisos = session('permissions')[2]['sub_permissions'][205];
@@ -264,7 +268,41 @@ class EmployeeController extends Controller
 
         $this->apiRequest('biometrics/employees/' . $id, 'PUT', $data);
 
-        return redirect()->route($this->base_route . '.one', ['id' => $id]);
+        return redirect()->route($this->base_route . '.one', ['id' => $id_employee]);
+    }
+
+    public function update_IMG($id_employee, $id, Request $request)
+    {
+        $request->validate([
+            'imagen' => 'required | image | mimes:jpeg,png,jpg,gif',
+        ]);
+
+        $imagen_bs64 = base64_encode(file_get_contents($request->file('imagen')->path()));
+
+        $data = [];
+
+        $data['info'] = $imagen_bs64;
+
+        $this->apiRequest('employees/' . $id_employee . '/images' . '/' . $id, 'PUT', $data);
+
+        return redirect()->route($this->base_route . '.one', ['id' => $id_employee]);
+    }
+
+    public function create_IMG($id_employee, Request $request)
+    {
+        $request->validate([
+            'imagen' => 'required | image | mimes:jpeg,png,jpg,gif',
+        ]);
+
+        $imagen_bs64 = base64_encode(file_get_contents($request->file('imagen')->path()));
+
+        $data = [];
+
+        $data['info'] = $imagen_bs64;
+
+        $this->apiRequest('employees/' . $id_employee . '/images', 'POST', $data);
+
+        return redirect()->route($this->base_route . '.one', ['id' => $id_employee]);
     }
 
     public function delete($id)
