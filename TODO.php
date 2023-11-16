@@ -1,8 +1,8 @@
 <?php
 
 /**
- * TODO: Empleados Foto
- * Empleados documentos
+ * *DONE: Empleados Foto
+ * TODO: Empleados documentos
  * Documentar BD
  * VERIFICAR checkbox en valores binarios
  * pantallas de admin para seleccionar una empresa

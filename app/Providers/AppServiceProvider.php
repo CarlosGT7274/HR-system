@@ -82,6 +82,8 @@ class AppServiceProvider extends ServiceProvider
             'Sobrina',
         ];
 
+        $this->app->instance('parentescos', $parentescos);
+
         $file_types = [
             '.txt' => 'text/plain',
             '.rtf' => 'application/rtf',
@@ -108,7 +110,7 @@ class AppServiceProvider extends ServiceProvider
             '.webp' => 'image/webp',
         ];
 
-        $this->app->instance('parentescos', $parentescos);
+        $this->app->instance('file_types', $file_types);
     }
 
     /**
