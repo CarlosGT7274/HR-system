@@ -16,7 +16,3 @@ dropArea.addEventListener("drop", function (event) {
     // Disparar el evento 'change'
     fileInput.dispatchEvent(changeEvent);
 });
-
-dropArea.addEventListener("click", function () {
-    fileInput.click();
-});

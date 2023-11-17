@@ -66,8 +66,6 @@ class CompanyController extends Controller
         if ($this->value === null) {
             $this->value = $this->getPermissions(session('permissions'));
         }
-
-
         $data = [
             'pageTitle' => $this->pageTitle,
             'data' => $this->apiRequest($this->getEndpoint(), 'GET', [])['data'],

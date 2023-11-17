@@ -22,14 +22,21 @@ class Controller extends BaseController
      */
     public function apiRequest($uri, $method, $params)
     {
-        $internalRequest = Request::create('/api/' . env('API_VERSION') . '/' . $uri, $method, $params, [], [], $_SERVER);
+        $internalRequest = Request::createFromBase(request());
+
+        $internalRequest->server->set('REQUEST_URI', '/api/' . env('API_VERSION') . '/' . $uri);
+
+        $internalRequest->setMethod($method);
+
+        $internalRequest->merge($params);
+
         $internalRequest->headers->set('Authorization', 'Bearer ' . session('token'));
 
         $response = app()->handle($internalRequest);
 
         if ($response->getStatusCode() == 500) {
-            // return ['error' => true, 'mensaje' => 'Error en el Servidor'];
-            return $response;
+            return ['error' => true, 'mensaje' => 'Error en el Servidor'];
+            // return $response;
         } else {
             $data = json_decode($response->getContent(), true);
             $data['code'] = $response->getStatusCode();

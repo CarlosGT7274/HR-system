@@ -308,4 +308,26 @@ class EmployeeController extends Controller
     public function delete($id)
     {
     }
+
+    public function search(Request $request)
+    {
+        if ($this->permisos === null) {
+            $this->permisos = session('permissions')[2]['sub_permissions'][205];
+        }
+
+        $request->validate([
+            'nombre' => 'required | string',
+        ]);
+
+        $data = [
+            'pageTitle' => $this->page_title,
+            'data' => $this->apiRequest('employees/' . $request->nombre, 'GET', [])['data'],
+            'nombre' => $request->nombre,
+            'base_route' => $this->base_route,
+            'id_name' => $this->id_name,
+            'permiso' => $this->permisos['valor']
+        ];
+
+        return view($this->base_route . '.all', $data);
+    }
 }

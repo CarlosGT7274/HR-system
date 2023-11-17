@@ -64,6 +64,8 @@ Route::prefix('v1')->group(function () {
 
         Route::post('refresh', 'refresh');
 
+        Route::get('validate', 'validateToken');
+
         Route::get('me', 'me');
 
         Route::get('resetToken', 'generateResetToken');
@@ -603,7 +605,9 @@ Route::prefix('v1')->group(function () {
         Route::controller(EmpleadosController::class)->group(function () {
             Route::get('', 'readAll');
 
-            Route::get('{id}', 'readOne');
+            Route::get('{id}', 'readOne')->where('id', '[0-9]+');
+
+            Route::get('{name}', 'search');
 
             Route::post('', 'create');
 

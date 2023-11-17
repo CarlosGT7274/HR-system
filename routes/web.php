@@ -9,7 +9,6 @@ use App\Http\Controllers\Pages\SessionController;
 use App\Http\Controllers\Pages\systemController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
-use Illuminate\Validation\Rule;
 
 /**
 |--------------------------------------------------------------------------

@@ -10,6 +10,10 @@ use App\Models\HR\Employee\General\hr_vacaciones;
 use App\Models\HR\Employee\Incidencies\hr_faltas;
 use App\Models\HR\Employee\Incidencies\hr_incidencias;
 use App\Models\HR\Employee\Incidencies\hr_movimientos_vacaciones;
+use App\Models\HR\Company\Employment\hr_departamentos;
+use App\Models\HR\Company\Employment\hr_puestos;
+use App\Models\HR\Company\Employment\hr_tipos_empleados;
+use App\Models\HR\Company\Employment\hr_unidades;
 use App\Models\SYS\sys_usuarios;
 use App\Models\SYS\sys_usuarios_empresas;
 use Illuminate\Http\Request;
@@ -53,7 +57,7 @@ class EmpleadosController extends Controller
         if (empty($employee)) {
             return response()->json([
                 'error' => true,
-                'message' => 'Empleado Inexiste'
+                'message' => 'Empleado Inexistente'
             ], 404);
         }
 
@@ -131,7 +135,7 @@ class EmpleadosController extends Controller
 
         return response()->json([
             'error' => false,
-            'mensaje' => 'insercion exitosa'
+            'mensaje' => 'Inserción exitosa'
         ], 200);
     }
 
@@ -366,7 +370,7 @@ class EmpleadosController extends Controller
             if (empty($mv_faltas)) {
                 return response()->json([
                     'error' => true,
-                    'message' => 'no se pudo completar la accion'
+                    'message' => 'no se pudo completar la acción'
                 ], 404);
             }
 
@@ -425,7 +429,7 @@ class EmpleadosController extends Controller
             if (empty($mv_faltas)) {
                 return response()->json([
                     'error' => true,
-                    'message' => 'no se pudo completar la accion'
+                    'message' => 'no se pudo completar la acción'
                 ], 404);
             }
         }
@@ -632,6 +636,28 @@ class EmpleadosController extends Controller
         return response()->json([
             'error' => false,
             'message' => 'Registro Creado'
+        ], 200);
+    }
+
+    public function search($name)
+    {
+        $data = sys_usuarios::join('hr_empleados', 'sys_usuarios.id_usuario', '=', 'hr_empleados.id_usuario')->where('nombre', 'LIKE', '%' . $name . '%')
+            ->orWhere('apellidoP', 'LIKE', '%' . $name . '%')
+            ->orWhere('apellidoM', 'LIKE', '%' . $name . '%')->get();
+
+        if (!empty($data)) {
+            foreach ($data as $employee) {
+                $employee['id_unidad'] = hr_unidades::find($employee['id_unidad'])['nombre'];
+                $employee['id_departamento'] = hr_departamentos::find($employee['id_departamento'])['nombre'];
+                $employee['id_puesto'] = hr_puestos::find($employee['id_puesto'])['nombre'];
+                $employee['id_tipo_empleado'] = hr_tipos_empleados::find($employee['id_tipo_empleado'])['nombre'];
+            }
+        }
+
+        return response()->json([
+            'error' => false,
+            'mensaje' => '',
+            'data' => $data
         ], 200);
     }
 }

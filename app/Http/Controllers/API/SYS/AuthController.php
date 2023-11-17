@@ -14,12 +14,13 @@ use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Mail;
+use Tymon\JWTAuth\Facades\JWTAuth;
 
 class AuthController extends Controller
 {
     public function __construct()
     {
-        $this->middleware('auth:api', ['except' => ['login', 'generateResetToken', 'updatePassword']]);
+        $this->middleware('auth:api', ['except' => ['login', 'generateResetToken', 'updatePassword', 'validateToken']]);
     }
 
     /**
@@ -141,6 +142,40 @@ class AuthController extends Controller
                 'tipoToken' => 'Bearer',
             ]
         ], 200);
+    }
+
+    /**
+     * Validate a Token.
+     *
+     * @return JsonResponse
+     */
+    public function validateToken()
+    {
+        try {
+            $token = JWTAuth::getToken();
+
+            $user = JWTAuth::toUser($token);
+
+            return response()->json([
+                'error' => false,
+                'mensaje' => 'Token Válido',
+            ], 200);
+        } catch (\Tymon\JWTAuth\Exceptions\TokenExpiredException $e) {
+            return response()->json([
+                'error' => false,
+                'mensaje' => 'Token Expirado'
+            ], 401);
+        } catch (\Tymon\JWTAuth\Exceptions\TokenInvalidException $e) {
+            return response()->json([
+                'error' => false,
+                'mensaje' => 'Token Inválido'
+            ], 401);
+        } catch (\Tymon\JWTAuth\Exceptions\JWTException $e) {
+            return response()->json([
+                'error' => false,
+                'mensaje' => 'Otra Cosa'
+            ], 401);
+        }
     }
 
     /**

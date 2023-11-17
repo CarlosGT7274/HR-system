@@ -6,7 +6,7 @@
 
     <div class="h-full border-2" id="drop-area">
         <label for="file-input"
-            class="h-full w-full border-4 border-ldark border-dashed flex justify-center items-center rounded-lg cursor-pointer flex flex-col gap-4 justify-center items-center">
+            class="h-full w-full border-4 border-ldark border-dashed flex flex-col justify-center items-center rounded-lg cursor-pointer gap-4 ">
             <i class="fa-solid fa-camera text-ldark fa-2xl"></i>
             <p class="py-3 px-6 text-center">Elija una foto o arrástrela hasta aquí</p>
         </label>

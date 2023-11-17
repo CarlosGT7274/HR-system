@@ -210,7 +210,10 @@ class DashboardController extends Controller
 
             $edad = date_diff(date_create($employee["cumpleaños"]), date_create($currentDate))->y;
 
-            $hasChildren = hr_familiares::where('id_empleado', $employee["id_empleado"])->where('parentesco', 2)->count();
+            $hasChildren = hr_familiares::where('id_empleado', $employee["id_empleado"])->where(function ($query) {
+                $query->where('parentesco', 8)
+                    ->orWhere('parentesco', 9);
+            })->count();
 
             $data[$sex == 1 ? 'hombres' : 'mujeres']['total']++;
 
@@ -339,7 +342,7 @@ class DashboardController extends Controller
 
         $data['hombres'] = 0;
         $data['mujeres'] = 0;
-        
+
         $data['recontratables'] = 0;
         $data['finiquitos'] = 0;
         $data['firmas'] = 0;
@@ -349,9 +352,9 @@ class DashboardController extends Controller
 
         $temp_array = [];
         $first = true;
-        
+
         while (count($employees) != 0) {
-            $temp_object = [];    
+            $temp_object = [];
 
             foreach ($employees as $key => $employee) {
 
@@ -361,24 +364,24 @@ class DashboardController extends Controller
 
                 $histMonth = date('m', strtotime($hist['fecha']));
 
-                $infoBaja = $hist['infoBaja'];                
+                $infoBaja = $hist['infoBaja'];
 
                 if ($month <= $histMonth) {
                     if ($first) {
                         $data[$employee['sexo'] == 0 ? 'mujeres' : 'hombres']++;
-                        if ($infoBaja - 8 >= 0){
+                        if ($infoBaja - 8 >= 0) {
                             $data['recontratables']++;
                             $infoBaja -= 8;
                         };
-                        if ($infoBaja - 4 >= 0){
+                        if ($infoBaja - 4 >= 0) {
                             $data['finiquitos']++;
                             $infoBaja -= 4;
                         };
-                        if ($infoBaja - 2 >= 0){
+                        if ($infoBaja - 2 >= 0) {
                             $data['firmas']++;
                             $infoBaja -= 2;
                         };
-                        if ($infoBaja - 1 >= 0){
+                        if ($infoBaja - 1 >= 0) {
                             $data['entrevistas']++;
                             $infoBaja -= 1;
                         };
@@ -424,7 +427,7 @@ class DashboardController extends Controller
             array_push($data['detalles'], $unit);
         }
 
-        if($data['total'] > 0){
+        if ($data['total'] > 0) {
             $data['recontratables'] /= $data['total'] / 100;
             $data['finiquitos'] /= $data['total'] / 100;
             $data['firmas'] /= $data['total'] / 100;

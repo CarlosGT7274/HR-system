@@ -4,7 +4,8 @@
     <section class="w-5/6 md:w-2/3 lg:w-5/6 grid lg:grid-cols-2 lg:gap-x-20 gap-y-12">
         <div>
             <label for="nombre">Nombre:</label>
-            <x-input id="nombre" icon="" type="text" name="nombre" placeholder="Ingresa un nombre" />
+            <x-input id="nombre" icon="" type="text" name="nombre" placeholder="Ingresa un nombre"
+                defaultValue="Nada" />
         </div>
 
         <div>

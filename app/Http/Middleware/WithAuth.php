@@ -4,20 +4,11 @@ namespace App\Http\Middleware;
 
 use Symfony\Component\HttpFoundation\Response;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Request as InternalRequest;
 use Closure;
 
 class WithAuth
 {
-    // Podrías checar la siguiente página para más información acerca de estas cabeceras
-    // https://securityheaders.com/
-
-    // Lista las cabeceras que no quieras en tus respuestas de tu aplicación
-    // Hay cabeceras que no es recomendable que se muestren, por ejemplo "X-Powered-BY" muestra información del servidor, la puedes editar a tu gusto
-    private $unwishedHeaders = [
-        'X-Powered-By',
-        'Server',
-    ];
-
     /**
      * Handle an incoming request.
      *
@@ -25,13 +16,23 @@ class WithAuth
      */
     public function handle(Request $request, Closure $next): Response
     {
-        $this->deleteUnwishedHeaders($this->unwishedHeaders);
+        if (session('token')) {
 
-        return session('token') ? $next($request) : redirect()->route('login.form');
-    }
-    private function deleteUnwishedHeaders($headers)
-    {
-        foreach ($headers as $header)
-            header_remove($header);
+            $internalRequest = InternalRequest::createFromBase($request);
+
+            $internalRequest->server->set('REQUEST_URI', '/api/' . env('API_VERSION') . '/validate');
+
+            $internalRequest->headers->set('Authorization', 'Bearer ' . session('token'));
+
+            $response = app()->handle($internalRequest);
+
+            if ($response->getStatusCode() == 401) {
+                return redirect()->route('login.form');
+            } else {
+                return $next($request);
+            }
+        } else {
+            return redirect()->route('login.form');
+        }
     }
 }
