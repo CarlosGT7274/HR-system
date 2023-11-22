@@ -20,7 +20,7 @@
             </form>
         </header>
 
-        <div class="grid grid-cols-1 lg:grid-cols-[2fr_3fr] xl:grid-cols-[1fr_3fr] gap-x-8 p-2">
+        <div class="grid grid-cols-1 lg:grid-cols-[2fr_3fr] xl:grid-cols-[1fr_3fr] gap-x-8 p-2 gap-y-5 lg:gap-y-0">
             @if ($image)
                 <section id="profile-pic" class="relative">
                     <img alt="Foto de perfil del empleado"
@@ -79,7 +79,7 @@
             <section class="mt-4 grid grid-cols-2 md:grid-cols-3 xl:grid-cols-4 gap-10">
                 @foreach ($documents as $item)
                     <a class="border-b-2 border-ldark hover:border-primary w-full text-center font-semibold cursor-pointer select-none h-16 hover:text-primary flex flex-col items-center justify-center"
-                        href="{{ route('employees.documents.one', ['id' => $item['id_familiar'], 'father_id' => $employee['id_empleado']]) }}">
+                        href="{{ route('employees.documents.one', ['id' => $item['id_documento'], 'father_id' => $employee['id_empleado']]) }}">
                         <p>
                             {{ $item['nombre'] }}
                         </p>

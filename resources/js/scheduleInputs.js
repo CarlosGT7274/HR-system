@@ -24,9 +24,36 @@ radiosD.forEach((radio, i) => {
                 input.value = 0;
             }
 
-            group.style.display = "none";
+            input.classList.remove("text-dark");
+            input.classList.add("text-ldark");
+
+            input.readOnly = true;
         });
     });
+
+    if(radio.checked) {
+        const divGrupo = radio.closest(".detalles-wrapper");
+        const inputsGroup = divGrupo.querySelectorAll(".detail-input");
+
+        inputsGroup.forEach((group) => {
+            const input = group.querySelector("input");
+
+            if (input.type == "time") {
+                if (input.name == `detalles[${i}][inicio]`) {
+                    input.value = "00:00:00";
+                } else if (input.name == `detalles[${i}][fin]`) {
+                    input.value = "23:59:59";
+                }
+            } else {
+                input.value = 0;
+            }
+
+            input.classList.remove("text-dark");
+            input.classList.add("text-ldark");
+
+            input.readOnly = true;
+        });
+    }
 });
 
 radiosL.forEach((radio) => {
@@ -39,7 +66,10 @@ radiosL.forEach((radio) => {
 
             input.value = "";
 
-            group.style.display = "block";
+            input.classList.remove("text-ldark");
+            input.classList.add("text-dark");
+
+            input.readOnly = false;
         });
     });
 });

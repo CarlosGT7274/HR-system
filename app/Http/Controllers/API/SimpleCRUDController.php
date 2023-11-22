@@ -193,6 +193,18 @@ class SimpleCRUDController extends Controller
             $request["info"] = base64_decode($request["info"]);
         }
 
+        //! JUST FOR DEBUG ERRORS
+        // try {
+        //     $succeed = $object->update($request->all());
+        // } catch (\Throwable $th) {
+        //     $succeed = false;
+
+        //     return response()->json([
+        //         'error' => $succeed ? false : true,
+        //         'mensaje' => 'Cambios Realizados'
+        //     ], 200);
+        // }
+
         return response()->json([
             'error' => $object->update($request->all()) ? false : true,
             'mensaje' => 'Cambios Realizados'

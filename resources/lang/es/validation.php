@@ -6,6 +6,8 @@ return [
     'email' => 'El campo :attribute debe ser una dirección de correo electrónico válida.',
     'array' => 'El campo :attribute debe ser un arreglo o verifica si no necesitas atributos.',
     'integer' => 'El campo :attribute debe ser un número entero.',
+    'file' => 'El campo :attribute debe ser un archivo.',
+    'mimes' => 'El archivo debe ser de uno de los siguientes tipos: :values.',
     'decimal' => [
         'numeric' => 'El campo :attribute debe ser un número decimal con :decimal lugares decimales.',
     ],

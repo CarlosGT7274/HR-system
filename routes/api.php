@@ -658,8 +658,8 @@ Route::prefix('v1')->group(function () {
                         ['id_empleado' => $id_employee],
                         [
                             'nombre' => 'required | string',
-                            'tipo' => 'required | integer | min:1',
-                            'info' => 'required | string'
+                            'tipo' => 'required | integer | min:0',
+                            'info' => 'required'
                         ],
                         true
                     );
@@ -671,8 +671,8 @@ Route::prefix('v1')->group(function () {
                         $request,
                         [
                             'nombre' => 'sometimes | required | string',
-                            'tipo' => 'integer | required_with:info | min:1',
-                            'info' => 'sometimes | required | string'
+                            'tipo' => 'integer | required_with:info | min:0',
+                            'info' => 'sometimes | required'
                         ],
                         true
                     );

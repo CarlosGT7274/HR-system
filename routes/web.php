@@ -519,10 +519,12 @@ Route::middleware('needToken')->group(function () {
         'un Documento',
         [
             'nombre' => 'required | string',
-            'tipo' => 'required | integer | min:1',
-            'info' => 'required | string'
+            'archivo' => 'required | file | mimes:rtf,doc,docx,csv,xls,xlsx,ppt,pptx,rar,7z,zip,txt,pdf,xml,json,mp3,wav,mp4,avi,webm,jpg,jpeg,png,gif,bmp,svg,webp',
         ],
-        []
+        [
+            'archivo' => 'info',
+            'info' => 'file'
+        ]
     );
 });
 

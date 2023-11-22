@@ -18,6 +18,7 @@ export default defineConfig({
                 getResource("js", "inputs"),
                 getResource("js", "rols"),
                 getResource("js", "edit_rol"),
+                getResource("js", "docsInput"),
                 getResource("js", "imageInputC"),
                 getResource("js", "imageInputU"),
                 getResource("js", "dragAndDrop"),

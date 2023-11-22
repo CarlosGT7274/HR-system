@@ -13,6 +13,5 @@ dropArea.addEventListener("drop", function (event) {
 
     let changeEvent = new Event("change");
 
-    // Disparar el evento 'change'
     fileInput.dispatchEvent(changeEvent);
 });

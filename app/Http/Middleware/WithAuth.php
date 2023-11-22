@@ -4,7 +4,7 @@ namespace App\Http\Middleware;
 
 use Symfony\Component\HttpFoundation\Response;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Request as InternalRequest;
+use Tymon\JWTAuth\Facades\JWTAuth;
 use Closure;
 
 class WithAuth
@@ -17,19 +17,15 @@ class WithAuth
     public function handle(Request $request, Closure $next): Response
     {
         if (session('token')) {
-
-            $internalRequest = InternalRequest::createFromBase($request);
-
-            $internalRequest->server->set('REQUEST_URI', '/api/' . env('API_VERSION') . '/validate');
-
-            $internalRequest->headers->set('Authorization', 'Bearer ' . session('token'));
-
-            $response = app()->handle($internalRequest);
-
-            if ($response->getStatusCode() == 401) {
-                return redirect()->route('login.form');
-            } else {
+            try {
+                JWTAuth::setToken(session('token'))->checkOrFail();
+                
+                $user = JWTAuth::toUser(session('token'));
+                
                 return $next($request);
+
+            } catch (\Tymon\JWTAuth\Exceptions\JWTException $e) {
+                return redirect()->route('login.form');
             }
         } else {
             return redirect()->route('login.form');

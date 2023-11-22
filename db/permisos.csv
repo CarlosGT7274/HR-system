@@ -47,9 +47,8 @@ id_permiso,padre,nombre,endpoint,activo
 2052,205,Información Personal,empleados_ip,1
 2053,205,Información Dispositivo,empleados_bio,1
 2054,205,Configuración Asistencia,empleados_att,1
-2055,205,Documentos,empleados_doc,1
-2056,205,Importar,empleados_imp,1
-2057,205,Descargar,empleados_exp,1
+2055,205,Documentos,documentos,1
+2056,205,Descargar,descargar,1
 3011,301,Comandos de dispositivo,enviacomandos,1
 4071,407,Total Asistencia,rasistenciatotal,1
 4072,407,Excepciones,rexcepciones,1

@@ -110,7 +110,7 @@ for (let i = 0; i < cancelButtons.length; i++) {
 
             if (i < selects.length) {
                 selects[i].setAttribute("disabled", "disabled");
-                selects[i].style.cursor = "auto";
+                selects[i].style.cursor = "default";
                 selects[i].style.borderColor = "#8c8c8b";
             }
 

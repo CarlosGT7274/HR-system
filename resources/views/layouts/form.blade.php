@@ -11,7 +11,7 @@
             <h1 class="text-2xl font-semibold">Registro de {{ $title }}</h1>
         </header>
 
-        <form class="mt-8 flex flex-col items-center" method="POST"
+        <form class="mt-8 flex flex-col items-center" method="POST" enctype="multipart/form-data"
             action="{{ $father_id ? route($base_route . '.submit', ['father_id' => $father_id]) : route($base_route . '.submit') }}">
             @csrf
 

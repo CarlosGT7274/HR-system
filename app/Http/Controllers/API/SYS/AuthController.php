@@ -154,7 +154,7 @@ class AuthController extends Controller
         try {
             $token = JWTAuth::getToken();
 
-            $user = JWTAuth::toUser($token);
+            JWTAuth::toUser($token);
 
             return response()->json([
                 'error' => false,

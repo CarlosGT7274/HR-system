@@ -29,4 +29,6 @@ document.getElementById("remove").onclick = function () {
     const label = document.querySelector("label[for=file-input]");
     label.classList.remove("hidden");
     label.parentElement.classList.remove("hidden");
+
+    document.getElementById("file-input").value = "";
 };

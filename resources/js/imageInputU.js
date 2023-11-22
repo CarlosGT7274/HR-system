@@ -31,11 +31,26 @@ document.getElementById("remove").onclick = function () {
     const label = document.querySelector("label[for=file-input]");
     label.classList.remove("hidden");
     label.parentElement.classList.remove("hidden");
+
+    document.getElementById("file-input").value = "";
 };
 
 document.getElementById("cancel").onclick = function () {
     document.getElementById("profile-pic").classList.remove("hidden");
     document.getElementById("form-pic").classList.add("hidden");
+
+    const image = document.getElementById("pp");
+    image.classList.add("hidden");
+    image.src = "";
+
+    document.getElementById("save").classList.add("hidden");
+    document.getElementById("remove").classList.add("hidden");
+
+    const label = document.querySelector("label[for=file-input]");
+    label.classList.remove("hidden");
+    label.parentElement.classList.remove("hidden");
+
+    document.getElementById("file-input").value = "";
 };
 
 document.getElementById("edit-img").onclick = function () {

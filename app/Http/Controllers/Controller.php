@@ -5,8 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 use Illuminate\Foundation\Validation\ValidatesRequests;
 use Illuminate\Routing\Controller as BaseController;
-use Illuminate\Support\Facades\Request;
-use Illuminate\Http\Request as http_request;
+use Illuminate\Http\Request;
 
 class Controller extends BaseController
 {
@@ -22,6 +21,9 @@ class Controller extends BaseController
      */
     public function apiRequest($uri, $method, $params)
     {
+        // $internalRequest = Request::create('/api/' . env('API_VERSION') . '/' . $uri, $method, $params, [], [], $_SERVER);
+        // $internalRequest->headers->set('Authorization', 'Bearer ' . session('token'));
+
         $internalRequest = Request::createFromBase(request());
 
         $internalRequest->server->set('REQUEST_URI', '/api/' . env('API_VERSION') . '/' . $uri);
@@ -34,6 +36,7 @@ class Controller extends BaseController
 
         $response = app()->handle($internalRequest);
 
+
         if ($response->getStatusCode() == 500) {
             return ['error' => true, 'mensaje' => 'Error en el Servidor'];
             // return $response;
@@ -44,11 +47,13 @@ class Controller extends BaseController
         }
     }
 
-    public function UpdateRequest(http_request $request, $changes)
+    public function UpdateRequest(Request $request, $changes)
     {
         $data = [];
 
-        foreach ($request->request as $llave => $valor) {
+        $todosLosDatos = array_merge($request->all(), $request->allFiles());
+
+        foreach ($todosLosDatos as $llave => $valor) {
             if (is_array($valor)) {
                 foreach ($valor as $key => $value) {
                     $data[$llave][$key] = $value;
@@ -72,6 +77,9 @@ class Controller extends BaseController
                         $data[$llave] = (int) $valor;
                     } else if ($changes[$llave] == 'datetime') {
                         $data[$llave] = str_replace('T', ' ', $valor);
+                    } else if ($changes[$llave] == 'file') {
+                        $data[$llave] = base64_encode(file_get_contents($request->file($llave)->path()));
+                        $data['tipo'] = $this->findFileExtension($request->file($llave)->getMimeType());
                     } else {
                         $data[$changes[$llave]] = $valor;
                     }
@@ -101,6 +109,9 @@ class Controller extends BaseController
                     if (array_key_exists($llave, $changes)) {
                         if ($changes[$llave] == 'int' && $valor) {
                             $data[$llave] = (int) $valor;
+                        } else if ($changes[$llave] == 'file') {
+                            $data[$llave] = base64_encode(file_get_contents($valor->path()));
+                            $data['tipo'] = $this->findFileExtension($valor->getMimeType());
                         } else if ($changes[$llave] == 'datetime') {
                             $data[$llave] = str_replace('T', ' ', $valor);
                         }
@@ -109,5 +120,11 @@ class Controller extends BaseController
             }
         }
         return $data;
+    }
+
+    public function findFileExtension($file_type)
+    {
+        $index = array_search($file_type, app('file_types'));
+        return $index;
     }
 }

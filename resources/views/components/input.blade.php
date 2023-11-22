@@ -6,8 +6,12 @@
         @endif
 
         <input class="w-full h-10" name="{{ $name }}" type="{{ $type }}"
-            @if ($type == 'password' && $name == 'contraseña_de_la_terminal') value="123"
-            @else value="{{ old(strpos($name, '[') !== false ? str_replace(['[', ']'], ['.', ''], $name) : $name) }}" @endif
+            @if ($type == 'password' && $name == 'contraseña_de_la_terminal') 
+                value="123"
+            @else
+                value="{{ old(strpos($name, '[') !== false ? str_replace(['[', ']'], ['.', ''], $name) : $name) }}" 
+            @endif
+            
             @if ($type == 'number') min="{{ $min }}"
                 step="{{ $step }}" max="{{ $max }}" placeholder="{{ $placeholder }}"  
             @elseif ($type == 'time' || $type == 'datetime-local')
@@ -15,7 +19,9 @@
             @elseif ($type == 'email') 
                 id="{{ $id }}" autocomplete="{{ $autocomplete }}" placeholder="{{ $placeholder }}" 
             @else 
-                id="{{ $id }}" placeholder="{{ $placeholder }}" @endif>
+                id="{{ $id }}" placeholder="{{ $placeholder }}" 
+            @endif
+        >
 
         @if ($type == 'password')
             <button type="button" id="{{ $id . 'preview' }}">
