@@ -18,21 +18,22 @@ class Controller extends BaseController
      * @param string $method Method for the api request
      * @param array $params for the body of the request to the api
      * @return array
-     */
+     */ 
     public function apiRequest($uri, $method, $params)
     {
-        // $internalRequest = Request::create('/api/' . env('API_VERSION') . '/' . $uri, $method, $params, [], [], $_SERVER);
-        // $internalRequest->headers->set('Authorization', 'Bearer ' . session('token'));
-
-        $internalRequest = Request::createFromBase(request());
-
-        $internalRequest->server->set('REQUEST_URI', '/api/' . env('API_VERSION') . '/' . $uri);
-
-        $internalRequest->setMethod($method);
-
-        $internalRequest->merge($params);
+        $internalRequest = Request::create('/api/' . env('API_VERSION') . '/' . $uri, $method, $params, [], [], $_SERVER);
 
         $internalRequest->headers->set('Authorization', 'Bearer ' . session('token'));
+
+        // $internalRequest = Request::createFromBase(request());
+
+        // $internalRequest->server->set('REQUEST_URI', '/api/' . env('API_VERSION') . '/' . $uri);
+
+        // $internalRequest->setMethod($method);
+
+        // $internalRequest->merge($params);
+
+        // $internalRequest->headers->set('Authorization', 'Bearer ' . session('token'));
 
         $response = app()->handle($internalRequest);
 

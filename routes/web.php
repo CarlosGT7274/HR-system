@@ -126,7 +126,45 @@ function ChildRoutes($father_prefix, $father_route, $endpoint, $uri_prefix, $ext
     });
 }
 
+Route::get('getFile/{file_name}', function($file_name) {
+        $filePath = public_path('storage/files/' . $file_name);
 
+        // dd(asset('storage/file/' . $file_name));
+
+        if (file_exists($filePath)) {
+            dd(response()->file($filePath));
+        } else {
+            return response()->json([
+                'error' => 'El archivo no existe',
+                'file_name' => $file_name,
+                'file_p' => $filePath,
+            ], 404);
+        }
+});
+
+//* ---------------------------------------------------------------------------------
+//* ----------------------------  Rutas para Sesión  ----------------------------
+//* ---------------------------------------------------------------------------------
+Route::controller(SessionController::class)->group(function () {
+    Route::get('login', 'login')->name('login.form');
+
+    Route::post('login', 'submit')->name('login.submit');
+
+    Route::get('resetPassword', 'getEmail')->name('resetPassword.form');
+    
+    Route::post('resetPassword', 'sendToken')->name('resetPassword.submit');
+
+    Route::get('changePassword', 'changePassword')->name('changePassword.form');
+
+    Route::post('changePassword', 'updatePassword')->name('changePassword.submit');
+    
+    Route::get('logout', 'logout')->name('logout');
+});
+//* ---------------------------------------------------------------------------------
+
+//? ---------------------------------------------------------------------------------
+//? ----------------------------  Rutas para Home  ----------------------------
+//? ---------------------------------------------------------------------------------
 Route::middleware('needToken')->controller(HomeController::class)->group(function () {
     Route::get('/', 'home')->name('home');
 
@@ -134,22 +172,7 @@ Route::middleware('needToken')->controller(HomeController::class)->group(functio
 
     Route::post('/dashboard', 'graph')->name('attendance.graph');
 });
-
-Route::controller(SessionController::class)->group(function () {
-    Route::get('login', 'login')->name('login.form');
-
-    Route::post('login', 'submit')->name('login.submit');
-
-    Route::get('resetPassword', 'getEmail')->name('resetPassword.form');
-
-    Route::post('resetPassword', 'sendToken')->name('resetPassword.submit');
-
-    Route::get('changePassword', 'changePassword')->name('changePassword.form');
-
-    Route::post('changePassword', 'updatePassword')->name('changePassword.submit');
-
-    Route::get('logout', 'logout')->name('logout');
-});
+//? ---------------------------------------------------------------------------------
 
 Route::middleware('needToken')->group(function () {
 

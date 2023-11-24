@@ -659,7 +659,7 @@ Route::prefix('v1')->group(function () {
                         [
                             'nombre' => 'required | string',
                             'tipo' => 'required | integer | min:0',
-                            'info' => 'required'
+                            'info' => 'required | string'
                         ],
                         true
                     );
@@ -672,7 +672,7 @@ Route::prefix('v1')->group(function () {
                         [
                             'nombre' => 'sometimes | required | string',
                             'tipo' => 'integer | required_with:info | min:0',
-                            'info' => 'sometimes | required'
+                            'info' => 'sometimes | required | string'
                         ],
                         true
                     );

@@ -11,7 +11,7 @@
             <p class="py-3 px-6 text-center">Elija una foto o arrástrela hasta aquí</p>
         </label>
 
-        <input name="imagen" accept="image/png,image/jpg,image/jpeg" id="file-input" class="hidden" type="image">
+        <input name="imagen" accept="image/png,image/pjp,image/jpeg,image/pjpeg,image/jpg,image/jfif" id="file-input" class="hidden" type="file">
     </div>
 
     <section class="relative">

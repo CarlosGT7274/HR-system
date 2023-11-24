@@ -274,7 +274,7 @@ class EmployeeController extends Controller
     public function update_IMG($id_employee, $id, Request $request)
     {
         $request->validate([
-            'imagen' => 'required | image | mimes:jpeg,png,jpg,gif',
+            'imagen' => 'required | image | mimes:png,pjp,jpg,pjpeg,jpeg,jfif',
         ]);
 
         $imagen_bs64 = base64_encode(file_get_contents($request->file('imagen')->path()));
