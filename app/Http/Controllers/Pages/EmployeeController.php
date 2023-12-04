@@ -330,4 +330,39 @@ class EmployeeController extends Controller
 
         return view($this->base_route . '.all', $data);
     }
+
+    public function cambia_posicion_form()
+    {
+        
+        return view($this->base_route . '')
+    }
+
+    public function cambia_posicion(Request $request)
+    {
+        $request->validate([
+            'id_unidad' => 'required | integer',
+            'id_puesto' => 'required | integer',
+            'id_departamento' => 'required | integer',
+            'sueldo' => 'required | number',
+            'observaciones' => 'required | string | max:255',
+            'estado' => 1,
+        ]);
+
+        $request['movimiento'] = 'C';
+
+    }
+
+    public function baja_form()
+    {
+        return view($this->base_route . '')
+    }
+
+    public function baja(Request $request)
+    {
+        $request->validate([
+            'observaciones' => 'required | string | max:255',
+            'infoBaja' => 'required | int ',
+        ]);
+
+    }
 }
