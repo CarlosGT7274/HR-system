@@ -497,9 +497,13 @@ Route::middleware('needToken')->group(function () {
 
         Route::put('{id_employee}/img/{id}', 'update_IMG')->where('id_employee', '[0-9]+')->where('id', '[0-9]+')->name('employees.general.update.IMG');
 
-        Route::get('{id_employee}/cambia_puesto', 'cambia_puesto_form')->where('id_employee', '[0-9]+')->name('employees.general.change_position.form');
+        Route::get('{father_id}/cambia_puesto', 'cambia_puesto_form')->where('father_id', '[0-9]+')->name('employees.general.change_position.form');
 
-        Route::post('{id_employee}/cambia_puesto', 'cambia_puesto')->where('id_employee', '[0-9]+')->name('employees.general.change_position.submit');
+        Route::post('{father_id}/cambia_puesto', 'cambia_puesto')->where('father_id', '[0-9]+')->name('employees.general.change_position.submit');
+        
+        Route::get('{father_id}/baja', 'baja_form')->where('father_id', '[0-9]+')->name('employees.general.dismiss.form');
+
+        Route::post('{father_id}/baja', 'baja')->where('father_id', '[0-9]+')->name('employees.general.dismiss.submit');
 
         Route::delete('{id}', 'delete')->where('id', '[0-9]+')->name('employees.general.delete');
     });

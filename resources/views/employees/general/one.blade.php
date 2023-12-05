@@ -11,6 +11,9 @@
                 {{ $user['nombre'] . ' ' . $user['apellidoP'] . ' ' . $user['apellidoM'] }}
             </h1>
 
+            <a class="p-1 border-2 rounded-lg border-dark hover:border-danger hover:text-danger w-36 text-center font-semibold" href="{{ route('employees.general.change_position.form', ['father_id' => $employee['id_empleado']]) }}"> Cambiar Puesto </a>
+            <a class="p-1 border-2 rounded-lg border-dark hover:border-danger hover:text-danger w-36 text-center font-semibold" href="{{ route('employees.general.dismiss.form', ['father_id' => $employee['id_empleado']]) }}"> Dar de Baja </a>
+
             <form method="POST" action="{{ route($base_route . '.delete', ['id' => $employee['id_' . $id_name]]) }}">
                 @csrf
                 @method('DELETE')

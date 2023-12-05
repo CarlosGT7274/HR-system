@@ -331,13 +331,13 @@ class EmployeeController extends Controller
         return view($this->base_route . '.all', $data);
     }
 
-    public function cambia_posicion_form()
+    public function cambia_puesto_form($father_id)
     {
         
-        return view($this->base_route . '')
+        return view($this->base_route . '.rotation_form');
     }
 
-    public function cambia_posicion(Request $request)
+    public function cambia_puesto(Request $request)
     {
         $request->validate([
             'id_unidad' => 'required | integer',
@@ -352,17 +352,30 @@ class EmployeeController extends Controller
 
     }
 
-    public function baja_form()
+    public function baja_form($father_id)
     {
-        return view($this->base_route . '')
+        $data = [
+            'pageTitle' => 'Baja de un Empleado',
+            'title' => 'una Baja de un Empleado',
+            'base_route' => 'employees.general.dismiss',
+            'father_url' => 'employees.general',
+            'father_id' => $father_id,
+        ];
+
+        return view($this->base_route . '.dismiss_form', $data);
     }
 
     public function baja(Request $request)
     {
-        $request->validate([
-            'observaciones' => 'required | string | max:255',
-            'infoBaja' => 'required | int ',
-        ]);
+        dump($request);
+
+        // $request->validate([
+        //     'motivo' => 'required | string | max:255',
+        //     'r' => 'sometimes | int ',
+        //     'e' => 'sometimes | int ',
+        //     's' => 'sometimes | int ',
+        //     'f' => 'sometimes | int ',
+        // ]);
 
     }
 }
