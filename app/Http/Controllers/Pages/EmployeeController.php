@@ -332,23 +332,57 @@ class EmployeeController extends Controller
     }
 
     public function cambia_puesto_form($father_id)
-    {
-        
-        return view($this->base_route . '.rotation_form');
+    {   
+        $first_request = [
+            'nueva_unidad' => app('request')->old('nueva_unidad'),
+            'nuevo_departamento' => app('request')->old('nuevo_departamento'),
+            'nuevo_puesto' => app('request')->old('nuevo_puesto'),
+            'nuevo_sueldo' => app('request')->old('nuevo_sueldo'),
+            'observaciones' => app('request')->old('observaciones'),
+        ];
+
+        $data = [
+            'pageTitle' => 'Cambio de Puesto',
+            'title' => 'un Cambio de Puesto de un Empleado',
+            'base_route' => 'employees.general.change_position',
+            'father_url' => 'employees.general',
+            'father_id' => $father_id,
+            'unidades' => $this->apiRequest('companies/' . session('company') . '/units', 'GET', [])['data'],
+            'departamentos' => $this->apiRequest('companies/' . session('company') . '/departments', 'GET', [])['data'],
+            'puestos' => $this->apiRequest('companies/' . session('company') . '/positions', 'GET', [])['data'],
+            'old' => $first_request
+        ];
+
+        return view($this->base_route . '.rotation_form', $data);
     }
 
-    public function cambia_puesto(Request $request)
-    {
+    public function cambia_puesto($father_id, Request $request)
+    {           
         $request->validate([
-            'id_unidad' => 'required | integer',
-            'id_puesto' => 'required | integer',
-            'id_departamento' => 'required | integer',
-            'sueldo' => 'required | number',
-            'observaciones' => 'required | string | max:255',
-            'estado' => 1,
+            'nueva_unidad' => 'required | integer',
+            'nuevo_puesto' => 'required | integer',
+            'nuevo_departamento' => 'required | integer',
+            'nuevo_sueldo' => 'required | decimal:0,6',
+            'observaciones' => 'sometimes | string | max:255',
         ]);
 
         $request['movimiento'] = 'C';
+        $request['estado'] = 1;
+
+        $data = $this->UpdateRequest($request, [
+            'nueva_unidad' => 'id_unidad',
+            'nuevo_puesto' => 'id_puesto',
+            'nuevo_departamento' => 'id_departamento',
+            'nuevo_sueldo' => 'sueldo',
+            'id_unidad' => 'int',
+            'id_puesto' => 'int',
+            'id_departamento' => 'int',
+            'sueldo' => 'float',
+        ]);
+
+        $this->apiRequest('employees/' . $father_id . '/changePosition', 'POST', $data );
+        
+        return $this->getOne($father_id);
 
     }
 
@@ -365,17 +399,32 @@ class EmployeeController extends Controller
         return view($this->base_route . '.dismiss_form', $data);
     }
 
-    public function baja(Request $request)
+    public function baja($father_id, Request $request)
     {
-        dump($request);
+        $request->validate([
+            'motivo' => 'required | string | max:255',
+            'r' => 'sometimes | int ',
+            'e' => 'sometimes | int ',
+            's' => 'sometimes | int ',
+            'f' => 'sometimes | int ',
+        ]);
 
-        // $request->validate([
-        //     'motivo' => 'required | string | max:255',
-        //     'r' => 'sometimes | int ',
-        //     'e' => 'sometimes | int ',
-        //     's' => 'sometimes | int ',
-        //     'f' => 'sometimes | int ',
-        // ]);
+        $data = [
+            "infoBaja" => 0
+        ];
 
+        foreach ($request->all() as $key => $value) {
+            if ($key == 'motivo') {
+                $data['observaciones'] = $value;
+            } else if ($key == "_token") {
+                $data[$key] = $value;
+            } else {
+                $data['infoBaja'] += (int)$value;
+            }
+        }
+
+        $this->apiRequest('employees/' . $father_id . '/youAreFired' , 'POST', $data);
+
+        return $this->getAll();
     }
 }

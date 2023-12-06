@@ -125,13 +125,11 @@ function ChildRoutes($father_prefix, $father_route, $endpoint, $uri_prefix, $ext
     });
 }
 
-Route::get('getFile/{file_name}', function($file_name) {
-        $filePath = public_path('storage/files/' . $file_name);
-
-        // dd(asset('storage/file/' . $file_name));
+Route::middleware('needToken')->get('getFile/{file_name}', function($file_name) {
+        $filePath = storage_path('app/public/files/' . $file_name);
 
         if (file_exists($filePath)) {
-            dd(response()->file($filePath));
+            return response()->download($filePath);
         } else {
             return response()->json([
                 'error' => 'El archivo no existe',
@@ -139,7 +137,7 @@ Route::get('getFile/{file_name}', function($file_name) {
                 'file_p' => $filePath,
             ], 404);
         }
-});
+})->name('file');
 
 //* ---------------------------------------------------------------------------------
 //* ----------------------------  Rutas para Sesión  ----------------------------
@@ -275,6 +273,8 @@ Route::middleware('needToken')->group(function () {
         [
             'sueldo_sugerido' => 'sueldoSug',
             'sueldo_máximo' => 'sueldoMax',
+            'sueldoSug' => 'float',
+            'sueldoMax' => 'float',
             'clave' => 'riesgo'
         ]
     );

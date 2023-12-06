@@ -107,37 +107,22 @@ class CompanyController extends Controller
         else if ($this->pageTitle == "Documentos"){
             $data['file_path'] = '';
             $mime_type = app('file_types')[$data['data']['tipo']];
-
-            list(, $nada) = explode(',', $data['data']['info']);
-            $file_data = base64_decode($nada);
             
-            // dump($file_data);
-
+            list(, $base_64_string) = explode(',', $data['data']['info']);
+            $file_data = base64_decode($base_64_string);
+            
             $file_name = $data['data']['nombre'] . '.' . app('file_extensions')[$data['data']['tipo']];
-            dump($file_name);
+            $data['file_name'] = $file_name;
 
             $file_path = storage_path('app/public/files/' . $file_name);
             file_put_contents($file_path, $file_data);
             
-            $data['file_path2'] = public_path($file_name);
-            $data['file_path'] = asset('storage/file/' . $file_name);
-            // $data['iguales'] = ($file_path === public_path($file_name));
-            dump($data);
-
-
             if( $data['data']['tipo'] < 8){
-    
-                
+                $data['file_path'] = $file_path;
             }
             else {
                 $data['data']['info'] = 'data:' . $mime_type . ';' . $data['data']['info'];
-
-                if($data['data']['tipo'] < 11 && $data['data']['tipo'] >= 8){
-                    $data['file_path'] = '-1';
-                }
             }
-            // dump($data['data']['info']);
-            
         }
 
         return view($this->baseUrl . '.one', $data);

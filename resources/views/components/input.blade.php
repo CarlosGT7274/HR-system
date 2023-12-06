@@ -5,9 +5,11 @@
             <i class="fa-solid fa-lg {{ $icon }}" style="color: var(--color-dlight)"></i>
         @endif
 
-        <input class="w-full h-10" name="{{ $name }}" type="{{ $type }}"
+        <input class="w-full h-10" name="{{ $name }}" type="{{ $type }}" id="{{ $id }}"
             @if ($type == 'password' && $name == 'contraseña_de_la_terminal') 
                 value="123"
+            @elseif ($name == 'nuevo_sueldo')
+                value="{{ $old }}"
             @else
                 value="{{ old(strpos($name, '[') !== false ? str_replace(['[', ']'], ['.', ''], $name) : $name) }}" 
             @endif
@@ -17,9 +19,9 @@
             @elseif ($type == 'time' || $type == 'datetime-local')
                 step="1"
             @elseif ($type == 'email') 
-                id="{{ $id }}" autocomplete="{{ $autocomplete }}" placeholder="{{ $placeholder }}" 
+                autocomplete="{{ $autocomplete }}" placeholder="{{ $placeholder }}" 
             @else 
-                id="{{ $id }}" placeholder="{{ $placeholder }}" 
+                placeholder="{{ $placeholder }}" 
             @endif
         >
 

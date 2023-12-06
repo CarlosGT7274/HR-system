@@ -12,26 +12,6 @@
                 <input class="w-auto" type="text" name="nombre" readonly value="{{ $data['nombre'] }}" id="name">
                 <p>.{{ app('file_extensions')[$data['tipo']] }}</p>
             </div>
-            <script>
-                const input = document.getElementById('name')
-                input.addEventListener('input', resizeInput);
-                resizeInput.call(input);
-
-                function resizeInput() {
-                    let contador = 0;
-                    let contador_ = 0;
-
-                    for (let i = 0; i < this.value.length; i++) {
-                        if (this.value[i] === ' ') {
-                            contador++;
-                        } else if (this.value[i] === '_') {
-                            contador_++;
-                        }
-                    }
-
-                    this.style.width = (this.value.length  - (0.44 * contador) + (0.48 * contador_)) + "ch";
-                }
-            </script>
         </div>
 
         {{-- <div>
@@ -61,22 +41,7 @@
 @endsection
 
 @section('extra-info')
-    {{-- <iframe 
-        src="https://docs.google.com/gview?url=http://127.0.0.1:8000/getFile/Doc.docx&embedded=true" 
-        frameborder="0"
-    >
-    </iframe>
-
-    <iframe
-        src='https://view.officeapps.live.com/op/embed.aspx?src={{$file_path}}'
-        width='100%' height='800px' frameborder='0'
-    >            
-        This is an embedded
-        <a target='_blank' href='http://office.com'>Microsoft Office</a> 
-        document, powered by 
-        <a target='_blank' href='http://office.com/webapps'>Office Online</a>.
-    </iframe>  --}}
-    <div class="flex flex-row justify-center gap-5 flex-wrap">
+    <div class="flex flex-row justify-center gap-5 flex-wrap pt-5">
         <button class="flex flex-row gap-3 p-2 items-center border-2 rounded-lg border-dark hover:border-primary hover:text-primary w-32" onclick="togglePreview()" id="visualiza">
             <i class="fa-solid fa-eye fa-lg"></i>
             <p class="text-center font-semibold">Visualizar</p>
@@ -85,32 +50,10 @@
             <i class="fa-solid fa-eye-slash fa-lg"></i>
             <p class="text-center font-semibold">Ocultar</p>
         </button>
-        <a class="flex flex-row gap-3 p-2 items-center border-2 rounded-lg border-dark hover:border-primary hover:text-primary w-32" href="{{ $file_path }}">
+        <a class="flex flex-row gap-3 p-2 items-center border-2 rounded-lg border-dark hover:border-primary hover:text-primary w-32" href="{{ route('file', ['file_name' => $file_name ]) }}">
             <i class="fa-solid fa-arrow-down fa-lg"></i>
             <p class="text-center font-semibold">Descargar</p>
         </a>
-
-        <script>
-            let es_visible = false;
-
-            function togglePreview () {
-                const div = document.getElementById('preview_file')
-                div.classList.toggle('hidden')
-                es_visible = !es_visible;
-
-                if(es_visible){
-                    document.getElementById('visualiza').classList.add('hidden')
-                    document.getElementById('oculta').classList.remove('hidden')
-                    document.getElementById('oculta').classList.add('flex')
-                }
-                else {
-                    document.getElementById('visualiza').classList.remove('hidden')
-                    document.getElementById('oculta').classList.add('hidden')
-                    document.getElementById('oculta').classList.remove('flex')
-                }
-
-            };
-        </script>
     </div>
 
     <div id="preview_file" class="hidden pt-4">
@@ -125,6 +68,60 @@
         @elseif ($data['tipo'] > 10)
             <iframe src="{{ $data['info'] . "#toolbar=0" }}" width="100%"
                 class="h-[400px] sm:h-[600px] md:h-[800px] xl:h-[1000px] p-8"></iframe>
+        @elseif($data['tipo'] > 7)
+            <p>Hola</p>
+        @else
+            <iframe
+                src='https://view.officeapps.live.com/op/embed.aspx?src={{$file_path}}'
+                width='100%' class="h-[400px] sm:h-[600px] md:h-[800px] xl:h-[1000px] p-8"
+            ></iframe>
         @endif
     </div>
+@endsection
+
+@section('js-scripts')
+    @vite('resources/js/inputs.js')
+
+    <script>
+        const input = document.getElementById('name')
+        input.addEventListener('input', resizeInput);
+        resizeInput.call(input);
+
+        function resizeInput() {
+            let contador = 0;
+            let contador_ = 0;
+
+            for (let i = 0; i < this.value.length; i++) {
+                if (this.value[i] === ' ') {
+                    contador++;
+                } else if (this.value[i] === '_') {
+                    contador_++;
+                }
+            }
+
+            this.style.width = (this.value.length  - (0.44 * contador) + (0.3 * contador_)) + "ch";
+        }
+    </script>
+
+    <script>
+        let es_visible = false;
+
+        function togglePreview () {
+            const div = document.getElementById('preview_file')
+            div.classList.toggle('hidden')
+            es_visible = !es_visible;
+
+            if(es_visible){
+                document.getElementById('visualiza').classList.add('hidden')
+                document.getElementById('oculta').classList.remove('hidden')
+                document.getElementById('oculta').classList.add('flex')
+            }
+            else {
+                document.getElementById('visualiza').classList.remove('hidden')
+                document.getElementById('oculta').classList.add('hidden')
+                document.getElementById('oculta').classList.remove('flex')
+            }
+
+        };
+    </script>
 @endsection

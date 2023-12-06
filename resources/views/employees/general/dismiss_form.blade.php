@@ -1,9 +1,15 @@
 @extends('layouts.form')
 
 @section('inputs')
-    <section class="w-full px-58">
+    <section class="w-full px-8">
         <label class="font-semibold text-lg" for="motivo">Motivo</label>
-        <textarea class="border-2 border-ldark rounded-lg p-2 w-full mt-2 h-56 resize-none" placeholder="Escriba el motivo del despido" name="motivo"></textarea>
+        <div>
+            <textarea class="border-2 border-ldark rounded-lg p-2 w-full mt-2 h-56 resize-none" placeholder="Escriba el motivo del despido" name="motivo"></textarea>
+            @if ($errors->has('motivo'))
+                <span class="text-danger">{{ $errors->first('motivo') }}</span>
+            @endif
+        </div>
+
 
         <section class=" overflow-x-auto mt-5">
             <table class="table rounded-xl w-full">

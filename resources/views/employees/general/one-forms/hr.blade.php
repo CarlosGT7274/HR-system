@@ -199,11 +199,8 @@
             <div class="col-span-2 xl:col-span-3 p-2">
                 <label class="w-32 py-2" for="enfermedades">Enfermedades:</label>
                 <textarea type="text" class="border-2 border-ldark cursor-default p-1 text-ldark flex-1 w-full h-96 my-2"
-                    name="enfermedades" readonly id="enfermedades">
-                            {{ $employee['enfermedades'] }}
-                        </textarea>
+                    name="enfermedades" readonly id="enfermedades"> {{ $employee['enfermedades'] }} </textarea>
             </div>
-
         </section>
 
         <header class="py-2 text-lg border-b-2">Datos de Empleo</header>
@@ -214,148 +211,155 @@
                     name="departamento">
                     <option disabled>-- Seleccione una opción --</option>
                     @foreach ($companyInfo['departamentos'] as $departamento)
-                        <option value="{{ $departamento['id_departamento'] }}"
-                            @if ($employee['id_departamento'] == $departamento['id_departamento']) selected @endif>
-                            {{ $departamento['nombre'] }}
-                        </option>
-                    @endforeach
-                </select>
-            </div>
+                        @if ($employee['id_departamento'] == $departamento['id_departamento'])
+                            <option value="{{ $departamento['id_departamento'] }}" selected>
+                                {{ $departamento['nombre'] }}
+                            </option>
+                        @break
+                    @endif
+                @endforeach
+            </select>
+        </div>
 
-            <div class="flex flex-row items-center gap-2 p-2">
-                <label class="w-32" for="id_puesto">Puesto</label>
-                <select disabled class="h-10 border-b-2 border-ldark flex-1" id="id_puesto" name="puesto">
-                    <option disabled>-- Seleccione una opción --</option>
-                    @foreach ($companyInfo['puestos'] as $puesto)
-                        <option value="{{ $puesto['id_puesto'] }}" @if ($employee['id_puesto'] == $puesto['id_puesto']) selected @endif>
+        <div class="flex flex-row items-center gap-2 p-2">
+            <label class="w-32" for="id_puesto">Puesto</label>
+            <select disabled class="h-10 border-b-2 border-ldark flex-1" id="id_puesto" name="puesto">
+                @foreach ($companyInfo['puestos'] as $puesto)
+                    @if ($employee['id_puesto'] == $puesto['id_puesto'])
+                        <option value="{{ $puesto['id_puesto'] }}" selected>
                             {{ $puesto['nombre'] }}
                         </option>
-                    @endforeach
-                </select>
-            </div>
+                    @break
+                @endif
+            @endforeach
+        </select>
+    </div>
 
 
 
-            <div class="flex flex-row items-center gap-2 p-2">
-                <label class="w-32" for="id_unidad">Unidad</label>
-                <select disabled class="h-10 border-b-2 border-ldark flex-1" id="id_unidad" name="unidad">
-                    <option disabled>-- Seleccione una opción --</option>
-                    @foreach ($companyInfo['unidades'] as $unidad)
-                        <option value="{{ $unidad['id_unidad'] }}" @if ($employee['id_unidad'] == $unidad['id_unidad']) selected @endif>
-                            {{ $unidad['nombre'] }}
-                        </option>
-                    @endforeach
-                </select>
-            </div>
+    <div class="flex flex-row items-center gap-2 p-2">
+        <label class="w-32" for="id_unidad">Unidad</label>
+        <select disabled class="h-10 border-b-2 border-ldark flex-1" id="id_unidad" name="unidad">
+            @foreach ($companyInfo['unidades'] as $unidad)
+                @if ($employee['id_unidad'] == $unidad['id_unidad'])
+                    <option value="{{ $unidad['id_unidad'] }}" selected>
+                        {{ $unidad['nombre'] }}
+                    </option>
+                @break
+            @endif
+        @endforeach
+    </select>
+</div>
 
-            <div class="flex flex-row items-center gap-2 p-2">
-                <label class="w-32" for="id_tipo_empleado">Tipo Empleado</label>
-                <select disabled class="h-10 border-b-2 border-ldark flex-1" id="id_tipo_empleado"
-                    name="tipo_de_empleado">
-                    <option disabled>-- Seleccione una opción --</option>
-                    @foreach ($companyInfo['tipos_empleados'] as $tipo_empleado)
-                        <option value="{{ $tipo_empleado['id_tipo_empleado'] }}"
-                            @if ($employee['id_tipo_empleado'] == $tipo_empleado['id_tipo_empleado']) selected @endif>
-                            {{ $tipo_empleado['nombre'] }}
-                        </option>
-                    @endforeach
-                </select>
-            </div>
-
-
-            <div class="flex flex-row items-center gap-2 p-2">
-                <label class="w-32" for="id_horario">Horario</label>
-                <select disabled class="h-10 border-b-2 border-ldark flex-1" id="id_horario" name="horario">
-                    <option disabled>-- Seleccione una opción --</option>
-                    @foreach ($companyInfo['horarios'] as $horario)
-                        <option value="{{ $horario['id_horario'] }}"
-                            @if ($employee['id_horario'] == $horario['id_horario']) selected @endif>
-                            {{ $horario['descripcion'] }}
-                        </option>
-                    @endforeach
-                </select>
-            </div>
-
-            <div class="flex flex-row items-center gap-2 p-2">
-                <label class="w-32" for="sueldo">Sueldo:</label>
-                <input type="number" class="border-b-2 border-ldark cursor-default p-1 text-ldark flex-1"
-                    name="sueldo" readonly value="{{ $employee['sueldo'] }}" id="sueldo">
-            </div>
+<div class="flex flex-row items-center gap-2 p-2">
+    <label class="w-32" for="id_tipo_empleado">Tipo Empleado</label>
+    <select disabled class="h-10 border-b-2 border-ldark flex-1" id="id_tipo_empleado"
+        name="tipo_de_empleado">
+        <option disabled>-- Seleccione una opción --</option>
+        @foreach ($companyInfo['tipos_empleados'] as $tipo_empleado)
+            <option value="{{ $tipo_empleado['id_tipo_empleado'] }}"
+                @if ($employee['id_tipo_empleado'] == $tipo_empleado['id_tipo_empleado']) selected @endif>
+                {{ $tipo_empleado['nombre'] }}
+            </option>
+        @endforeach
+    </select>
+</div>
 
 
-            <div class="flex flex-row items-center gap-2 p-2">
-                <label class="w-32" for="contratoInicio">Fecha de Inicio de Contrato:</label>
-                <input type="date" class="border-b-2 border-ldark cursor-default p-1 text-ldark flex-1"
-                    name="fecha_de_inicio_de_contrato" readonly value="{{ $employee['contratoInicio'] }}"
-                    id="fecha_de_inicio_de_contrato">
-            </div>
+<div class="flex flex-row items-center gap-2 p-2">
+    <label class="w-32" for="id_horario">Horario</label>
+    <select disabled class="h-10 border-b-2 border-ldark flex-1" id="id_horario" name="horario">
+        <option disabled>-- Seleccione una opción --</option>
+        @foreach ($companyInfo['horarios'] as $horario)
+            <option value="{{ $horario['id_horario'] }}"
+                @if ($employee['id_horario'] == $horario['id_horario']) selected @endif>
+                {{ $horario['descripcion'] }}
+            </option>
+        @endforeach
+    </select>
+</div>
 
-            <div class="flex flex-row items-center gap-2 p-2">
-                <label class="w-32" for="contratoFin">Fecha de Fin de Contrato:</label>
-                <input type="date" class="border-b-2 border-ldark cursor-default p-1 text-ldark flex-1"
-                    name="fecha_de_fin_del_contrato" readonly value="{{ $employee['contratoFin'] }}"
-                    id="fecha_de_fin_de_contrato">
-            </div>
+<div class="flex flex-row items-center gap-2 p-2">
+    <label class="w-32" for="sueldo">Sueldo:</label>
+    <input type="number"
+        class="border-b-2 border-ldark p-1 text-ldark flex-1 cursor-default pointer-events-none"
+        name="sueldo" readonly value="{{ $employee['sueldo'] }}" id="sueldo" step="0.01">
+</div>
 
-            <div class="flex flex-row items-center gap-2 p-2">
-                <label class="w-32" for="formaPago">Forma de Pago</label>
-                <input type="text" class="border-b-2 border-ldark cursor-default p-1 text-ldark flex-1"
-                    name="forma_de_pago" readonly value="{{ $employee['formaPago'] }}" id="formaPago">
-            </div>
 
-            <div class="flex flex-row items-center gap-2 p-2">
-                <label class="w-32" for="alta">Fecha Alta:</label>
-                <input type="date" class="border-b-2 border-ldark cursor-default p-1 text-ldark flex-1"
-                    name="fecha_de_alta" readonly value="{{ $employee['alta'] }}" id="alta">
-            </div>
+<div class="flex flex-row items-center gap-2 p-2">
+    <label class="w-32" for="contratoInicio">Fecha de Inicio de Contrato:</label>
+    <input type="date" class="border-b-2 border-ldark cursor-default p-1 text-ldark flex-1"
+        name="fecha_de_inicio_de_contrato" readonly value="{{ $employee['contratoInicio'] }}"
+        id="fecha_de_inicio_de_contrato">
+</div>
 
-            <div class="flex flex-row items-center gap-2 p-2">
-                <label class="w-32" for="altaFiscal">Fecha Alta Fiscal:</label>
-                <input type="date" class="border-b-2 border-ldark cursor-default p-1 text-ldark flex-1"
-                    name="fecha_de_alta_fiscal" readonly value="{{ $employee['altaFiscal'] }}" id="altaFiscal">
-            </div>
+<div class="flex flex-row items-center gap-2 p-2">
+    <label class="w-32" for="contratoFin">Fecha de Fin de Contrato:</label>
+    <input type="date" class="border-b-2 border-ldark cursor-default p-1 text-ldark flex-1"
+        name="fecha_de_fin_del_contrato" readonly value="{{ $employee['contratoFin'] }}"
+        id="fecha_de_fin_de_contrato">
+</div>
 
-            <div class="flex flex-row items-center gap-2 p-2">
-                <label class="w-32" for="pensAlimenticia">Pensión Alimenticia</label>
-                <input type="text" class="border-b-2 border-ldark cursor-default p-1 text-ldark flex-1"
-                    name="incluye_pensión_alimenticia" readonly value="{{ $employee['pensAlimenticia'] }}"
-                    id="pensAlimenticia">
-            </div>
-        </section>
+<div class="flex flex-row items-center gap-2 p-2">
+    <label class="w-32" for="formaPago">Forma de Pago</label>
+    <input type="text" class="border-b-2 border-ldark cursor-default p-1 text-ldark flex-1"
+        name="forma_de_pago" readonly value="{{ $employee['formaPago'] }}" id="formaPago">
+</div>
 
-        <header class="py-2 text-lg border-b-2">Datos de Nomina</header>
-        <section class="md:grid md:grid-cols-2 xl:grid-cols-3 md:gap-8 xl:gap-x-20">
-            <div class="flex flex-row items-center gap-2 p-2">
-                <label class="w-32" for="nomClave">Clave de Nómina:</label>
-                <input type="text" class="border-b-2 border-ldark cursor-default p-1 text-ldark flex-1"
-                    name="clave_de_nómina" readonly value="{{ $employee['nomClave'] }}" id="nomClave">
-            </div>
-            <div class="flex flex-row items-center gap-2 p-2">
-                <label class="w-32" for="nomBanco">Bacno de Nómina:</label>
-                <input type="text" class="border-b-2 border-ldark cursor-default p-1 text-ldark flex-1"
-                    name="banco_de_nómina" readonly value="{{ $employee['nomBanco'] }}" id="nomBanco">
-            </div>
-            <div class="flex flex-row items-center gap-2 p-2">
-                <label class="w-32" for="nomLocalidad">Localidad de Nómina:</label>
-                <input type="text" class="border-b-2 border-ldark cursor-default p-1 text-ldark flex-1"
-                    name="localidad_de_nómina" readonly value="{{ $employee['nomLocalidad'] }}" id="nomLocalidad">
-            </div>
+<div class="flex flex-row items-center gap-2 p-2">
+    <label class="w-32" for="alta">Fecha Alta:</label>
+    <input type="date" class="border-b-2 border-ldark cursor-default p-1 text-ldark flex-1"
+        name="fecha_de_alta" readonly value="{{ $employee['alta'] }}" id="alta">
+</div>
 
-            <div class="flex flex-row items-center gap-2 p-2">
-                <label class="w-32" for="nomReferencia">Referencia de Nómina:</label>
-                <input type="text" class="border-b-2 border-ldark cursor-default p-1 text-ldark flex-1"
-                    name="referencia_de_nómina" readonly value="{{ $employee['nomReferencia'] }}"
-                    id="nomReferencia">
-            </div>
+<div class="flex flex-row items-center gap-2 p-2">
+    <label class="w-32" for="altaFiscal">Fecha Alta Fiscal:</label>
+    <input type="date" class="border-b-2 border-ldark cursor-default p-1 text-ldark flex-1"
+        name="fecha_de_alta_fiscal" readonly value="{{ $employee['altaFiscal'] }}" id="altaFiscal">
+</div>
 
-            <div class="flex flex-row items-center gap-2 p-2">
-                <label class="w-32" for="nomCuenta">Cuenta de Nómina:</label>
-                <input type="text" class="border-b-2 border-ldark cursor-default p-1 text-ldark flex-1"
-                    name="cuenta_de_nómina" readonly value="{{ $employee['nomCuenta'] }}" id="nomCuenta">
-            </div>
+<div class="flex flex-row items-center gap-2 p-2">
+    <label class="w-32" for="pensAlimenticia">Pensión Alimenticia</label>
+    <input type="text" class="border-b-2 border-ldark cursor-default p-1 text-ldark flex-1"
+        name="incluye_pensión_alimenticia" readonly value="{{ $employee['pensAlimenticia'] }}"
+        id="pensAlimenticia">
+</div>
+</section>
 
-        </section>
+<header class="py-2 text-lg border-b-2">Datos de Nomina</header>
+<section class="md:grid md:grid-cols-2 xl:grid-cols-3 md:gap-8 xl:gap-x-20">
+<div class="flex flex-row items-center gap-2 p-2">
+    <label class="w-32" for="nomClave">Clave de Nómina:</label>
+    <input type="text" class="border-b-2 border-ldark cursor-default p-1 text-ldark flex-1"
+        name="clave_de_nómina" readonly value="{{ $employee['nomClave'] }}" id="nomClave">
+</div>
+<div class="flex flex-row items-center gap-2 p-2">
+    <label class="w-32" for="nomBanco">Bacno de Nómina:</label>
+    <input type="text" class="border-b-2 border-ldark cursor-default p-1 text-ldark flex-1"
+        name="banco_de_nómina" readonly value="{{ $employee['nomBanco'] }}" id="nomBanco">
+</div>
+<div class="flex flex-row items-center gap-2 p-2">
+    <label class="w-32" for="nomLocalidad">Localidad de Nómina:</label>
+    <input type="text" class="border-b-2 border-ldark cursor-default p-1 text-ldark flex-1"
+        name="localidad_de_nómina" readonly value="{{ $employee['nomLocalidad'] }}" id="nomLocalidad">
+</div>
 
-    </section>
+<div class="flex flex-row items-center gap-2 p-2">
+    <label class="w-32" for="nomReferencia">Referencia de Nómina:</label>
+    <input type="text" class="border-b-2 border-ldark cursor-default p-1 text-ldark flex-1"
+        name="referencia_de_nómina" readonly value="{{ $employee['nomReferencia'] }}"
+        id="nomReferencia">
+</div>
+
+<div class="flex flex-row items-center gap-2 p-2">
+    <label class="w-32" for="nomCuenta">Cuenta de Nómina:</label>
+    <input type="text" class="border-b-2 border-ldark cursor-default p-1 text-ldark flex-1"
+        name="cuenta_de_nómina" readonly value="{{ $employee['nomCuenta'] }}" id="nomCuenta">
+</div>
+
+</section>
+
+</section>
 
 </form>

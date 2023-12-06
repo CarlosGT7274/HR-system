@@ -18,7 +18,7 @@ class Controller extends BaseController
      * @param string $method Method for the api request
      * @param array $params for the body of the request to the api
      * @return array
-     */ 
+     */
     public function apiRequest($uri, $method, $params)
     {
         $internalRequest = Request::create('/api/' . env('API_VERSION') . '/' . $uri, $method, $params, [], [], $_SERVER);
@@ -63,6 +63,8 @@ class Controller extends BaseController
                         if (array_key_exists($sub_key, $changes)) {
                             if ($changes[$sub_key] == 'int' && $sub_value) {
                                 $data[$llave][$key][$sub_key] = (int) $sub_value;
+                            } else if ($changes[$sub_key] == 'float' && $sub_value) {
+                                $data[$llave][$key][$sub_key] = (float) $sub_value;
                             } else if ($changes[$sub_key] == 'datetime') {
                                 $data[$llave][$key][$sub_key] = str_replace('T', ' ', $sub_value);
                             } else {
@@ -76,6 +78,8 @@ class Controller extends BaseController
                 if (array_key_exists($llave, $changes)) {
                     if ($changes[$llave] == 'int' && $valor) {
                         $data[$llave] = (int) $valor;
+                    } else if ($changes[$llave] == 'float' && $valor) {
+                        $data[$llave] = (float) $valor;
                     } else if ($changes[$llave] == 'datetime') {
                         $data[$llave] = str_replace('T', ' ', $valor);
                     } else if ($changes[$llave] == 'file') {
@@ -100,6 +104,8 @@ class Controller extends BaseController
                             if (array_key_exists($sub_key, $changes)) {
                                 if ($changes[$sub_key] == 'int' && $sub_value) {
                                     $data[$llave][$key][$sub_key] = (int) $sub_value;
+                                } else if ($changes[$sub_key] == 'float' && $sub_value) {
+                                    $data[$llave][$key][$sub_key] = (float) $sub_value;
                                 } else if ($changes[$sub_key] == 'datetime') {
                                     $data[$llave][$key][$sub_key] = str_replace('T', ' ', $sub_value);
                                 }
@@ -110,6 +116,8 @@ class Controller extends BaseController
                     if (array_key_exists($llave, $changes)) {
                         if ($changes[$llave] == 'int' && $valor) {
                             $data[$llave] = (int) $valor;
+                        } else if ($changes[$llave] == 'float' && $valor) {
+                            $data[$llave] = (float) $valor;
                         } else if ($changes[$llave] == 'file') {
                             $data[$llave] = base64_encode(file_get_contents($valor->path()));
                             $data['tipo'] = $this->findFileExtension($valor->getMimeType());

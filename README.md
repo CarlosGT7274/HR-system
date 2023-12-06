@@ -6,9 +6,9 @@ Esta documentación describe la API de Sistema Control de Recursos Humanos de la
 
 La API se utiliza para realizar operaciones relacionadas con usuarios, autenticación y operaciones CRUD. A continuación, se detallan los endpoints disponibles y cómo utilizarlos.
 
-Por otro lado el api se encuentra bajo el siguiente endpoit base: `/api/v1`
+Por otro lado el api se encuentra bajo el siguiente endpoint base: `/api/v1`
 
-Los parámetros necesarios en los endpoints de creación por lo general son todos necesarios y en los de actualización son todos opcionales a menos que se indique lo contrario en la documentación del enpoint.
+Los parámetros necesarios en los endpoints de creación por lo general son todos necesarios y en los de actualización son todos opcionales a menos que se indique lo contrario en la documentación del endpoint.
 
 Todas Las respuestas del API se mandan con el siguiente formato:
 
@@ -24,7 +24,7 @@ El atributo de `error` indica con un true en caso de que algo haya fallado al mo
 
 En el `mensaje` se mostrará un indicativo en caso de que se requiera.
 
-En `data` se envia toda la información que se haya solicitado, el formato de esta parte depende el endpoint de consulta, como se muestra en la documetnación de cada enpoint.
+En `data` se envía toda la información que se haya solicitado, el formato de esta parte depende el endpoint de consulta, como se muestra en la documentación de cada endpoint.
 
 En caso de que ocurra algún error con las solicitudes como no mandar los campos requeridos o no mandar el tipo de dato correcto el API regresa un código `422` con un atributo en lugar del `data` con el nombre de `errors` con los errores ocurridos.
 
@@ -34,16 +34,9 @@ Es Necesario para hacer uso de la API mandar en los headers de la petición dos 
 
 | Parámetro       | Tipo     | Descripción                                          |
 | :-------------- | :------- | :--------------------------------------------------- |
-| `x-api-key`     | `string` | **Necesario**. The Api Key                           |
 | `Authorization` | `string` | **Necesario después de Login**. Bearer { JTW token } |
 
 En caso de que algo falte el api regresa un código `401` con el mensaje `No autorizado`.
-
-## Variables de entorno
-
-```
-x-api-key = 39da6568-b63a-4dbd-92c0-ec5b836c5708
-```
 
 ## Endpoints
 
